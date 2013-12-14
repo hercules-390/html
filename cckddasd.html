@@ -1,0 +1,745 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD><TITLE>
+Hercules: Compressed Dasd Emulation</TITLE>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="hercules.css">
+</HEAD>
+<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
+      VLINK="#008040" ALINK="#000000">
+<h1>Compressed Dasd Emulation</h1>
+<hr noshade>
+<h2>Contents</h2>
+<ul>
+<li><a href="#introduction">       Introduction       </a>
+<li><a href="#shadowfiles">        Shadow Files       </a>
+<li><a href="#filestructure">      File Structure     </a>
+<li><a href="#howitworks">         How It Works       </a>
+<li><a href="#cckdcommand">        The CCKD Command (and initialization statement)   </a>
+<li><a href="#utilities">          Utilities          </a>
+</ul>
+
+<hr noshade>
+<h2><a NAME="introduction">Introduction</a></h2>
+<p>
+Using compressed DASD files you can significantly reduce the file space
+required for emulated DASD files and possibly gain a performance boost
+because less physical I/O occurs.
+
+Both <b>CKD</b> (Count-Key-Data) and <b>FBA</b> (Fixed-Block-Architecture)
+emulation files can be compressed.
+<p>
+In regular (or uncompressed) files, each CKD track or FBA block occupies
+a specific spot in the emulation file.  The offset of the track or block
+in the file can be directly calculated knowing the track or block number
+and the maximum size of the track or block.  In compressed files, each
+track image or group of blocks may be compressed by
+<a href="http://www.zlib.net/"><b>zlib</b></a> or
+<a href="http://www.bzip.org/"><b>bzip2</b></a>, and only
+occupies the space neccessary for the compressed image.  The offset of a compressed
+track or block is obtained by performing a two-table lookup.  The lookup
+tables themselves reside in the emulation file.
+<p>
+Because FBA blocks are 512 bytes in length, and that being a rather small
+number, FBA blocks are grouped into <b>block groups</b>.  Each block group
+contains 120 FBA blocks (60K).
+<p>
+Whenever a track or block group is written to a compressed file,
+it is written either to an existing free space within the file, or at
+the end of the file, then the lookup tables are updated, and then the space the
+track or block group previously occupied is freed.  The location of a
+track or block group in the file can change many times.
+<p>
+In the event of a failure (for example, Hercules crash,
+operating system crash or power failure), the compressed emulation file
+on the host's physical disk may be out of sync if the host operating
+system defers physical writes to the file system containing the emulation
+file.  Several methods have evolved to reduce the amount of data lost in
+these kind of events.
+<p>
+A compressed file may occupy only 20% of the disk space required by an
+uncompressed file.  In other words, you may be able to have 5 times more
+emulated volumes using compressed DASD files.  However, compressed files
+are more sensitive to failures and corruption may occur.
+
+<p>
+<hr noshade>
+<p><h2><a NAME="shadowfiles">Shadow Files</a></h2>
+
+<p>
+An compressed CKD or FBA dasd can have more than one physical file.  The
+additional files are called <em>shadow files</em>.  
+The function is implemented as a kind of
+<i>snapshot</i>, where a new shadow file can be created on demand.
+An emulated dasd is represented by a <em>base</em> file and 0 or more
+shadow files.  All files are opened <em>read-only</em>
+except for the <em>current</em> file, which is opened <em>read-write</em>.
+<p>
+Shadow files are specified by the <b>sf=</b><i>shadow-file-name</i> parameter
+on the device statement for the compressed DASD device.
+<p class="note">
+    Please note that the specified shadow filename does <u>not</u> have to
+    actually exist. The <i>shadow-file-name</i> operand of the <i>sf=</i>
+    parameter is simply a filename <i><u>template</u></i> that will be used
+    to name the shadow file whenever a shadow file is to be created, but
+    shadow files do not actually get created until you specifically create
+    them via the <code>sf+xxxx</code> (or <code>sf+*</code>) command. Please
+    refer to the discussion of the <b>sf</b> command several paragraphs
+    below for more information.
+<p>
+The shadow file name
+should have spot where the shadow file number will be set.  This is
+either the character preceding the last period after the last slash or the
+last character if there is no period.  For example:<br><br>
+<code>0100 3390 disks/linux1.dsk sf=shadows/linux1_*.dsk</code>
+<p>
+There can be up to 8 shadow files in use at any time for an
+emulated dasd device.  The base file is designated file<b>[0]</b> and
+the shadow files are file<b>[1]</b> to file<b>[8]</b>.
+The <em>highest</em> numbered file in use at a given time is the <em>current</em>
+file, where all writes will occur.  Track reads start with the <em>current</em>
+file and proceed down until a file is found that actually contains the track
+image.
+<p>
+A shadow file contains all the changes made to the emulated dasd
+since it was created, until the next shadow file is created.  The moment
+of the shadow file's creation can be thought of as a <em>snapshot</em>
+of the current emulated dasd at that time, because if the shadow file is
+later removed, then the emulated dasd reverts back to the state it was at
+when the <em>snapshot</em> was taken.
+<p>
+Using shadow files, you can keep the base file on a read-only device
+such as cdrom, or change the base file attributes to read-only,
+ensuring that this file can never be corrupted.
+<p>
+Hercules console commands are provided to add a new shadow file, remove
+the current shadow file (with or without backward merge), compress the
+curent shadow file, and display the shadow file status and statistics:<br><br>
+
+<table>
+<tr><td align="left"><b>sf+</b></td>
+    <td align="left" colspan="2"><font size=-1>unit</font></td>
+    <td align="left">Create a new shadow file</td>
+<tr><td align="left" valign="top"><b>sf-</b></td>
+    <td align="left" valign="top"><font size=-1>unit</font></td>
+    <td align="left" valign="top"<font size=-1><b>merge</b><br><em>nomerge<br>force</em></font></td>
+    <td align="left" valign="top">Remove a shadow file.  If <em>merge</em> is
+                     specified or defaulted, then the contents of the current
+                     file is merged into the previous file, the current file
+                     is removed, and the previous file becomes the current file.
+                     The previous file must be able to be opened read-write.
+                     If <em>nomerge</em> is specified then the contents of the
+                     current file is discarded and the previous file becomes the
+                     current file.  However, if the previous file is read-only,
+                     then a new shadow file is created (re-added) and that becomes
+                     the current file.
+                     The <em>force</em> option is required when doing a merge to
+                     the base file and the base file is read-only because the
+                     <em>ro</em> option was specified on the device config statement.
+                     </td>
+<tr><td align="left"><b>sfc</b></td>
+    <td align="left" colspan="2"><font size=-1>unit</font></td>
+    <td align="left">Compress the current file</td>
+<tr><td align="left" valign="top"><b>sfk</b></td>
+    <td align="left" valign="top"><font size=-1>unit</font></td>
+    <td align="left" valign="top"<font size=-1><i>level</i></font></td>
+    <td align="left" valign="top">Perform the <b>chkdsk</b> function on the current file.
+                     Level is a number -1 ... 4, the default is <b>2</b>.  The levels are:<br>
+                     -1 &nbsp&nbsp&nbsp devhdr, cdevhdr, l1 table <br>
+                     &nbsp 0 &nbsp&nbsp&nbsp devhdr, cdevhdr, l1 table, l2 tables <br>
+                     &nbsp 1 &nbsp&nbsp&nbsp devhdr, cdevhdr, l1 table, l2 tables, free spaces <br>
+                     &nbsp 2 &nbsp&nbsp&nbsp devhdr, cdevhdr, l1 table, l2 tables, free spaces, trkhdrs <br>
+                     &nbsp 3 &nbsp&nbsp&nbsp devhdr, cdevhdr, l1 table, l2 tables, free spaces, trkimgs <br>
+                     &nbsp 4 &nbsp&nbsp&nbsp devhdr, cdevhdr. Build everything else from recovery
+                     </td>
+<tr><td align="left"><b>sfd</b></td>
+    <td align="left" colspan="2"><font size=-1>unit</font></td>
+    <td align="left">Display shadow file status and statistics</td>
+</table>
+<br>
+<b><font size=-1>Note</font></b>.  You can use <b>*</b> in place of unit
+address to apply the command to all compressed dasd (e.g. <code>'sf+*'</code>,
+or <code>'sf-* nomerge'</code>).
+
+<p>
+<hr noshade>
+<p><h2><a NAME="filestructure">Compressed DASD File Structure</a></h2>
+
+<p>
+A compressed DASD file has 6 types of spaces, a <em>device header</em>,
+a <em>compressed device header</em>, a <em>primary lookup table</em>,
+<em>secondary lookup tables</em>, track or block group <em>images</em>,
+and <em>free spaces</em>.  The first 3 types only occur once, at the
+beginning of the file in order.  The rest of the file is occupied by
+the other 3 space types.
+<p>
+The first 512 bytes of a compressed DASD file contains a <b>device header</b>.
+The device header contains an eye-catcher that identifies the file type
+(CKD or FBA and base or shadow).  The device type and file size is also
+specified in this header.  The header is identical to the header used
+for uncompressed CKD files, except for the eye-catcher:
+<p>
+<table border=1>
+<tr><td align="left" colspan="8"><font size=-1>devid</font></td>
+    <td align="left" colspan="4"><font size=-1>heads</font></td>
+    <td align="left" colspan="4"><font size=-1>trksize</font></td>
+<tr><td align="left" colspan="1"><font size=-1>devt</font></td>
+    <td align="left" colspan="1"><font size=-1>seq</font></td>
+    <td align="left" colspan="2"><font size=-1>hicyl</font></td>
+    <td align="left" colspan="12">&nbsp</td>
+<tr><td align="center" valign="middle" colspan="16">
+        <br><br><font size=-1>reserved</font><br><br><br></td>
+</table>
+<p>
+
+The next 512 bytes contains the <b>compressed device header</b>.
+This contains file usage information such as the amount of free
+space in the file:
+<p>
+<table border=1>
+<tr><td align="left" colspan="3"><font size=-1>vrm</font></td>
+    <td align="left" colspan="1"><font size=-1>opts</font></td>
+    <td align="left" colspan="4"><font size=-1>numl1</font></td>
+    <td align="left" colspan="4"><font size=-1>numl2</font></td>
+    <td align="left" colspan="4"><font size=-1>size</font></td>
+<tr><td align="left" colspan="4"><font size=-1>used</font></td>
+    <td align="left" colspan="4"><font size=-1>->free</font></td>
+    <td align="left" colspan="4"><font size=-1>free</font></td>
+    <td align="left" colspan="4"><font size=-1>largest</font></td>
+<tr><td align="left" colspan="4"><font size=-1>number</font></td>
+    <td align="left" colspan="4"><font size=-1>&nbsp</font></td>
+    <td align="left" colspan="4"><font size=-1>cyls</font></td>
+    <td align="left" colspan="1"><font size=-1>&nbsp</font></td>
+    <td align="left" colspan="1"><font size=-1>comp</font></td>
+    <td align="left" colspan="4"><font size=-1>parm</font></td>
+<tr><td align="center" colspan="16">
+        <br><br><font size=-1>reserved</font><br><br><br></td>
+</table>
+<p>
+After the compressed device header is the <b>primary lookup table</b>,
+also called the <em>level 1 table</em> or <em>l1tab</em>.  Each
+4 byte unsigned entry in the l1tab contains the file offset of
+a <em>secondary lookup table</em> or <em>level 2 table</em> or
+<em>l2tab</em>.  The track or block group number being accessed
+divided by 256 gives the index into the l1tab.  That is, each l1tab
+entry represents 256 tracks or block groups.  The number of entries
+in the l1tab is dependent on the size of the emulated device:
+<p>
+<table border=1>
+<tr><td align="left" colspan="4"><font size=-1>l2<sub>0</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>1</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>2</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>3</sub></font></td>
+<tr><td align="left" colspan="4"><font size=-1>l2<sub>4</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>5</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>6</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>7</sub></font></td>
+<tr><td align="left" colspan="16">
+        <br><br><center>. &nbsp &nbsp . &nbsp &nbsp .</center><br><br></td>
+<tr><td align="left" colspan="4"><font size=-1>l2<sub>n-4</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>n-3</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>n-2</sub></font></td>
+    <td align="left" colspan="4"><font size=-1>l2<sub>n-1</sub></font></td>
+</table>
+<p>
+Following the <em>l1tab</em>,
+in no particular order, are <em>l2tabs</em>, track or block group
+<em>images</em>, and <em>free spaces</em>.
+<p>
+Each <b>secondary lookup table</b> (or <em>l2tab</em>), contains 256 8-byte
+entries.  The entry is indexed
+by the remainder of the track or block group number divided by 256.  Each
+entry contains an unsigned 4 byte offset, an unsigned 2 byte length and an
+unsigned 2 byte size.  The length is the space required for the track or
+block group image and the size is the amount of space actually used.  The
+size may be greater than the length to prevent short free spaces from
+accumulating in the file.
+<p>
+<table border=1>
+<tr><td align="left" colspan="4"><font size=-1>
+       <sup>0</sup>&nbsp ->image
+       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font></td>
+    <td align="left" colspan="2"><font size=-1>length</font></td>
+    <td align="left" colspan="2"><font size=-1>size</font></td>
+<tr><td align="left" colspan="4"><font size=-1>
+       <sup>1</sup>&nbsp ->image
+       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font></td>
+    <td align="left" colspan="2"><font size=-1>length</font></td>
+    <td align="left" colspan="2"><font size=-1>size</font></td>
+<tr><td align="center" colspan="8"><font size=-1>
+       <br>. &nbsp &nbsp .&nbsp &nbsp .<br><br></td>
+<tr><td align="left" colspan="4"><font size=-1>
+       <sup>255</sup>&nbsp ->image
+       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</font></td>
+    <td align="left" colspan="2"><font size=-1>length</font></td>
+    <td align="left" colspan="2"><font size=-1>size</font></td>
+</table>
+<p>
+A track or block group <b>image</b> contains two fields, a 5-byte
+<em>header</em> and a variable amount of data that may or may not be
+compressed.  The length in the l2tab entry includes the length of the
+header and the data.
+<p>
+<table border=1>
+<tr><td align="left"><font size=-1>hdr</font></td>
+    <td align="left"><font size=-1>track or block group data</font></td>
+</table>
+<p>
+The 5 byte header contains a 1 byte compression indicator and 4 bytes that
+identify the track or block group.  The format of the identifier
+depends on whether the emulated device is CKD or FBA:
+<p>
+CKD hdr
+<table border=1>
+<tr><td><font size=-1>comp</font></td>
+    <td align="left" colspan="2"><font size=-1><b>CC</b></font>&nbsp&nbsp</td>
+    <td align="left" colspan="2"><font size=-1><b>HH</b></font>&nbsp&nbsp</td>
+</table>
+<p>
+The 2 byte CC is the cylinder number for the track image and the HH
+is the head number.  These numbers are stored in <em>big-endian</em>
+byte order.  When the compression indicator byte is zeroed, the 5 byte header
+is identical to the <em>Home Address</em> (or <em>HA</em>) for the track image.
+The data, which may or may not be compressed, begins with the <em>R0</em>
+count and ends with the <em>end-of-track</em> (or <em>eot</em>) marker,
+which is a count field containing <code>FFFFFFFFFFFFFFFF</code>.
+The <em>HA</em> plus the uncompressed track data comprise the track image.
+<p>
+FBA hdr
+<table border=1>
+<tr><td><font size=-1>comp</font></td>
+    <td align="left" colspan="4"><font size=-1>nnnn</font>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+</table>
+<p>
+The 4 byte nnnn field is the FBA block group number in
+<em>big-endian</em> byte order. The data contains 120 FBA blocks,
+which may or may not be compressed.  Uncompressed, the FBA block
+group is 60K.  The header for FBA, unlike CKD, is not used as part
+of the uncompressed image.
+<p>
+The compression indicator byte contains the value 0, 1 or 2.  Any
+other value is invalid.
+
+<table border="1">
+<tr><td><center>0</center></td><td>&nbsp &nbsp Data is uncompressed</td>
+<tr><td><center>1</center></td><td>&nbsp &nbsp Data is compressed using zlib</td>
+<tr><td><center>2</center></td><td>&nbsp &nbsp Data is compressed using bzip2</td>
+<tr><td>3 .. 255</td><td>&nbsp &nbsp Not valid</td>
+</table>
+
+<p>
+
+<b>Free space</b> contains a 4-byte <i>offset</i> to the next free space, a
+4-byte <i>length</i> of the free space, and zero or more bytes of residual data:
+<p>
+<table border=1>
+<tr><td><font size=-1>->next</font></td>
+    <td><font size=-1>length</font></td>
+    <td>&nbsp &nbsp<font size=-1>residual</font>&nbsp &nbsp</td>
+</table>
+<p>
+The minimum length of a free space is 8 bytes.
+The free space chain is ordered by file offset and no two free spaces are
+adjacent.  The <em>compressed device header</em> contains the offset to the
+first free space.  The chain is terminated when a free space has zero offset
+to the next free space.  The free space chain is read when the file is opened
+for read-write and written when the file is closed; while the file is opened,
+the free space chain is maintained in storage.
+<p>
+
+<hr noshade>
+<p><h2><a NAME="howitworks">How It Works</a></h2>
+
+<h3>Reading</h3>
+<p>
+A track or block group image is read while executing a channel
+program or by the <em>readahead</em> thread.  An image has to
+be read before it is updated or written to.  An image may be <em>cached</em>.
+If an image is cached, then the channel program may complete
+<em>synchronously</em>.  This means that if all the data a channel program
+accesses is cached and Hercules does not have to perform physical I/O,
+then the channel program runs synchronously within the SSCH or SIO
+instruction in the <em>CPU</em> thread.  All DASD channel programs are started
+synchronously.  If a CCW in the channel program requires physical I/O
+then the channel program is interrupted and restarted at that CCW
+<em>asynchronously</em> in a <em>device I/O</em> thread.
+<p>
+All compressed devices share a common cache; the devices can be a mixture
+of FBA and/or CKD device types.  Each cache entry contains a pointer to
+a 64K buffer containing an uncompressed track or block group image.
+If the track or block group image being read is not found in the cache,
+then the oldest (or <em>least recently used</em> or <em>LRU</em>) entry that
+is not <em>busy</em> is <em>stolen</em>.  A cache entry is busy if it is
+being read, or last accessed by an <em>active</em> channel program, or updated
+but not yet written, or being written.  If no cache entries are available then
+the read must enter a <em>cache wait</em>.  When images are detected to be
+accessed sequentially then the readahead thread(s) may be signalled to read
+following sequential images.
+<p>
+<h3>Writing</h3>
+<p>
+When a cache entry is updated or written to, a bit is turned on indicating
+the cache entry has been updated.  When a <em>cache wait</em> occurs, or
+(more likely) during space recovery, a cache <em>flush</em> is performed.
+When the cache is flushed, if any entries have the updated bit on, then
+the writer thread(s) are signalled.  The writer thread selects the oldest
+cache entry with the updated bit on, compresses the image, and writes it
+to the file.  The new image is written to a new space in the file and then
+the space previously occupied by the image is freed.  In certain circumstances,
+the image may be written under <em>stress</em>.  A stress write occurs when
+a reading thread is in a <em>cache wait</em> or when a high percentage of
+cache entries are pending write.  In this circumstance, the compression
+parameters are relaxed to reduce the CPU requirements.  An image written
+under stress is likely to take up more space than the same image written
+not under stress.  The writer thread(s) run 1 nicer than the CPU thread(s);
+compression is a CPU intensive activity.
+<p>
+<h3>Space Recovery</h3>
+<p>
+Space recovery is also called, somewhat inaccurately, garbage collection.
+The primary function of the space recovery thread, or garbage collector,
+is to keep the emulated compressed DASD files as small as possible.
+After all, that is the reason for using compressed DASD files in the first
+place.
+<p>
+When a track or block group image is written, it is written to a new
+location in the file.  It is either written to an existing free space
+within the file or to the end of the file, increasing the size of the
+file.  The space previously occupied by the image is freed, but it is
+not immediately available for space allocation requests.  Instead, it
+is <i>pending</i> free space.  It is assigned a <i>pending value</i>
+(typically 2) that is decremented each space recovery cycle (typically
+every 10 seconds).  When the pending value reaches 0 then the space is
+available for allocation.  This increases the chance that a track or
+block group image can be recovered in the event of a failure.
+<p>
+The space recovery routine relocates track or block group
+images towards the beginning of the file, causing free space to move
+towards the end of the file.  When a free space reaches the end of the
+file, it `falls off', that is, the file size is reduced.
+<p>
+Simply, the space recovery routine selects a space after a sufficiently
+large <i>non-pending</i> free space.  It then reads and writes consecutive
+spaces using the normal cckd read and write routines.  The space read will
+become <i>pending</i> free space and will hopefully be written to a
+<i>non-pending</i> free space occurring earlier in the file.  Sometimes it
+is necessary to write the space later in the file to increase free space
+size earlier in the file.  Left to itself, the space recovery routine will
+eventually remove all free space from the file.  However, it is not
+intended to be a replacement for the cckdcomp utility; rather, the intent
+is to provide sufficient free space to prevent excessive file growth.
+<p>
+Another function performed by space recovery is to relocate <em>L2</em> (secondary
+lookup) tables towards the beginning of the file.  This enables the
+<i>chkdsk</i> function to complete more quickly during initialization and
+simplifies chkdsk recovery.
+
+<hr noshade>
+<p><h2><a name=cckdcommand>The cckd command and initialization statement</a></h2>
+
+<p>
+The <b>cckd</b> command and initialization statement can be used to
+affect cckd processing. The <b>CCKD</b> initialization statement is specified
+as a Hercules configuration file statement and supports the same options as
+the <b>cckd</b> command explained below.
+<p>
+<b>Syntax:</b>
+<table>
+<tr><td><b>cckd</b></td><td><b>help</b></td><td>Display cckd help</td>
+<tr><td><b>cckd</b></td><td><b>stats</b></td>
+                        <td>Display current cckd statistics</td>
+<tr><td><b>cckd</b></td><td><b>opts</b></td><td>Display current cckd options</td>
+<tr><td><b>cckd</b></td><td>opt=value</td><td>Set a cckd option</td>
+<tr><td>&nbsp;</td><td>&nbsp;</td><td>Multiple options may be specified,
+                                      separated by a comma with no intervening
+                                      blanks.</td>
+<tr><td>&nbsp;</td><td><b>comp=</b>n</td><td>Compression to be used</td>
+<tr><td>&nbsp;</td><td><b>compparm=</b>n</td><td>Compression parameter to be used</td>
+<tr><td>&nbsp;</td><td><b>ra=</b>n</td><td>Number readahead threads</td>
+<tr><td>&nbsp;</td><td><b>raq=</b>n</td><td>Readahead queue size</td>
+<tr><td>&nbsp;</td><td><b>rat=</b>n</td><td>Number of tracks to readahead</td>
+<tr><td>&nbsp;</td><td><b>wr=</b>n</td><td>Number writer threads</td>
+<tr><td>&nbsp;</td><td><b>gcint=</b>n</td><td>Garbage collection interval</td>
+<tr><td>&nbsp;</td><td><b>gcparm=</b>n</td><td>Garbage collection parameter</td>
+<tr><td>&nbsp;</td><td><b>nostress=</b>n</td><td>Turn stress writes on or off</td>
+<tr><td>&nbsp;</td><td><b>freepend=</b>n</td><td>Set the free pending value</td>
+<tr><td>&nbsp;</td><td><b>fsync=</b>n</td><td>Turn fsync on or off</td>
+<tr><td>&nbsp;</td><td><b>trace=</b>n</td><td>Number of trace table entries</td>
+<tr><td>&nbsp;</td><td><b>linuxnull=</b>n</td><td>Check for null linux tracks</td>
+<tr><td>&nbsp;</td><td><b>gcstart=</b>n</td><td>Start garbage collector</td>
+</table>
+<p>
+
+<b>Options:</b>
+<table>
+<tr><td valign="top"><b>comp=</b>n</td>
+    <td>Compression type:<br>
+        <b>-1</b> Default<br>
+        <b>&nbsp 0</b> None<br>
+        <b>&nbsp 1</b> zlib<br>
+        <b>&nbsp 2</b> bzip2
+        <p>
+        Override the compression used for all cckd files.  -1 (default) means
+        don't override the compression.
+        <p>
+    </td>
+<tr><td valign="top"><b>compparm=</b>n</td>
+    <td>Compression parameter.  A value between -1 and 9.  -1 means use the default
+        parameter.  A higher value generally means more compression at the expense
+        of cpu and/or storage.
+        <p>
+    </td>
+<tr><td valign="top"><b>ra=</b>n</td>
+    <td>Number of readahead threads.  When sequential track or block group
+        access is detected, some number (<em>rat=</em>) of tracks or
+        block groups are queued (<em>raq=</em>) to be read by one of the
+        readahead threads.
+        <p>
+        The default is <b>2</b>.
+        <p>
+        You can specify a number between <b>1</b> and <b>9</b>.
+        <p>
+    </td>
+<tr><td valign="top"><b>raq=</b>n</td>
+    <td>Size of the readahead queue.  When sequential track or block group
+        access is detected, some number (<em>rat= </em>) of tracks or
+        block groups are queued in the readahead queue.
+        <p>
+        The default is <b>4</b>.
+        <p>
+        You can specify a number between <b>0</b> and <b>16</b> (a value
+        of zero disables readahead).
+        <p>
+    </td>
+<tr><td valign="top"><b>rat=</b>n</td>
+    <td>Number of tracks or block groups to read ahead when sequential access
+        has been detected.
+        <p>
+        The default is <b>2</b>.
+        <p>
+        You can specify a number between <b>0</b> and <b>16</b> (a value
+        of zero disables readahead).
+        <p>
+    </td>
+<tr><td valign="top"><b>wr=</b>n</td>
+    <td>Number of writer threads.  When the cache is <em>flushed</em> updated
+        cache entries are marked write pending and a writer thread is signalled.
+        The writer thread compresses the track or block group and writes the
+        compressed image to the emulation file.  A writer thread is cpu-intensive
+        while compressing the track or block group and i/o-intensive while writing
+        the compressed image.  The writer thread runs one <em>nicer</em> than
+        the CPU thread(s).
+        <p>
+        The default is <b>2</b>.
+        <p>
+        You can specify a number between <b>1</b> and <b>9</b>.
+        <p>
+    </td>
+<tr><td valign="top"><b>gcint=</b>n</td>
+    <td>Number of seconds the garbage collector thread waits durinng an interval.
+        At the end of an interval, the garbage collector performs space recovery,
+        flushes the cache, and optionally <em>fsync</em>s the emulation file.
+        (However, the file will not be <em>fsync</em>ed unless at least 5
+        seconds have elapsed since the last <em>fsync</em>).
+        <p>
+        The default is <b>10</b> seconds.
+        <p>
+        You can specify a number between <b>1</b> and <b>60</b>.
+        <p>
+    </td>
+<tr><td valign="top"><b>gcparm=</b>n</td>
+    <td>A value affecting the amount of data moved during the garbage collector's
+        space recovery routine. The garbage collector determines an amount of
+        space to move based on the ratio of free space to used space in an
+        emulation file, and on the number of free spaces in the file.  (The
+        garbage collector wants to reduce the free space to used space ratio
+        and the number of free spaces).  The value is logarithmic; a value
+        of 8 means moving 2<sup>8</sup> the selected value while a negative
+        value similarly decreases the amount to be moved.  Normally, 256K
+        will be moved for a file in an interval.  Specifying a value of 8 can
+        increase the amount to 64M.  At least 64K will be moved.  Interestingly,
+        specifying a large value (such as 8) may not increase the garbage
+        collection efficiency correspondingly.
+        <p>
+        The default is <b>0</b>.
+        <p>
+        You can specify a number between <b>-8</b> and <b>8</b>.
+        <p>
+<tr><td valign="top"><b>nostress=</b>n&nbsp</td>
+    <td>Indicates whether <em>stress</em> writes will occur or not.  A track
+        or block group may be written under stress when a high percentage of
+        the cache is pending write or when a device i/o thread is waiting for
+        a cache entry.  When a stressed write occurs, the compression algorithm
+        and/or compression parm may be relaxed, resulting in faster compression
+        but usually a larger compressed image.  If <em>nostress</em> is set
+        to one, then a stressed situation is ignored.  You would typically
+        set this value to one when you want create the smallest emulation file
+        possible in exchange for a possible performance degradation.
+        <p>
+        The default is <b>0</b>.
+        <p>
+        You can specify <b>0</b> (enable stressed writes) or <b>1</b>
+        (disable stressed writes).
+        <p>
+    </td>
+<tr><td valign="top"><b>freepend=</b>n&nbsp</td>
+    <td>Specifies the <em>free pending</em> value for freed space.  When a
+        track or block group image is written the space it previously occupied
+        is freed.  This space will not be available for future 
+        allocations until <em>n</em> garbage collection intervals have completed.
+        In the event of a catastrophic failure, previously written track or
+        block group images should be recoverable if the current image has
+        not yet been written to the physical disk.  By default the value
+        is set to <b>-1</b>.  This means that if <em>fsync</em> is specified
+        then the value is 1 otherwise it is 2.  If 0 is specified then freed
+        space is immediately available for new allocations.
+        <p>
+        The default is <b>-1</b>.
+        <p>
+        You can specify a number between <b>-1</b> and <b>4</b>.
+        <p>
+    </td>
+<tr><td valign="top"><b>fsync=</b>n&nbsp</td>
+    <td>Enables or disables <em>fsync</em>.  When fsync is enabled, then
+        the disk emulation file is synchronized with the physical hard
+        disk at the end of a garbage collection interval (however, no more
+        often than 5 seconds).  This means that if <em>freepend</em> is
+        non-zero then if a catastrophic error occurs then the emulated disks
+        <em>should</em> be recovered coherently.  However, fsync may cause
+        performance degradation depending on the host operating system and/or
+        the host operating system level.
+        <p>
+        The default is <b>0</b> (fsync disabled).
+        <p>
+        You can specify <b>0</b> (disable fsync) or <b>1</b> (enable fsync).
+        <p>
+    </td>
+<tr><td valign="top"><b>trace=</b>n&nbsp</td>
+    <td>Number of cckd trace entries.  You would normally specify a non-zero
+        value when debugging or capturing a problem in cckd code.  When the
+        problem occurs, you should enter the <b>k</b> Hercules console command
+        which will print the trace table entries.
+        <p>
+        The default is <b>0</b>.
+        <p>
+        You can specify a number between <b>0</b> and <b>200000</b>.
+        Each entry represents 128 bytes.  Normally, for debugging, I use
+        100000.
+        <p>
+    </td>
+<tr><td valign="top"><b>linuxnull=</b>n&nbsp</td>
+    <td>If set to 1 then tracks written to 3390 cckd volumes that were
+        initialized with the <i>-linux</i> option will be checked if they
+        are null (that is, if all 12 4096 byte user records contain zeroes).
+        This is used by the dasdcopy utility.
+        <p>
+        The default is <b>0</b>.
+        <p>
+    </td>
+<tr><td valign="top"><b>gcstart=</b>n&nbsp</td>
+    <td>If set to 1 then space recovery will become active on any emulated
+        disks that have free space.  Normally space recovery will ignore emulated
+        disks until they have been updated.
+        <p>
+        The default is <b>0</b>.
+        <p>
+    </td>
+</table>
+<p>
+
+<hr noshade>
+<p><h2><a NAME="utilities">Utilities</a></h2>
+
+<a NAME="ckd2cckd">
+<a NAME="cckd2ckd">
+<a NAME="fba2cfba">
+<a NAME="cfba2fba">
+<table>
+<tr><td valign="top"><b>ckd2cckd &nbsp</b><br><b>cckd2ckd &nbsp</b><br>
+                     <b>fba2cfba &nbsp</b><br><b>cfba2fba &nbsp</b></td>
+    <td valign="top">These utilities are deprecated.  Use the <b>dasdcopy</b> utility instead</td>
+</table>
+
+<p>
+
+<a NAME="cckdcdsk">
+<table>
+<tr><td valign="top"><b>cckdcdsk &nbsp</b></td>
+    <td valign="top"><em>[-v] [-f] [-ro] [-level] filename1 [filename2 ...]</em></td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">Check the integrity of one or more compressed files.
+                     Recover damaged files.</td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">
+    <table>
+    <tr><td valign="top"><b>-v &nbsp</b></td>
+        <td valign="top">Display version and exit.</td>
+    <tr><td valign="top"><b>-f &nbsp</b></td>
+        <td valign="top">Perform check even if the <em>OPENED</em> bit is on.</td>
+    <tr><td valign="top"><b>-ro &nbsp</b></td>
+        <td valign="top">Open the file(s) <i>read-only</i>. The file will not be updated.</td>
+    <tr><td valign="top"><b>-level &nbsp</b></td>
+        <td valign="top">A number 1 .. 4 indicating the level of checking.<br>
+                         <b>1</b> Minimal checking (default)<br>
+                         <b>2</b> Medium checking. All track headers will be read.<br>
+                         <b>3</b> Maximal checking. All track images will be read and uncompressed.<br>
+                         <b>4</b> Recover everything</td>
+    </table>
+    </td>
+</table>
+
+<p>
+
+<a NAME="cckdcomp">
+<table>
+<tr><td valign="top"><b>cckdcomp &nbsp</b></td>
+    <td valign="top"><em>[-v] [-f] [-level] filename1 [filename2 ...]</em></td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">Remove all free space from a compressed file or files.</td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">
+    <table>
+    <tr><td valign="top"><b>-v &nbsp</b></td>
+        <td valign="top">Display version and exit.</td>
+    <tr><td valign="top"><b>-f &nbsp</b></td>
+        <td valign="top">Perform compress even if the <em>OPENED</em> bit is on.</td>
+    <tr><td valign="top"><b>-level &nbsp</b></td>
+        <td valign="top">A number 1 .. 3 indicating the <a href="#cckdcdsk">chkdsk</a> level.</td>
+    </table>
+    </td>
+</table>
+
+<p>
+
+<a NAME="cckdswap">
+<table>
+<tr><td valign="top"><b>cckdswap &nbsp</b></td>
+    <td valign="top"><em>[-v] [-f] [-level] filename1 [filename2 ...]</em></td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">Change the <i>endianess</i> or <i>byte-order</i> of a
+                     compressed file or files</td>
+<tr><td valign="top"> &nbsp </td>
+    <td valign="top">
+    <table>
+    <tr><td valign="top"><b>-v &nbsp</b></td>
+        <td valign="top">Display version and exit.</td>
+    <tr><td valign="top"><b>-f &nbsp</b></td>
+        <td valign="top">Perform swap even if the <em>OPENED</em> bit is on.</td>
+    <tr><td valign="top"><b>-level &nbsp</b></td>
+        <td valign="top">A number 1 .. 3 indicating the <a href="#cckdcdsk">chkdsk</a> level.</td>
+    </table>
+    </td>
+</table>
+
+<hr noshade>
+
+<p>
+
+Greg Smith
+<a href="mailto:gsmith@nc.rr.com"><em>gsmith</em>&#064;<em>nc.rr.com</em></a>
+<p><center><hr width=15% noshade>
+<a href="index.html"><img src="images/back.gif" border=0 alt="back"></a>
+</center>
+<p class="lastupd">Last updated $Date$ $Revision$</p>
+</BODY>
+</HTML>

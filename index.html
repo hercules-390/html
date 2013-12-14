@@ -1,83 +1,405 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+<HTML>
+<HEAD><TITLE>
+The Hercules System/370, ESA/390, and z/Architecture Emulator</TITLE>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="hercules.css">
+<link rel="shortcut icon" href="images/favicon.ico" />
+<link rel="icon" href="images/favicon.ico" />
+</HEAD>
+<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
+      VLINK="#008040" ALINK="#000000">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+<table><tr><td>
 
-    <title>Html by hercules-390</title>
-  </head>
+<table width="300" align="right">
+  <tr>
+   <td></td>
+   <td width="256" align="right">
+     <img vspace="10" src="images/hercpic-rblk-256.gif" alt="Hercules logo" width="256" height="256">
+   </td>
+  </tr>
+  <tr>
+   <td></td>
+   <td width="256" align="right">
+     <center>
+     <a href="http://www.opensource.org/">
+       <img vspace="10" src="images/osi-certified-60x50.jpg" alt="Hercules is OSI Certified Open Source Software" border="1" width="60" height="50">
+     </a>
+     </center>
+   </td>
+  </tr>
+</table>
 
-  <body>
-    <header>
-      <div class="inner">
-        <h1>Html</h1>
-        <h2>The Hercules web pages.</h2>
-        <a href="https://github.com/hercules-390/html" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+<h1>The Hercules System/370, ESA/390, and z/Architecture Emulator</h1>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+<hr noshade>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<b>Hercules</b> is an open source software implementation of the mainframe
+System/370 and ESA/390 architectures, in addition to the new 64-bit
+z/Architecture. Hercules runs under Linux, Windows (98, NT, 2000, and XP),
+Solaris, FreeBSD,
+and Mac OS X (10.3 and later).
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>
+
+Hercules is <a href="http://www.opensource.org/">OSI Certified Open Source Software</a>
+licensed under the terms of the <a href="herclic.html">Q Public Licence</a>.
+
+<p>
+
+Hercules was created by <a href="http://perso.wanadoo.fr/rbowler/">Roger Bowler</a> and is maintained by Jay Maynard.
+Jan Jaeger designed and implemented many of the advanced features of
+Hercules, including dynamic reconfiguration, integrated console,
+interpretive execution and z/Architecture support. A dedicated crew of
+programmers is constantly at work implementing new features and fixing bugs.
+
+<p><br>
+
+<h3>To find out more about Hercules, follow these links:</h3>
+
+<h4>Web documentation:</h4>
+<ul>
+<li><a href="hercinst.html">Hercules Installation and Operation</a>
+<li><a href="hercconf.html">Hercules Configuration File</a>
+<li><a href="hercmsg.html">Hercules System Messages</a>
+<li><a href="hercnew.html">What's new in this release</a>
+<li><a href="hercrnot.html">Release notes</a>
+<li><a href="hercfaq.html">Hercules Frequently-Asked Questions</a>
+<li><a href="hercsupp.html">Technical Support</a>
+<li><a href="herclic.html">The Q Public Licence</a>
+</ul>
+
+<h4>PDF manuals:</h4>
+<ul>
+<li><a href="HerculesGeneralInfo.pdf">Hercules General Information</a>
+<li><a href="HerculesReferenceSummary.pdf">Hercules Reference Summary</a>
+<li><a href="HerculesInstallation.pdf">Hercules Installation Guide</a>
+<li><a href="HerculesUserReference.pdf">Hercules User Reference Guide</a>
+<li><a href="HerculesMessagesandCodes.pdf">Hercules Messages and Codes</a>
+</ul>
+
+<p><br>
+
+<h3>To download the current release version, use the following links:</h3>
+
+<ul>
+<li>Source tarball:
+<p>
+<ul>
+<li><a href="http://www.hercules-390.org/hercules-3.07.tar.gz">hercules-3.07.tar.gz</a>
+</ul>
+<p>
+<li>Linux:
+<p>
+<ul>
+<li><a href="http://www.hercules-390.org/hercules-3.07-1.i686.rpm">hercules-3.07-1.i686.rpm</a>: 32-bit Intel RPM
+<li><a href="http://www.hercules-390.org/hercules-3.07-1.x86_64.rpm">hercules-3.07-1.x86_64.rpm</a>: 64-bit Intel RPM
+<li><a href="http://www.hercules-390.org/hercules-3.07-1.src.rpm">hercules-3.07-1.src.rpm</a>: Source
+RPM (if you want to build RPMs yourself)
+</ul>
+<p>
+<li>Windows native program:
+<p>
+<ul>
+<li><a href="http://www.hercules-390.org/hercules-3.07-w32.msi">hercules-3.07-w32.msi</a>:
+Windows 32-bit Installer package
+<li><a href="http://www.hercules-390.org/hercules-3.07-w32.zip">hercules-3.07-w32.zip</a>:
+32-bit binaries only archive
+<li><a href="http://www.hercules-390.org/hercules-3.07-w64.msi">hercules-3.07-w64.msi</a>:
+Windows 64-bit Installer package
+<li><a href="http://www.hercules-390.org/hercules-3.07-w64.zip">hercules-3.07-w64.zip</a>:
+64-bit binaries only archive
+<p>
+<small>
+<b>Note:</b> Installing the .msi Windows Installer package ensures the
+required Microsoft Runtime components are installed and also provides
+convenience shortcuts in the programs menu. If the required components
+are already present and the shortcuts are not needed on the target system,
+the self-extracting or .zip archive may be used instead.
+<br>
+The required component for this build is the x86 version of the C runtime at
+level 8.50727.762.
+</small>
+</ul>
+<p>
+<li>Mac OS X:
+<p>
+<ul>
+<li><a href="http://www.hercules-390.org/hercules-3.07-tiger.dmg">hercules-3.07-tiger.dmg</a>: Mac OS X
+10.4 (Tiger) universal binary version, 32-bit Intel and PowerPC
+<li><a href="http://www.hercules-390.org/hercules-3.07-leopard.dmg">hercules-3.07-leopard.dmg</a>: Mac OS X
+10.5 (Leopard) universal binary version, 32- and 64-bit Intel and PowerPC
+<li><a href="http://www.hercules-390.org/hercules-3.07-snowleopard.dmg">hercules-3.07-snowleopard.dmg</a>: Mac OS X
+10.6 (Snow Leopard) universal binary version, 32- and 64-bit Intel
+</ul>
+</ul>
+
+<p><br>
+
+<center><hr width=15% noshade></center>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+What people are saying about Hercules
+</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p><br>
+
+<em>&#147;
+Never in my wildest dreams did I expect to see MVS
+running on a machine that I personally own.
+Hercules is a marvelous tool.  My thanks to you all for a job
+very well done.
+&#148;</em>
+<br>&#151;
+Reed H. Petty
+<p>
+<em>&#147;
+I do miss my mainframe a lot, and playing with Herc sure brings back
+memories.  Just seeing the IBM message prefixes, and responding to
+console messages again was a wonderful bit of nostalgia!
+&#148;</em>
+<br>&#151;
+Bob Brown
+<p>
+<em>&#147;
+I have installed your absolutely fantastic /390 emulator.
+You won't believe what I felt when I saw the prompt.
+Congratulations, this is a terrific software.
+I really have not had such a fascinating and interesting
+time on my PC lately.
+&#148;</em>
+<br>&#151;
+IBM Large Systems Specialist
+<p>
+<em>&#147;
+Such simulators have been available for a long time.  One of the most
+complete (up to modern 64-bit z/Architecture) is hercules.
+&#148;</em>
+<br>&#151;
+Michel Hack, IBM Thomas J. Watson Research Center
+<p>
+<em>&#147;
+An apparently excellent emulator that allows those open source
+developers with an "itch to scratch", to come to the S/390 table
+and contribute.
+&#148;</em>
+<br>&#151;
+Mike MacIsaac, IBM
+<p>
+<em>&#147;
+BTW grab a copy of Hercules and you can test it at home.
+It's a very good S/390 and zSeries (S/390 64bit) emulator..
+&#148;</em>
+<br>&#151;
+Alan Cox
+<p>
+<em>&#147;
+It works even better than I imagined.
+Hercules is a fine piece of software!
+&#148;</em>
+<br>&#151;
+Dave Sienkiewicz
+<p>
+<em>&#147;
+Hercules is a systems programmer's dream come true.
+&#148;</em>
+<br>&#151;
+Ren&eacute; Vincent Jansen
+<p>
+<em>&#147;
+Aside from the electric trains my parents got
+me in 1953, this is the best toy I've ever been given,
+bar none.&#148;</em>
+<br>&#151;
+Jeffrey Broido
+<p>
+<em>&#147;
+Congratulations to you and your team on a fine piece of work!
+&#148;</em>
+<br>&#151;
+Rich Smrcina
+<p>
+<em>&#147;
+Congratulations on a magnificent achievement!
+&#148;</em>
+<br>&#151;
+Mike Ross
+<p>
+<em>&#147;
+For anyone thinking running Hercules is too much trouble or too hard
+or whatever, I came home from work one day and my 13 year old 8th
+grade son had MVS running under VM under Hercules on Linux. He had
+gotten all the information about how to do this from the Internet.
+When he complained about MVS console configuration and figuring out
+how to get it to work with VM, I knew he had felt all the pain he
+ever needed to feel about mainframes.
+&#148;</em>
+<br>&#151;
+Scott Ledbetter, StorageTek
+<p>
+<em>&#147;
+I am running a fully graphical Centos z/Linux environment on my desktop.
+The Hercules emulator is an amazing feat of engineering.
+I just wanted to send my compliments to the team for an excellent job!
+Thanks much for making this product part of the open-source community!
+&#148;</em>
+<br>&#151;
+Roby Gamboa
+<p>
+<em>&#147;
+I have DOS and DOS/VS running on Hercules with
+some demo applications, both batch and on-line.  It does bring back
+some good memories. My compliments go to the Hercules team.  Thank you.
+&#148;</em>
+<br>&#151;
+Bill Carlborg
+<p>
+<em>&#147;
+This is stunning piece of work. To say that I am blown away is an
+understatement. I have a mainframe on my notebook!!!!!!
+P.S. Now if I can just remember my JCL
+&#148;</em>
+<br>&#151;
+Roger Tunnicliffe
+
+<p><br><br>
+
+Read Hesh Wiener's Technology News article about Hercules at
+<a href="http://www.tech-news.com/another/ap200601b.html">
+http://www.tech-news.com/another/ap200601b.html</a>
+
+<p>
+Read Moshe Bar's BYTE.com article about Hercules at
+<a href="http://www.byte.com/documents/s=429/byt20000801s0002/">
+http://www.byte.com/documents/s=429/byt20000801s0002/</a>
+
+<p>
+For eighteen months, the IBM Redbook
+<em>SG24-4987 Linux for S/390</em> at
+<a href="http://www.redbooks.ibm.com/abstracts/sg244987.html">
+http://www.redbooks.ibm.com/abstracts/sg244987.html</a>
+contained a chapter written by Richard Higson
+describing how to run Linux/390 under Hercules.
+Then suddenly, all mention of Hercules was mysteriously
+removed from the online edition of the book!
+Read the story of the disappearing Redbook chapter at
+<a href="http://www2.marist.edu/htbin/wlvtype?LINUX-VM.25658">
+http://www2.marist.edu/htbin/wlvtype?LINUX-VM.25658</a>
+
+<p>
+View the foils from Jay Maynard's presentation given at
+SHARE Session 2880
+in San Francisco on 20 August 2002
+as a PDF file (815K) from
+<a href="http://linuxvm.org/Present/SHARE99/S2880JMa.pdf">
+http://linuxvm.org/Present/SHARE99/S2880JMa.pdf</a>
+
+<p><br><br>
+
+<center><hr width=15% noshade></center>
+<h3>
+The Subversion source code repository
+</h3>
+
+<p>
+The complete source code for the current <i>development</i> version of
+Hercules is also available via anonymous access from our Subversion source
+code repository. The Subversion URL is:
+
+<center><b>svn://svn.hercules-390.org/hercules</b></center>
+
+<p>
+
+Doing a checkout on module "hercules" will get you the source for all of
+Hercules. You'll want to check out the trunk, instead of the whole
+repository:
+
+<blockquote>
+<tt>
+    svn checkout svn://svn.hercules-390.org/hercules/trunk hercules
+</tt>
+</blockquote>
+
+<p>
+(The last <tt>hercules</tt> specifies the directory the checked out copy is
+placed into.)
+Please note that this will get you the current
+<i>development</i> version of Hercules, which is <i>not</i>
+release quality and thus might not even work (since it's still under
+development). If you want the current, stable, <i>release</i> version
+of Hercules (i.e. one that is known to work properly), then use the
+previously mentioned links instead.
+
+<p>
+Please read the file <tt>README.SVN</tt> included with the source for additional and updated
+instructions for building the development version.
+
+<p><br>
+
+<p><center><hr width=15% noshade></center>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+Other Hercules-related sites
+</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<p><li><a href="http://www.ibiblio.org/jmaynard/">http://www.ibiblio.org/jmaynard/</a>
+    <br>Jay Maynard's IBM S/360 and S/370 Public Domain Software Collection
+<p><li><a href="http://www.bsp-gmbh.com/hercules">http://www.bsp-gmbh.com/hercules</a>
+    <br>Volker Bandke's Hercules site.  This is <i>the</i> site for
+    users of Hercules on Windows, and here you can also obtain Volker's
+    MVS 3.8J turnkey system.
+<p><li><a href="http://www.softdevlabs.com/Hercules/hercgui-index.html">
+    http://www.softdevlabs.com/Hercules/hercgui-index.html</a>
+    <br>Fish's Hercules GUI for Windows.
+<p><li><a href="http://cbttape.org/~jmorrison/">http://cbttape.org/~jmorrison/</a>
+    <br>Jim Morrison's downloads (includes 3380 support for MVS 3.8!)
+<p><li><a href="http://www.jaymoseley.com/hercules">http://www.jaymoseley.com/hercules</a>
+    <br>Jay Moseley's Hercules site - lots of Hercules and MVS information
+<p><li><a href="http://www.tommysprinkle.com/mvs">http://www.tommysprinkle.com/mvs</a>
+    <br>Tommy Sprinkle's MVS 3.8 documentation
+<p><li><a href="http://hansen-family.com/mvs">http://hansen-family.com/mvs</a>
+    <br>Bob Hansen's MVS 3.8 documentation
+<p><li><a href="http://www.schaefernet.de/hercules">http://www.schaefernet.de/hercules</a>
+    <br>Wolfgang Sch&auml;fer's Hercules site - MVT/MVS tutorials and add-ons
+</ul>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<p><br>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<center><hr width=15% noshade></center>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<p>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+<img src="images/note.gif">
+<b>If you have any questions or comments</b>
+&nbsp;please consider joining the hercules-390 discussion group at
+<a href="http://groups.yahoo.com/group/hercules-390">
+http://groups.yahoo.com/group/hercules-390</a>.
+<p>
+Bug reports (together with your diagnosis of the fault, please)
+may be sent to me, <a href="http://www.conmicro.com">Jay Maynard</a>,
+at <a href="mailto:jmaynard@conmicro.com"><em>jmaynard </em>&#064;<em>
+conmicro.com</em></a>.
 
-        <aside id="sidebar">
-          <a href="https://github.com/hercules-390/html/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/hercules-390/html/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+<p><br>
 
-          <p class="repo-owner"><a href="https://github.com/hercules-390/html"></a> is maintained by <a href="https://github.com/hercules-390">hercules-390</a>.</p>
+<p><center><hr width=15% noshade></center>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+<p>
 
-  
-  </body>
-</html>
+<small>
+
+IBM, System/370, ESA/390, and z/Architecture are trademarks or
+registered trademarks of <a href="http://www.ibm.com">IBM Corporation</a>.
+Other product names mentioned here are trademarks of other companies.
+
+</small>
+
+<p class="lastupd">Last updated $Date$ $Revision$</p>
+
+</td></tr></table>
+
+</BODY>
+</HTML>
