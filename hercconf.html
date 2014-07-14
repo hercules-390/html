@@ -151,6 +151,8 @@ and how they are used.
     0460.2    <a href="#PTP">PTP</a>     192.168.200.1  192.168.200.2/24
     0470.2    <a href="#PTP">PTP</a>     tun0
     0A00.3    <a href="#QETH">QETH</a>    iface /dev/net/tun
+    0E40      <a href="#CTCE">CTCE</a>    31880  192.168.1.202  32880
+    0E41      <a href="#CTCE">CTCE</a>    31882  192.168.1.202  32882
 
     0580      <a href="#3420">3420</a>    /dev/nst0   # <a href="#SCSI">SCSI</a>  (Linux or Windows)
     0581      <a href="#3420">3420</a>    \\.\Tape0   # <a href="#SCSI">SCSI</a>  (Windows only)
@@ -1224,7 +1226,7 @@ and how they are used.
     <p>
 
 <a name="TODDRAG"></a>
-<dt><code>TODDRAG &nbsp; <em>nn</em></code>
+<dt><code>TODDRAG &nbsp; <em>n.nn</em></code>
 <dd><p>
     specifies the TOD clock drag factor.  This parameter can be used
     to slow down or speed up the TOD clock by a factor of <em>nn</em>.
@@ -1922,6 +1924,8 @@ and how they are used.
                 </td>
                 <td>
                         <a href="#CTCT">"CTCT" driver</a>
+                        or
+                        <a href="#CTCE">"CTCE" driver</a>
                 </td>
             </tr>
 
@@ -2887,7 +2891,7 @@ and how they are used.
             <p>
             Check the manufacturer information for your particular model of
             SCSI attached tape drive (and/or use Fish's
-            "<a href="http://www.softdevlabs.com/Hercules">ftape</a>"
+            "<a href="http://www.softdevlabs.com/free">ftape</a>"
             Windows utility)
             to determine whether or not this option is needed for your
             particular drive.
@@ -2948,9 +2952,8 @@ and how they are used.
         <a href="herctcp.html">Hercules TCP/IP</a> page for unix details,
         in particular the use of preconfigured interfaces.
         <p>
-        The Windows
-        implementation is different from the unix one. See Fish's
-        <a href="http://www.softdevlabs.com/Hercules/ctci-w32-index.html">CTCI-W32</a>
+        The Windows implementation is different from the unix one. See Fish's
+        <a href="http://www.softdevlabs.com/ctci-win">CTCI-WIN</a>
         page for further details and information.
         <p>
         For unix systems, such as Linux, BSD, and OSX, you may use
@@ -3024,7 +3027,7 @@ and how they are used.
                 <dt><code>-i &nbsp;<em>tuntap32-i/o-buffer-size</em></code>
                 <dd><p>
                     See Fish's
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-index.html">CTCI-W32</a>
+                    <a href="http://www.softdevlabs.com/ctci-win">CTCI-WIN</a>
                     page for further details and information.
                     <p>
 
@@ -3056,12 +3059,10 @@ and how they are used.
                     adapter binding order, which may not be the one you want if
                     you have multiple adapters.
                     <p>
-                    See
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-faq.html#wireless">question #22
-                    of the CTCI-W32 F.A.Q. (Frequently Asked Questions)</a>
-                    document for more information about adapter binding order, and the
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-readme.html#herccfg">CTCI-W32 Configuration</a>
-                    web page for general information regarding CTCI-W32 configuration.
+                    Refer to the Help file included with Fish's
+                    <a href="http://www.softdevlabs.com/ctci-win">CTCI-WIN</a> product
+                    for for more information about adapter binding order and
+                    for general information regarding CTCI-WIN configuration.
                     <p>
 
                 <dt><code>-s <em>netmask</em></code>
@@ -3095,8 +3096,17 @@ and how they are used.
 <a name="CTCT"></a>
     <dt><b>CTCT</b> &nbsp; &nbsp; (Channel to Channel Emulation via TCP connection)
     <dd><p>
-        An emulated CTCA to another Hercules system. Four arguments
-        are required:
+        An emulated CTCA to another Hercules system.
+        This emulation mode appears to the operating system running in
+        the Hercules machine as an IBM 3088 Channel to Channel Adapter.
+        It provides communication via a TCP connection with another
+        instance of the CTCT driver, and is designed to carry TCP/IP
+        communications between two guest TCP/IP stacks.
+        CTCT may also be used for communication between the client and
+        server components of the
+        <a href="http://home.comcast.net/~mvsddt/">MVS Dynamic Debug Tool</a>.
+        <p>
+        Four arguments are required:
         <p>
 
         <dl> <!-- begin CTCT parms -->
@@ -3133,8 +3143,73 @@ and how they are used.
 
         <p>
 
-        Note: CTCT currently only supports IP traffic, so it cannot be used to
-        transport NJE, SNA, PVM, etc. type payloads. This may change in the future.
+        Note: CTCT only supports IP traffic. Use <a href="#CTCE">CTCE</a>
+        to transport general purpose payloads such as NJE, SNA, PVM, etc.
+        <p>
+
+<p><br>
+
+<a name="CTCE"></a>
+    <dt><b>CTCE</b> &nbsp; &nbsp; (Enhanced Channel to Channel Emulation via TCP connection)
+    <dd><p>
+        The CTCE device type will emulate a real 3088 Channel to
+        Channnel Adapter also for non-IP traffic, enhancing the CTCT
+        capabilities. CTCE connections are also based on TCP/IP between
+        two (or more) Hercules instances, and requires an even-odd pair
+        of port numbers per device side. Only the even port numbers are
+        to be configured; the odd numbers are just derived by adding 1
+        to the (configured) even port numbers. The socket connection
+        pairs cross-connect, the arrows showing the send->receive
+        direction :
+        <pre>
+           x-lport-even -> y-rport-odd
+           x-lport-odd  <- y-rport-even
+        </pre>
+
+        <p>
+        Three arguments are required:
+        <p>
+
+        <dl> <!-- begin CTCE parms -->
+
+        <dt><code><em>lport</em></code>
+        <dd>is the even TCP/IP port on the local system.
+
+        <dt><code><em>raddress</em></code>
+        <dd>is the IP address of the remote system.
+
+        <dt><code><em>rport</em></code>
+        <dd>is the even TCP/IP port on the remote system.
+        </dl>
+
+        <p>
+        The remaining arguments are optional:
+        <p>
+        <dl>
+
+        <dt><code><em>mtu</em></code>
+        <dd>optional mtu buffer size, defaults to 32778
+
+        <dt><code><em>sml</em></code>
+        <dd>optional small minimum for mtu, defaults to 8
+
+        </dl> <!-- end CTCE parms -->
+
+        <p>
+        A sample CTCE device configuration is shown below:
+        <p>
+        Hercules PC Host A with IP address 192.168.1.100 :
+        <pre>
+              0E40  CTCE  30880  192.168.1.200  30880
+              0E41  CTCE  30882  192.168.1.200  30882 </pre>
+        <p>
+        Hercules PC Host B with IP address 192.168.1.200 :
+        <pre>
+              0E40  CTCE  30880  192.168.1.100  30880
+              0E41  CTCE  30882  192.168.1.100  30882 </pre>
+        <p>
+        CTCE connected Hercules instances can be hosted on either Unix
+        or Windows platforms, both sides do not need to be the same.
         <p>
 
 <p><br>
@@ -3497,9 +3572,9 @@ ROUTE  00  172.021.003.032  255.255.255.224
                     <dd>
                 <dt><code>-i &nbsp;<em>tuntap32-i/o-buffer-size</em></code>
                 <dd><p>
-                    See Fish's
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-index.html">CTCI-W32</a>
-                    page for further details and information.
+                    Refer to the Help file included with Fish's
+                    <a href="http://www.softdevlabs.com/ctci-win">CTCI-WIN</a> product
+                    for further details and information.
                     <p>
 
             </dl> <!-- end Optional for Windows -->
@@ -3530,12 +3605,10 @@ ROUTE  00  172.021.003.032  255.255.255.224
                     adapter binding order, which may not be the one you want if
                     you have multiple adapters.
                     <p>
-                    See
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-faq.html#wireless">question #22
-                    of the CTCI-W32 F.A.Q. (Frequently Asked Questions)</a>
-                    document for more information about adapter binding order, and the
-                    <a href="http://www.softdevlabs.com/Hercules/ctci-w32-readme.html#herccfg">CTCI-W32 Configuration</a>
-                    web page for general information regarding CTCI-W32 configuration.
+                    Refer to the Help file included with Fish's
+                    <a href="http://www.softdevlabs.com/ctci-win">CTCI-WIN</a> product
+                    for for more information about adapter binding order and
+                    for general information regarding CTCI-WIN configuration.
                     <p>
 
                 <dt><code>-4</code> &nbsp;&nbsp; or &nbsp; <code>--inet</code>
