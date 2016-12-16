@@ -271,17 +271,16 @@ http://linuxvm.org/Present/SHARE99/S2880JMa.pdf</a>
     <li>Windows binaries:
         <p>
         <ul>
-            <li><a href="http://www.softdevlabs.com/hyperion.html#prebuilt">Hyperion 4.00 Pre-built Binaries</a>: &nbsp; (SoftDevLabs)
+            <li><a href="https://github.com/hercules-390/hyperion/releases/latest" target="_blank">Hyperion 4.00 Pre-built Binaries</a>: &nbsp; (Latest release)
             <p>
                 <b>Note:</b> The above development snapshots of Hercules 4.0 Hyperion
                 do not come with an installer to install the required Microsoft Visual
                 C++ 2008 Runtime components. The above .zip files contain only the Hercules
-                binaries. You will need to either manually install the
+                binaries.  If the Runtime components are not already installed on your system,
+                you will need to manually install the 
                 <a href="http://support.microsoft.com/kb/2019667">Microsoft Visual C++ 2008 Runtime components</a>
-                yourself, or else install one of the products from Fish's
-                <a href="http://www.softdevlabs.com">SoftDevLabs</a> web site
-                which come with their own standard Windows installers to
-                automatically install the Visual C++ 2008 Runtime components for you.
+                yourself.  If you have previously installed Hercules on your system,
+                you will have the needed runtime components and need not install them again.  
         </ul>
 </ul>
 
@@ -300,11 +299,9 @@ may be fixed at an unspecified later date. Additionally, the
 that might not appear in future spinhawk production releases.
 
 <p>
-Build instructions are contained in the source files <tt>BUILDING</tt>
-and <tt>INSTALL</tt> (for Unix) or <tt>README.WIN64</tt> (for Windows)
-in each of the repositories. Fish also has a
-"<a href="http://www.softdevlabs.com/hercules-msvc-build.html">Hercules Windows Build Instructions</a>"
-web page on his SoftDevLabs web site.
+Build instructions are contained in the source files <tt>BUILDING.txt</tt>
+and <tt>README.BuildUNIX.txt</tt> (for Unix) or <tt>README.BuildWIN</tt> (for Windows)
+in each of the repositories.
 
 <br /><br />
 
