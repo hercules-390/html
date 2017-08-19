@@ -520,10 +520,10 @@ a real System/390.  The configuration file is an ASCII text file.
     bind to (listen for connections on). If not specified the server
     will accept connections from any host interface.
     <p>
-    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a> 
+    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a>
     for additional information about setting up a telnet or tn3270 client.
     <p>
-    
+
 <a name="CONKPALV"></a>
 <dt><code>CONKPALV &nbsp; <i>(idle,intv,count)</i></code>
 <dd><p>
@@ -956,8 +956,14 @@ a real System/390.  The configuration file is an ASCII text file.
     Specifies the main storage size in megabytes, where
     <code><em>nnnn</em></code> &nbsp;is a decimal number. Or,
     <code><em>nnnM</em></code> &nbsp;where <code><em>M</em></code>&nbsp;
-    is K - Kilobytes, M - Megabytes, G - Gigabytes, T - Terabytes,
-    P - Petabytes, E - Exabytes. The default on startup is 2M.
+    is
+    <code>K</code> - Kilobytes,
+    <code>M</code> - Megabytes,
+    <code>G</code> - Gigabytes,
+    <code>T</code> - Terabytes,
+    <code>P</code> - Petabytes,
+    <code>E</code> - Exabytes.
+    The default on startup is 2M.
     <p>
     For storage sizes less than 16M, sizes not on a 4K boundary are
     rounded up to the next 4K boundary. Otherwise, storage sizes not on
@@ -2144,7 +2150,7 @@ a real System/390.  The configuration file is an ASCII text file.
     To use this device, a tn3270 client must connect to the host machine
     via the port number specified on the <a href="#CNSLPORT">CNSLPORT</a>
     statement. A valid tn3270 device type, such as IBM-3278, must be used.
-    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a> 
+    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a>
     for additional information about setting up a tn3270 client.
     <p>
 
@@ -2246,8 +2252,8 @@ a real System/390.  The configuration file is an ASCII text file.
     Use tn3270 client software to connect to the SYSG console device via the port number
     specified on the <a href="#CNSLPORT">CNSLPORT</a> statement, just as you would connect
     to a regular local non-SNA 3270 device.
-    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a> 
-    for additional information about setting up a tn3270 client. 
+    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a>
+    for additional information about setting up a tn3270 client.
     <p>
 
     The SYSG console configuration statement recognizes optional arguments which specify
@@ -2337,7 +2343,7 @@ a real System/390.  The configuration file is an ASCII text file.
 
     To use this device, a telnet client must connect to the host machine
     via the port number specified on the <a href="#CNSLPORT">CNSLPORT</a> statement.
-    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a> 
+    See the <a href="telnet.html">Telnet/tn3270 Console How-To</a>
     for additional information about setting up a telnet or tn3270 client.
     <p>
 
