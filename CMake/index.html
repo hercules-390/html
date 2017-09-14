@@ -95,7 +95,7 @@ And see the <a href="faq.html">FAQ</a> if you wish to use 1Stop to build with CM
         system.  
         You just need git, 
         CMake 3.4.3 or better, 
-        a generator such as UNIX Makefiles or Ninja, 
+        a build tool such as GNU Makefiles, BSD Makefiles, or Ninja, 
         and gcc or clang.</li>
 </ul>
 <br />
@@ -160,7 +160,12 @@ And see the <a href="faq.html">FAQ</a> if you wish to use 1Stop to build with CM
     </li>
 </ul>
 <h4>Open Object Rexx and Hercules</h4>
-<p>The current release of Open Object Rexx, 4.2.0, 
+<p>The issue previously noted on this page regarding the use of 
+Open Object Rexx 4.2.0 and Hercules has been addressed in commit 
+<a href="https://github.com/hercules-390/hyperion/commit/cd05efad3d2205c131330b1ef01103f8c952d482" target="_blank">cd05efa</a>.
+CMake may be used to build Hercules integrated with Open Object Rexx without error.
+</p>
+<del><p>The current release of Open Object Rexx, 4.2.0, 
 fails when integrated with Hercules built using CMake
 on Leap 42.2 and Ubuntu 16.04.  
 The failure has been reproduced using a simple c program that
@@ -189,7 +194,7 @@ specifically building the small c program using libtool.
 <li>Use the 5.0.0 beta version of Open Object Rexx.</li>
 <li>Use Regina Rexx as the REXX interpreter integrated with Hercules.</li>
 </ul>
-
+</del>
 <br />
 
 <hr />
