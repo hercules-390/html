@@ -168,10 +168,18 @@ and
 <p><code>&lt;path&gt;</code> may be absolute or relative to the Hercules build directory.
 </p>
 
-<p>The <code>-DEXTPKG_DIR=&lt;path&gt;</code> option is most useful to Hercules developers who may have multiple
-Hercules build directories, 
-or who wish to erase and recreate the build
-directory without rebuilding all external packages.
+<p>
+    The <code>-DEXTPKG_DIR=&lt;path&gt;</code> option is most useful to Hercules developers who may have multiple
+    Hercules build directories, 
+    or who wish to erase and recreate the build
+    directory without rebuilding all external packages.  
+    Note that if a single EXTPKG_DIR directory is shared between 
+    multiple Hercules build directories, 
+    all Hercules build directories must be built using
+    the same build tool.  
+    It is not possible for a Hercules build that uses, 
+    say, Ninja, to reference an EXTPKG_DIR that is used by a Hercules
+    build directory that uses Makefiles.  
 </p>
 
 <p>This option specifies the path that the CMake build will use as the root of all

@@ -3,8 +3,8 @@
 <HEAD><TITLE>
 Using CMake to Build Hercules Version 4.0</TITLE>
 <LINK REL=STYLESHEET TYPE="text/css" HREF="../hercules.css">
-<link rel="shortcut icon" href="images/favicon.ico" />
-<link rel="icon" href="images/favicon.ico" />
+<link rel="shortcut icon" href="../images/favicon.ico" />
+<link rel="icon" href="../images/favicon.ico" />
 </HEAD>
 
 <style>
@@ -18,19 +18,65 @@ li:not(:last-child) {
 
 <h1>Using CMake to Build Hercules Version 4.0</h1>
 <hr />
-<h3>QUICK START: Build Hercules Using CMake</h3>
-<p>To build Hercules on your computer using CMake, 
+
+<blockquote>
+    <p>
+        <a href="#quickstart">QUICK START: Build Hercules Using CMake</a>
+    </p>
+    <p>
+        <a href="#whycmake">Why should I use CMake to build Hercules?</a>
+    </p>
+    <p>
+        <a href="#cmakestatus">CMake Build Development Status</a>
+    </p>
+    <p>
+        <a href="#versusautotools">Changes From the Autotools Build</a>
+    </p>
+    <p>
+        <a href="#optdelta">Command Line Option Changes</a>
+    </p>
+    <p>
+        <a href="#optnew">Command Line Option Additions</a>
+    </p>
+    <p>
+        <a href="#limitations">Current Limitations of the CMake Build</a>
+        <ul>
+            <li><a href="#ninjafreebsd">Ninja issues on FreeBSD</a>
+            <li><a href="#wslreginarexx">Windows Subsystem for Linux, Regina Rexx, and runtest.rexx</a>
+            <li><a href="#oorexx">(Resolved) Open Object Rexx and Hercules</a>
+        </ul>
+    </p>
+    <p>
+        <a href="#What_To_Do_When_it_Fails">What To Do When it Fails</a>
+    </p>
+</blockquote>
+
+<br /><hr />
+
+
+<h3 id="quickstart">QUICK START: Build Hercules Using CMake</h3>
+<p>To build Hercules on your computer using CMake,
 you need the following software installed:
 </p>
 <ul>
-<li>CMake 3.4 or better.</li>
-<li>A git client</li>
-<li>A c compiler.  Both gcc and clang have been tested</li>
-<li>If you wish to use <code>1Stop-Cmake</code>, sed</li>
-<li>If you wish to run <code>make&thinsp;test</code>, 
-    the replacement for <code>make&thinsp;check</code>, 
-    a REXX interpreter, 
-    either Regina Rexx or Open Object Rexx.&nbsp; </li>
+<li>
+    CMake version 3.4 or better: <code>cmake&nbsp;--version</code>.  
+    (CMake older than 3.4?  
+    <a href="upgrcmake.html" target="_blank">See these instructions</a>.)
+</li>
+<li>A git client version 1.8.5.1 or better: <code>git&nbsp;--version</code>.</li>
+<li>A c compiler.  Both gcc and clang have been tested.</li>
+<li>If you wish to use <code>1Stop-Cmake</code>, sed.</li>
+<li>A REXX interpreter,
+    either Regina Rexx or Open Object Rexx,
+    if you wish to run <code>make&thinsp;test</code>,
+    the CMake equivalent of <code>make&thinsp;check</code>.&nbsp; 
+</li>
+<li>
+    <em>Not required:</em> autoconf, automake, flex, gawk, grep, m4, nor perl.  
+    Although there is no issue if these are installed on the
+    system being used to build Hercules-390.
+</li>
 </ul>
 <p>
 Do the following to build Hercules using CMake on GNU/Linux or BSD
@@ -39,7 +85,7 @@ open source systems or on Solaris.
     <ol>
         <li>Clone or update your local clone of Hyperion, as needed.</li>
 
-        <li>Create a build directory.  Anywhere you wish, so long as the 
+        <li>Create a build directory.  Anywhere you wish, so long as the
             directory is writable.</li>
 
         <li>cmake &lt;hyperion-source-dir&gt</li>
@@ -49,31 +95,47 @@ open source systems or on Solaris.
         <li>make test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<em>not</em> make check)</li>
 
         <li>make install&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(if you wish)</li>
-        
+
     </ol>
 
 <p>That's it.  SoftFloat-3a will be cloned and built inside the Hercules
 build directory, and Hercules will be built.</p>
 <p>
-See the <a href="buildopts.html">Build Options</a>
-page for more information on those build options 
-that are specific to building Hercules.&nbsp;
-A separate page, 
-<a href="cmakeopts.html">CMake Build Options</a>, 
-details how selected standard CMake options may be used when building Hercules.&nbsp;
+Helpful pages:
+<ul>
+<li>
+    <a href="buildopts.html">Build Options</a>
+    - information on CMake build options
+    that are specific to building Hercules.&nbsp;
+</li>
+<li>
+    <a href="cmakeopts.html">CMake Build Options</a>,
+    - information on standard CMake options may be used when building Hercules.&nbsp;
+</li>
+<li>
+    <a href="aboutcmake.html">An Overview of CMake</a>
+    - provides, unsurprisingly, an overview of the CMake application 
+    and its approach to building applications.
+</li>
+<li>
+    <a href="extpkg.html">External Packages</a> 
+    - how to control how and where CMake builds SoftFloat-3a
+    and other external packages needed by Hercules-390.
+</li>
+<li>
+    <a href="faq.html">FAQ</a> 
+    - Frequently Asked Questions.  
+    See the FAQ if you wish to use 1Stop with CMake.
+</li>
+</ul>
 </p>
-    <p>
-        Visit <a href="extpkg.html">External Packages</a> to change how and where CMake builds SoftFloat-3a.
-</p>
-<p>
-And see the <a href="faq.html">FAQ</a> if you wish to use 1Stop to build with CMake.
-</p>
-    <p>
-        &nbsp;</p>
-<hr />
 
 
-<h3>Why should I use CMake to build Hercules?</h3>
+
+<br /><hr />
+
+
+<h3 id="whycmake">Why should I use CMake to build Hercules?</h3>
 
 
 <ul>
@@ -85,69 +147,69 @@ And see the <a href="faq.html">FAQ</a> if you wish to use 1Stop to build with CM
         requirements and will build SoftFloat-3a in a subdirectory of
         the build directory.
         Options are provided to build SoftFloat-3a in another directory,
-        to share one SoftFloat-3a build directory with 
-        multiple CMake Hercules build directories, 
+        to share one SoftFloat-3a build directory with
+        multiple CMake Hercules build directories,
         or to use a previously-built SoftFloat-3a.</li>
-    <li>CMake supports either GNU make or BSD make.  
+    <li>CMake supports either GNU make or BSD make.
         There is no need to install GNU make on a FreeBSD system. </li>
     <li>The CMake build supports Ninja, a replacement for make.</li>
     <li>There is no need to have GNU autotools installed on your building
-        system.  
-        You just need git, 
-        CMake 3.4.3 or better, 
-        a build tool such as GNU Makefiles, BSD Makefiles, or Ninja, 
+        system.
+        You just need git,
+        CMake 3.4.3 or better,
+        a build tool such as GNU Makefiles, BSD Makefiles, or Ninja,
         and gcc or clang.</li>
 </ul>
 <br />
 
 <hr />
-<h3>CMake Build Development Status</h3>
+<h3 id="cmakestatus">CMake Build Development Status</h3>
 
 <ul>
 
     <li>CMake may be used for Hercules open source system builds as an
-    alternative to GNU autotools (autogen.sh followed by configure).  
+    alternative to GNU autotools (autogen.sh followed by configure).
     </li>
 
-    <li>The CMake build for Hercules has been tested on 
+    <li>The CMake build for Hercules has been tested on
     GNU/Linux (Debian, Ubuntu, Leap),
-    FreeBSD, 
-    Windows Subsystem For Linux, 
+    FreeBSD,
+    Windows Subsystem For Linux,
     and Solaris.
     </li>
 
-    <li>Apple build support has been coded but testing on mac OS 10.10 Yosemite
-    fails in the make command for Hercules; 
-    SoftFloat-3a builds successfully, 
+    <li>Apple build support has been coded but testing on macOS 10.10 Yosemite
+    fails in the make command for Hercules;
+    SoftFloat-3a builds successfully,
     and the CMake scripts complete without error.
     </li>
 
     <li>AIX builds have not been tested. </li>
 
-    <li>Native (Visual Studio) Windows builds are not yet supported.  
+    <li>Native (Visual Studio) Windows builds are not yet supported.
     That's comming.</li>
-    <li>Apple mac OS native Xcode builds have not been tested. </li>
+    <li>Apple macOS native Xcode builds have not been tested. </li>
 
 </ul>
 <br />
 <hr />
-<h3>Changes From the Autotools Build</h3>
+<h3 id="versusautotools">Changes From the Autotools Build</h3>
 
 <ul>
     <li>Libtool is not used.
     Shared libraries are always built.
         See below for the issue this creates with Open Object Rexx.</li>
 
-    <li><code>-O3</code> is never included in automatic optimization flags.  
-    You may, 
-    if you wish, 
-    include <code>-O3</code> in either the 
+    <li><code>-O3</code> is never included in automatic optimization flags.
+    You may,
+    if you wish,
+    include <code>-O3</code> in either the
     <code>OPTIMIZATION</code> option or the
     <code>ADD-CFLAGS</code>
     option.
     </li>
 
-    <li>A <code>make&thinsp;check</code> target is not generated.  
+    <li>A <code>make&thinsp;check</code> target is not generated.
         Use <code>make&thinsp;test</code> or <code>CTest</code> instead.</li>
 
     <li>Detailed test results from make test are not displayed on the console.
@@ -155,61 +217,25 @@ And see the <a href="faq.html">FAQ</a> if you wish to use 1Stop to build with CM
     <code>&lt;build-dir&gt;/Testing/Temporary</code> directory.
     </li>
 
-    <li>Ninja is supported as a generator and has been tested 
-    (multiple versions on multiple target systems). 
+    <li>Ninja is supported as a generator and has been tested
+    (multiple versions on multiple target systems).
     </li>
 </ul>
-<h4>Open Object Rexx and Hercules</h4>
-<p>The issue previously noted on this page regarding the use of 
-Open Object Rexx 4.2.0 and Hercules has been addressed in commit 
-<a href="https://github.com/hercules-390/hyperion/commit/cd05efad3d2205c131330b1ef01103f8c952d482" target="_blank">cd05efa</a>.
-CMake may be used to build Hercules integrated with Open Object Rexx without error.
-</p>
-<del><p>The current release of Open Object Rexx, 4.2.0, 
-fails when integrated with Hercules built using CMake
-on Leap 42.2 and Ubuntu 16.04.  
-The failure has been reproduced using a simple c program that
-dynamically loads the shared ooRexx libraries and attempts 
-to run a sample REXX script script based on the example on
-page <nobr>376-377</nobr> of the 
-<a href="http://hercdoc.glanzmann.org/V400/HerculesUserReference.pdf" target="_blank">
-Hercules User Reference</a>. 
-</p>
-<p>Open Object Rexx integrates without issue to Hercules
-when built with autotools.  
-The ooRexx 5.0.0 beta as of August 2017 can be used to 
-run the simple c program without error.  
-The beta version operates without issue when integrated
-with Hercules build using CMake. 
-</p>
-<p>One might speculate that ooRexx 4.2.0 has an issue
-when called dynamically from programs that are not built to use 
-libtool.  
-Further research would be needed to verify this,
-specifically building the small c program using libtool.  
-</p>
-<p>The alternatives for this issue are:
-</p>
-<ul>
-<li>Use the 5.0.0 beta version of Open Object Rexx.</li>
-<li>Use Regina Rexx as the REXX interpreter integrated with Hercules.</li>
-</ul>
-</del>
 <br />
 
 <hr />
-<h3>Command Line Option Changes</h3>
+<h3 id="optdelta">Command Line Option Changes</h3>
 <h4><code>--enable-xxx</code> is replaced with <code>-DXXX=yyy</code></h4>
 
 <p>XXX is the configure.ac -enable option in caps.
 </p>
-<p>For example <code>--enable-ipv6</code>, 
-as a configure.ac command line option, 
+<p>For example <code>--enable-ipv6</code>,
+as a configure.ac command line option,
 would be specified on the CMake command line as <code>-DIPV6=YES</code>;
-code>--disable-ipv6</code> as <code>-DIPV6=NO</code>.  
-The <code>-D</code> prefix identifies a CMake command line option, 
-and what follows it is made available to CMake in much 
-the same way that -D is used by a c compiler.  
+code>--disable-ipv6</code> as <code>-DIPV6=NO</code>.
+The <code>-D</code> prefix identifies a CMake command line option,
+and what follows it is made available to CMake in much
+the same way that -D is used by a c compiler.
 </p>
 <p>So these two command lines have the same effect on the Hercules build:
 </p>
@@ -248,12 +274,12 @@ lines set the same option for the CMake build:</p>
 <br />
 
 <hr />
-<h3>New Build Options</h3>
+<h3 id="optnew">Command Line Option Additions</h3>
 <h4><code>-DADD-CFLAGS</code></h4>
 <p>If you need to set compiler options or define macros that are passed directly to the c compiler,
 use <code>-DADD-CFLAGS="&lt;flags&gt;
-"</code> where <code>&lt;flags&gt;</code> is replaced with the string of options and macros.  
-For example: 
+"</code> where <code>&lt;flags&gt;</code> is replaced with the string of options and macros.
+For example:
 </p>
 <p><code>cmake &lt;source-dir&gt; -DADD-CFLAGS="-DNO_ASM_BYTESWAP"</code>
 </p>
@@ -267,40 +293,130 @@ The default is a null string, which adds no additional c flags.
 
 <p>Defines an absolute or relative path of the top level directory to be
 used for any external package that will be built by the Hercules build.
-If a relative path, it is relative to the Hercules build directory.  
+If a relative path, it is relative to the Hercules build directory.
 If the path does not exist, it is created.
-The relative directory <code>extpkg/</code> is used as a default.  
+The relative directory <code>extpkg/</code> is used as a default.
 </p>
 
-<p>See <a href="extpkg.html">"Controlling the Automatic Build of External Packages"</a> 
+<p>See <a href="extpkg.html">"Controlling the Automatic Build of External Packages"</a>
 for more information.
 </p>
 <br />
 
 <hr />
 
-<h3>Current Limitations of the CMake Build</h3>
+<h3 id="limitations">Current Limitations of the CMake Build</h3>
 
 <ul>
 <li>No support for AIX builds.  Test subject needed.</li>
 <li>No support for Windows builds. A Windows Build is the next goal.</li>
 <li>No Support for Cygwin/MinGW. Formerly deprecated, now gone.</li>
 <li>No support for creating an installation or source tarball.  Future activity.</li>
-<li>No support for making hercifc setuid from within the build.  
+<li>No support for making hercifc setuid from within the build.
     You will have to do this manually.</li>
 </ul>
+
+<h4 id="ninjafreebsd">Ninja issues on FreeBSD</h4>
+<p>
+    As of this writing,
+    the Ninja build tool cannot be used to build Hercules-390
+    on FreeBSD. 
+</p>
+<p>
+    Ninja on FreeBSD is unable to resolve the dependency of Hercules on the 
+    SoftFloat-3a For Hercules static library.  
+    Specific coding, a single option, 
+    is required in the CMake script to use static libraries created by external projects,
+    and this specific coding works on GNU/Linux target systems.  
+    It is not clear whether this is a Ninja issue,
+    a CMake issue,
+    or an issue in the CMake scripts used to build Hercules-390.  
+    Further investigation is needed. 
+</p>
+<p>
+    In the meantime, 
+    use the CMake generator "UNIX Makefiles" when building
+    Hercules-390 on FreeBSD.  
+</p>
+
+
+<h4 id="wslreginarexx">Windows Subsystem for Linux, Regina Rexx, and runtest.rexx</h4>
+<p>
+    As of this writing, 
+    the runtest.rexx command, 
+    used to run tests when using CMake to build Hercules-390,
+    fails when run on Windows Subsystem for Linux (WSL) using Regina Rexx.  
+    Regina Rexx is the only REXX interpreter included in the 
+    WSL repositories,
+    just as it is in native Ubuntu repositories.  
+</p>
+<p>
+    The Rexx Utilities package included with Regina Rexx is unable to
+    identify directories in the WSL file system.  
+    The runtest.rexx command uses the Rexx Utilities package to 
+    check the validity of directory names included in 
+    command line arguments provided to runtest.rexx.  
+    Oddly, the Regina Rexx Utilities package has no difficulty 
+    returning a valid list of files in a directory of the 
+    WSL file system.  
+</p>
+<p>
+    To use <code>make test</code> on WSL,
+    you will need to build Open Object Rexx (ooRexx) from source.  
+    The current stable production version of ooRexx has been tested.
+</p>
+
+<h4 id="oorexx">Open Object Rexx and Hercules</h4>
+<p>The issue previously noted on this page regarding the use of
+Open Object Rexx 4.2.0 and Hercules has been addressed in commit
+<a href="https://github.com/hercules-390/hyperion/commit/cd05efad3d2205c131330b1ef01103f8c952d482" target="_blank">cd05efa</a>.
+CMake may be used to build Hercules integrated with Open Object Rexx without error.
+</p>
+<del><p>The current release of Open Object Rexx, 4.2.0,
+fails when integrated with Hercules built using CMake
+on Leap 42.2 and Ubuntu 16.04.
+The failure has been reproduced using a simple c program that
+dynamically loads the shared ooRexx libraries and attempts
+to run a sample REXX script script based on the example on
+page <nobr>376-377</nobr> of the
+<a href="http://hercdoc.glanzmann.org/V400/HerculesUserReference.pdf" target="_blank">
+Hercules User Reference</a>.
+</p>
+<p>Open Object Rexx integrates without issue to Hercules
+when built with autotools.
+The ooRexx 5.0.0 beta as of August 2017 can be used to
+run the simple c program without error.
+The beta version operates without issue when integrated
+with Hercules build using CMake.
+</p>
+<p>One might speculate that ooRexx 4.2.0 has an issue
+when called dynamically from programs that are not built to use
+libtool.
+Further research would be needed to verify this,
+specifically building the small c program using libtool.
+</p>
+<p>The alternatives for this issue are:
+</p>
+<ul>
+<li>Use the 5.0.0 beta version of Open Object Rexx.</li>
+<li>Use Regina Rexx as the REXX interpreter integrated with Hercules.</li>
+</ul>
+</del>
+
 <br />
 
 <hr />
+
+
 <h3 id="What_To_Do_When_it_Fails">What To Do When it Fails</h3>
 
-<p>Please 
+<p>Please
 <a href="https://github.com/hercules-390/hyperion/issues/new" target="_blank">
         create a github issue
 </a>
-in Hercules-390/hyperion.  
+in Hercules-390/hyperion.
 The following information will be needed and can be posted
-to the issue in a tarball: 
+to the issue in a tarball:
 </p>
 
 <ul>
@@ -319,12 +435,12 @@ to the issue in a tarball:
 <small>This web page Copyright &copy; 2017 by Stephen R. Orso.
 <br /><br />
 This work is licensed under the Creative Commons Attribution-
-ShareAlike 4.0 International License. 
+ShareAlike 4.0 International License.
 <br /><br />
 To view a copy of this license,
-visit 
-<a href="http://creativecommons.org/licenses/by-sa/4.0/" 
-        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a> 
+visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/"
+        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a>
 or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 </small>

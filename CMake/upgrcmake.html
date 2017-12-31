@@ -1,0 +1,461 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+<HTML>
+<HEAD><TITLE>
+Upgrade CMake to at least 3.4</TITLE>
+<LINK REL=STYLESHEET TYPE="text/css" HREF="../hercules.css">
+<link rel="shortcut icon" href="../images/favicon.ico" />
+<link rel="icon" href="../images/favicon.ico" />
+</HEAD>
+
+<style>
+
+li:not(:last-child) {
+    margin-bottom: 5px;
+}
+table {
+    border: 2px solid black;
+    border-collapse:collapse;
+}
+th {
+    border: 1px solid black;
+    vertical-align:bottom;
+    text-align:left;
+    padding:10px 5px 5px 5px;
+}
+td {
+    border: 1px solid black;
+    vertical-align: top;
+    text-align:left;
+    padding:5px 5px 10px 5px;
+}
+</style>
+
+<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
+      VLINK="#008040" ALINK="#000000">
+<h1>Upgrade CMake to at least 3.4</h1>
+<hr />
+<p>
+There are four ways to get the current version, or at least a new-enough version, of CMake installed on your system.  
+Which of these can be used depends on your target system.
+</p>
+<ol>
+<li>Install CMake from your system's distribution repositories</li>
+<li>If your distro came with a pre-3.4 CMake, see if a newer version has been backported.</li>
+<li>Install binaries from
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+<li>
+    Build from source, also at 
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+</ol>
+<p>
+    Note: use 
+    <a href="https://cmake.org/files" target="_blank">https://cmake.org/files</a>
+    for direct links to older versions of CMake.
+</p>
+<p>
+    Here are quick links to information for each target system.
+    There are some considerations for building CMake from source,
+    whether using the CMake bootstrap process or building using
+    a previously-installed version of CMake to configure the build. 
+</p>
+<ul>
+<li><a href="#linux">Linux</a></li>
+<li><a href="#windows">Windows</a></li>
+<li><a href="#macos">Mac OS X / macOS</a></li>
+<li><a href="#otheruls">Other UNIX-like Systems</a></li>
+<li><a href="#bootstrap">Building From Source</a></li>
+</ul>
+<hr />
+<br />
+
+<h3 id="linux">Linux</h3>
+<p>
+There are four ways to get CMake installed on your system.  
+</p>
+<ol>
+<li>Install CMake from your system's distribution repositories</li>
+<li>If your distro came with a pre-3.4 CMake, see if a newer version has been backported.</li>
+<li>
+    Install binaries from 
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+<li>
+    Build from source, also at 
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+</ol>
+<p>
+    Procedures for using options one or two are dependent on your target system's distribution and release.  
+</p>
+<h5>Installing Pre-Built Binaries</h5>
+<p>
+    Pre-built binaries can be downloaded for 64-bit systems, 
+    and for 32-bit systems up to CMake 3.6.3.  
+    The tarball for binaries includes 
+    bin, doc, man, and share directories
+    and may be installed under any parent directory.  
+    All four directories must be installed under the same parent directory.  
+    For example,
+    if one installs the Linux binaries in <code>$HOME/cmake</code>,
+    one can invoke CMake for the configure step using:
+    <br /><br />
+    <code>$HOME/cmake/bin/cmake</code>
+    <br /><br />
+    and that binary will be used for the build and install steps.
+    (ctest and cpack will need to be run using 
+    $HOME/cmake/bin/ctest and $HOME/cmake/bin/cpackinstall,
+    respectively).
+</p>
+<p>
+    This author has tested the pre-built 64-bit Linux binaries 
+    for CMake 3.10 on:
+    <ul>
+    <li>CentOS7</li>
+    <li>Debian 9 and 8</li>
+    <li>Open SUSE Leap 42.3</li>
+    <li>Ubuntu 17.04 , 16.04.3 LTS, 14.04.5 LTS</li>
+    <li>Windows Subsystem for Linux (Ubuntu 16.04.3 LTS, Windows Fall 2017 Creator's Update)</li>
+    </ul>
+</p>
+<p>
+    This author has tested the pre-built 32-bit Linux binaries 
+    for CMake 3.6.3, 
+    the last CMake release with 32-bit Linux binaries, 
+    on:
+</p>
+<ul>
+    <li>Debian 9-32 (Stretch)</li>
+    <li>Debian 8-32 (Jessie)</li>
+    <li>Ubuntu 16.04.3 LTS</li>
+</ul>
+
+<h5>Build From Source on Linux</h5>
+<p>
+    See <a href="#bootstrap">Build From Source</a>. 
+    There are no special considerations for building from source on Linux.
+</p>
+
+
+<hr />
+<br />
+
+
+<h3 id="windows">Windows</h3>
+<p>
+    Here are your choices:
+</p>
+<ol>
+<li><del>Install CMake from your system's distribution repositories</del></li>
+<li><del>If your distro came with a pre-3.4 CMake, see if a newer version has been backported</del></li>
+<li>
+    Install binaries from 
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+<li><del>
+    Build from source, also at
+    https://cmake.org/download.</del>
+</del></li>
+</ol>
+<p>
+That is it.  
+Hobson's choice: binaries or nothing 
+(<a href="https://en.wikipedia.org/wiki/Hobson%27s_choice" target="_blank">more about Hobson's choice</a>).
+But the binaries are a good choice,
+and much better than giving up.  
+Pick the most recent version. 
+</p>
+<p>
+    If your Windows system has a pre-3.5 version of CMake already installed, 
+    you must uninstall it before installing version 3.5 or newer due to a change in the
+    installer technology.  
+    Uninstalling an older version is not a problem;
+    CMake does not have settings that would be removed by an uninstall.  
+</p>
+<p>
+If you find that the most recent version does not work,
+uninstall that one and install an older version. 
+You can find older versions at:
+<a href="https://cmake.org/files/" target="_blank">https://cmake.org/files/</a>.
+Just do not install one older than 3.4.0.  
+</p>
+<p>
+    One can build CMake from source on Windows,
+    one just has to install CMake using binaries to do this.
+    There is no equivalent to the bootstrap process available
+    on other target systems.  
+    Because Windows binaries are available for all CMake releases, 
+    there does not seem to be a need to build from source.  
+    Unless, of course, you wish to become a CMake developer.  
+</p>
+<hr />
+<br />
+
+<h3 id="macos">Mac OS X / macOS</h3>
+<p>
+See if CMake is included in the macOS app store, and if so, how.   
+But it is not likely to be there; 
+web search results showed lots of examples of using
+homebrew to build from source or using the binaries for
+macOS X 10.6 (Snow Leopard) or better.   
+</p>
+<p>
+    Here are your choices:
+</p>
+<ol>
+<li><del>Install CMake from your system's distribution repositories</del></li>
+<li><del>If your distro came with a pre-3.4 CMake, see if a newer version has been backported</del></li>
+<li>
+Install binaries from 
+<a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>.
+This option is available for macOS 10.6 (Snow Leopard) or newer only.
+</li>
+<li>
+Build from source, also at
+<a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>.
+</li>
+</ol>
+<h5>Build From Source on macOS</h5>
+<p>
+    See <a href="#bootstrap">Build From Source</a>. 
+    In addition, 
+    you will need the macOS application 
+    <a href="https://brew.sh/" target="_blank">Homebrew</a> 
+    and/or the Xcode command line utilities.  
+    This author does not have access to a Mac, 
+    so this procedure has not been validated.  
+    Any feedback about building from source under macOS
+    would be welcomed.  
+</p>
+
+<hr />
+<br />
+
+
+<h3 id="otheruls">Other UNIX-like Systems</h3>
+<p>
+There are three ways to get CMake installed on your system.  
+</p>
+<ol>
+<li>Install CMake from your system's distribution repositories</li>
+<li>If your distro came with a pre-3.4 CMake, see if a newer version has been backported.</li>
+<li><del>Install binaries from https://cmake.org/download</del></li>
+<li>
+    Build from source, also at 
+    <a href="https://cmake.org/download" target="_blank">https://cmake.org/download</a>
+</li>
+</ol>
+<p>
+Procedures for using options one or two are dependent on your target system's distribution and release.  
+</p>
+
+<h5>Build From Source on FreeBSD</h5>
+<p>
+    See <a href="#bootstrap">Build From Source</a>. 
+</p>
+<p>
+    CMake versions 3.6.0 and newer can be built 
+    from source on FreeBSD 11 without needing 
+    <code>--system-curl</code> when using <code>bootstrap</code> or 
+    <code>-DCMAKE-USE-SYSTEM-CURL</code> when building
+    using an older version of CMake.  
+    This is likely to be true on newer versions of FreeBSD,
+    and it may be true for older versions as well.  
+</p>
+<p>
+    If you try building from source on a newer or older FreeBSD version,
+    please provide feedback about your experiences.  
+</p>
+<p>
+    Note that Ninja is not supported as a Hercules build tool on FreeBSD.  
+    This restriction will be removed if and when SoftFloat-3a For Hercules
+    is built as a shared library.  
+    This restriction applies whether CMake is built from source or 
+    installed from a FreeBSD package or ports repository.  
+</p>
+<hr />
+<br />
+
+
+<h3 id="bootstrap">Build From Source</h3>
+<p>
+    Complete "build from source" instructions may be found on the CMake web site at 
+    <a href="https://cmake.org/install/" target="_blank">https://cmake.org/install/</a>.
+    Review those instructions and come back here for additional important information.
+</p>
+<p>
+    CMake uses CMake to configure CMake and create build scripts used when 
+    building CMake from source.  
+    If the target system does not already have an older CMake installed,
+    CMake sources include a <code>bootstrap</code> shell script that first builds a 
+    fixed configuration "bootstrap" CMake from source and then uses that 
+    bootstrap CMake to build the "real" CMake.   
+    The bootstrap process is not available on Windows systems, 
+    nor is it needed because CMake provides installable binaries for all
+    versions of CMake.  
+</p>
+<p>
+    The published CMake build from source process builds
+    in the source directory and uses no options.  
+    If you are building a version older than 3.7.1, 
+    or on a system with OpenSSL older that 1.1,
+    take note of the following:
+</p>
+<table style="width:800px">
+  <tr>
+    <th style="width:16%">CMake Version</th>
+    <th style="width:42%">OpenSSL 1.1</th> 
+    <th style="width:42%">OpenSSL 1.0</th>
+  </tr>
+  <tr>
+    <td>3.7.1 or newer</td>
+    <td>No issues</td> 
+    <td rowspan="2">
+        <p>
+            Use <code>-DCMAKE_USE_SYSTEM_CURL</code>
+            if you are building from source using an older
+            version of CMake, 
+            or use <span style="white-space: nowrap;"><code>--system-curl</code> </span>
+            on the <code>bootstrap</code> command.
+        </p>
+        <p>
+            Have the curl (OpenSSL flavor) 
+            and zlib development headers and libraries 
+            available on the target system.  
+            Avoid the GnuTLS curl development headers and library.
+        </p>
+        <p>
+            Note: Above options not required if building on FreeBSD 11 or newer,
+            and may not be required on older versions of FreeBSD.
+        </p>
+    </td>
+  </tr>
+  <tr>
+    <td>3.5.0 to 3.7.0</td>
+    <td>
+        <p>
+            Use <code>-DCMAKE_USE_SYSTEM_LIBARCHIVE</code>
+            if you are building CMake from source using an older
+            version of CMake,
+            or use <span style="white-space: nowrap;"><code>--system-libarchive</code></span>
+            on the <code>bootstrap</code> command.
+        </p>
+        <p>
+            Have the libarchive and liblzma development
+            headers and libraries installed on your system.
+        </p>
+        <p>
+            For the technical details, please see 
+            <a href="https://gitlab.kitware.com/cmake/cmake/issues/16459" target="_blank">CMake issue 16459</a>
+            and 
+            <a href="https://gitlab.kitware.com/cmake/cmake/merge_requests/289" target="_blank">CMake merge request 289</a>.
+        </p>
+    </td>
+</tr>
+  <tr>
+    <td>3.4.0 to 3.5.3</td>
+    <td colspan="2">        
+        <p>
+            Use <code>-DCMAKE_USE_SYSTEM_CURL</code>
+            if you are building from source using an older
+            version of CMake, 
+            or use <span style="white-space: nowrap;"><code>--system-curl</code> </span>
+            on the <code>bootstrap</code> command.
+        </p>
+        <p>
+            Have the curl (OpenSSL flavor) 
+            and Zlib development headers and libraries 
+            available on the target system.  
+            Avoid the GnuTLS curl development headers and library.
+        </p>
+    </td> 
+  </tr>
+  <tr>
+    <td>Older than 3.4.0</td>
+    <td colspan="2">Not supported to build Hercules</td> 
+  </tr>
+  <tr>
+    <td colspan="3">
+        The above options are required to enable HTTPS protocol support 
+        in the CMake <code>file( DOWNLOAD url )</code> command.  
+        The CMake build for Hercules uses https transfers to compare the 
+        versions of BZip2 and Zlib on the target system with those available
+        in the Hercules-390 repository.  
+    </td>
+  </tr>
+</table>
+<p>
+    You may find some of the available options for the bootstrap 
+    procedure helpful;
+    find them using <code>./bootstrap --help</code>.  
+    CMake is not bootstrapped when using <code>--help</code>.  
+    If you are using a prior version of CMake to build from source, 
+    you can use <code>cmake-gui</code> to review available 
+    options.  
+</p>
+<p>
+    Here are some suggestions:
+    <ul>
+        <li>Build out of source.
+            The <code>bootstrap</code> command supports this;
+            just execute it from the build directory.  
+            For example:
+            <br /><br />
+            <code>&nbsp;&nbsp;&nbsp;../cmake-3-.10-0/bootstrap</code>
+            <br /><br />
+        </li>
+        <li>
+            Use the <code>--parallel=n</code> option,
+            where n is the number of parallel build tasks.
+            The value is not limited by the number of 
+            processors available; 
+            memory is the primary limit.  
+            The bootstrap process seems to need about 3GB
+            of memory when using <code>--parallel=10</code>.
+        </li>
+        <li>
+            Consider using <code>--prefix=&lt;install-prefix&gt;</code> to install CMake
+            in other than the default, which is normally <code>/usr/local/bin</code>.
+            CMake can be run from other than the default installation directory 
+            without complications.  For example:
+
+            If one installs the Linux binaries in $HOME/cmake,
+            one can invoke CMake for the configure step using
+            $HOME/cmake/bin/cmake, 
+            and that binary will be used for the build and install steps.
+            (ctest and cpack will need to be run using 
+            $HOME/cmake/bin/ctest and $HOME/cmake/bin/cpackinstall,
+            respectively).
+
+        </li>
+    </ul>
+</p>
+
+
+
+
+
+
+<br /><hr />
+
+
+<br /><hr />
+<p>
+<small>This web page Copyright &copy; 2017 by Stephen R. Orso.
+<br /><br />
+This work is licensed under the Creative Commons Attribution-
+ShareAlike 4.0 International License.
+<br /><br />
+To view a copy of this license,
+visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/"
+        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a>
+or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+</small>
+</p>
+
+</BODY>
+
+</HTML>
