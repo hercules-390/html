@@ -1,0 +1,960 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+<HTML>
+
+<head>
+<title>Using CMake to Build Hercules Version 4.0</title>
+
+<link rel="stylesheet"   TYPE="text/css" HREF="../hercules2.css">
+<link rel="shortcut icon" href="../images/favicon.ico" />
+<link rel="icon" href="../images/favicon.ico" />
+
+<style>
+    table {
+        border: 2px solid black;
+        border-collapse:collapse;
+    }
+    th {
+        border: 1px solid black;
+        vertical-align:bottom;
+        text-align:left;
+        padding:10px 5px 5px 5px;
+    }
+    td {
+        border: 1px solid black;
+        vertical-align: top;
+        text-align:left;
+        padding:5px 5px 10px 5px;
+    }
+    .auto-style1 {
+        width: 30%;
+    }
+    .auto-style4 {
+        width: 17%;
+    }
+    li.spaced:not(:last-child) {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">Building Hercules for Windows</h2>
+        </td>
+    </tr>
+</table>
+<hr />
+</div>
+
+
+<div id="content">
+
+<blockquote>
+    <p>
+        <a href="#quickstart">QUICK START: Build Hercules for Windows Using CMake</a>
+        <ul>
+            <li><a href="#softreqs">Software Requirements</a>
+            <li><a href="#buildcmdline">Building from a command prompt</a>
+            <li><a href="#buildide">Building using the Visual Studio IDE</a>
+            <li><a href="#install">Installing and Uninstalling Hercules</a></li>
+            <li><a href="#helpful">Helpful links</a></li>
+        </ul>
+    </p>
+    <p>
+        <a href="#whycmake">Why should I use CMake to build Hercules for Windows?</a>
+    </p>
+    <p>
+        <a href="#cmakestatus">Hercules Windows Build Development Status</a>
+    </p>
+    <p>
+        <a href="#versusmakefile">Changes From the makefile.bat Build</a>
+        <ul>
+            <li><a href="#optcomp">Comparison of makefile.bat and CMake Options (table)</a></li>
+            <li><a href="#extpkgs">External Package Incompatibilities (BZip2, PCRE, Zlib)</a></li>
+            <li><a href="#envvars">Environment Variable Incompatibilities</a></li>
+            <li><a href="#buildtreedelta">Build Tree Differences</a></li>
+            <li><a href="#vssoldelta">Visual Studio Solution Differences</a></li>
+        </ul>
+    </p>
+    <p>
+        <a href="#limitations">Current Limitations of the CMake Build</a>
+    </p>
+    <p>
+        <a href="#What_To_Do_When_it_Fails">What To Do When it Fails</a>
+    </p>
+</blockquote>
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="quickstart">QUICK START: Build Hercules for Windows Using CMake</h3>
+<h4 class="skiplogo" id="softreq">Software Requirements</h4>
+<ul>
+    <li class="spaced">
+         <a href="http://cmake.org/download" target="_blank">CMake </a>
+         version 3.4 or better: <code>cmake&nbsp;--version</code>.  
+    </li>
+    <li class="spaced">
+        A <a href="http://gitforwindows.org/" target="_blank">Windows git client</a> 
+        version 1.8.5.1 or better.  <code>git&nbsp;--version</code>.
+    </li>
+    <li class="spaced">
+        A version of 
+        <a href="https://www.visualstudio.com/" target="_blank">Microsoft Visual Studio</a>. 
+        Visual Studio 2017 Community Edition or newer is recommended, 
+        although 2008 or newer may be used.   
+        The command line 
+        <a href="https://www.visualstudio.com/downloads/#other" target="_blank">Build Tools</a>
+        may also be used
+        (The Build Tools download link is at the bottom of 
+        <a href="https://www.visualstudio.com/downloads/#other" target="_blank">that page</a>.)
+    </li>
+    <li class="spaced">
+        Optional: The <a href="https://wiki.qt.io/Jom" target="_blank">
+        JOM build tool</a> from Qt, a replacement for NMake that supports
+        building with multiple processors.
+    </li>
+    <li class="spaced">
+        Either 
+        <a href="https://regina-rexx.sourceforge.io/" target="_blank">Regina Rexx</a> 
+        or 
+        <a href="http://www.oorexx.org/" target="_blank">Open Object Rexx</a>,
+        if you wish to run the Hercules test cases using
+        CTest, runtest.rexx, and/or the RUN_TESTS project from
+        within Visual Studio.
+    </li>
+</ul>
+
+
+
+<h4 class="skiplogo" id="buildcmdline">Build using a command prompt</h4>
+    <ol>
+        <li class="spaced">
+            Open a Visual Studio x64 Native Tools command prompt (Replace x64 with x86 for 32-bit systems)
+        </li>
+
+        <li class="spaced">
+            If you have previously used the old makefile.bat build 
+            and used environment variables to point to the directories
+            containing the BZlib2, PCRE, and Zlib packages, 
+            unset those variables: 
+            <p>
+            <code>bzlib_dir pcre_dir zlib_dir</code>
+            </p>
+        </li>
+
+        <li class="spaced">
+            Download: <code>git clone --depth 1 https://github.com/hercules-390/hyperion</code>
+            <p>
+                Omit <code>--depth 1</code> if you wish to review Hyperion change history.  
+                The change history requires about 1.75GB of additional disk space.
+            </p>
+        </li>
+
+        <li class="spaced">
+            Create a build directory anywhere you wish, 
+            so long as the directory is writable, 
+            and change to that directory.
+        </li>
+
+        <li class="spaced">
+            Configure: <code>cmake &lt;hyperion-source-dir&gt -G "&lt;generator-name&gt"</code>
+            <p>
+                Choose the values for -G "&lt;generator-name&gt"
+                using the following table.
+                Be sure to include the quotes.  
+                NMake and JOM build either a 32-bit or a 64-bit Hercules
+                based on the command prompt being used.  
+                The entries for Visual Studio apply to both command line builds
+                and builds using the Visual Studio IDE.  
+            </p>
+            <p>
+            <table>
+                <tr>
+                    <th>System type and build tool</th>
+                    <th>&lt;generator-name&gt</th>
+                </tr>
+                <tr>
+                    <td>64-bit, Visual Studio 2017</td>
+                    <td><code>-G "Visual Studio 15 2017 Win64"</code></td>
+                </tr>
+                <tr>
+                    <td>32-bit, Visual Studio 2017</td>
+                    <td><code>-G "Visual Studio 15 2017"</code></td>
+                </tr>
+                <tr>
+                    <td>64-bit, Visual Studio 2015</td>
+                    <td><code>-G "Visual Studio 14 2015 Win64"</code></td>
+                </tr>
+                <tr>
+                    <td>32-bit, Visual Studio 2015</td>
+                    <td><code>-G "Visual Studio 14 2015"</code></td>
+                </tr>
+                <tr>
+                    <td>NMake (command line)</td>
+                    <td><code>-G "NMake Makefiles"</code></td>
+                </tr>
+                <tr>
+                    <td>JOM (command line)</td>
+                    <td><code>-G "NMake Makefiles JOM"</code></td>
+                </tr>
+            </table>
+            </p>
+            <p>
+                Running <code>cmake --help</code> from the command prompt will
+                return a complete list of CMake options including the names
+                of every generator available within CMake.  
+            </p>
+        </li>
+
+        <li class="spaced">Build: <code>cmake --build . --config release</code></li>
+
+        <li class="spaced">Test: <code>ctest -C release</code></li>
+
+    </ol>
+
+<p>
+    That's it.  
+    BZip2, PCRE, SoftFloat-3a, and Zlib will be cloned 
+    from the Hercules-390 repository and built inside the Hercules
+    build directory, 
+    and Hercules will be built.
+</p>
+<p>
+    Should you experience difficulties using CMake to 
+    build Hercules
+    please follow the guidance provided in 
+    <a href="#What_To_Do_When_it_Fails">What To Do When it Fails</a>
+    and use the 
+    <a href="../hercinst.html">Installation Using Legacy Tools</a>
+    below to build Hercules.  
+</p>
+
+<h4 class="skiplogo" id="buildide">Build using the Visual Studio IDE</h4>
+<p>
+Begin by following steps 1-5 above.  
+Be sure you select a &lt;generator name&gt; 
+that corresponds to the version of Visual Studio you plan to use.  
+Note that you cannot use the command line generators with Visual Studio.  
+</p>
+
+<ol start="6">
+    <li class="spaced">Open the Visual Studio application</li>
+    <li class="spaced">
+        Open the solution created by the CMake configure step: File, Open, Project/Solution.  
+        Navigate to the build directory and open Hercules.sln.  
+    </li>
+    <p>
+        <strong>Note: </strong>If you see files named Hercules_VS*.sln, 
+        check to make sure you did not navigate to the source 
+        directory by mischance.  
+    </p>
+    <li class="spaced">
+        Visual Studio by default offers the alphabetically first 
+        configuration, Debug.  
+        Use the drop-down on the line below the menu bar to
+        change this to Release.  
+    </li>
+    <li class="spaced">
+        Using the menu bar, build the solution: Build, Build Solution.  
+    </li>
+    <li class="spaced">
+        When the build has completed, 
+        you may run the Hercules tests by scrolling to the 
+        project RUN_TESTS in the Solucion Explorer on the right-hand
+        side of the Visual Studio application window,
+        right-mouse clicking on it, and selecting Build.  
+    </li>
+</ol>
+
+
+<h4 class="skiplogo" id="install">Installing and Uninstalling Hercules</h4>
+<p>
+    Hercules may be installed using a command prompt or using 
+    the Visual Studio IDE.  
+    The command prompt may be but does not need to be a 
+    Visual Studio command prompt.  
+    If you wish to install Hercules in a system location, 
+    including the default location of C:\Program Files\Hercules,
+    you should use a standard command prompt with administrative 
+    privileges.  
+</p>
+<p>
+    The CMake configure option -DCMAKE_INSTALL_PREFIX can be used
+    to change the default installation directory. 
+    It is recommended to install Hercules in a separate subdirectory
+    when installing in Windows.  
+</p>
+<p>
+    While it is possible to start Visual Studio with 
+    administrative privileges and use it to install,
+    the command prompt is the recommended approach.  
+</p>
+
+<h5>Installing Hercules</h5>
+<ol>
+    <li class="spaced">
+        Open a command prompt.  
+        If you are installing to a system location, 
+        open a command prompt with administrative privileges.  
+    </li>
+    <li class="spaced">
+        Navigate to the build directory.
+    </li>
+    <li class="spaced">
+        Issue the following command:
+        <p>
+            <code>cmake -P cmake_install.cmake</code>
+        </p>
+        <p>
+            If you wish to install Hercules in a directory other
+            than the one that was used in the CMake configure
+            step, 
+            say, for example %userprofile%\hercules,
+            you can override that directory with the following 
+            form of the install command:
+        </p>
+        <p>
+            <code>cmake -DCMAKE_INSTALL_PREFIX="%userprofile%\hercules" -P cmake_install.cmake</code>
+        </p>
+    </li>
+</ol>
+
+
+<h5>Uninstalling Hercules</h5>
+<p>
+    Uninstallation can be easily performed by deleting the installation directory.  
+    All Hercules components and external packages are by default installed in a 
+    separate directory in C:\Program Files.  
+</p>
+<p>
+    If you have installed Hercules in a subdirectory that contains other 
+    applications, files, or data, 
+    you can use the following steps to remove <em>just</em> the Hercules files.
+</p>
+<p>
+    This procedure removes Hercules file by file from its last installed 
+    location.  
+    It uses a manifest of full path names that is re-created in the 
+    build directory on each install of Hercules.  
+    So if you install to the wrong location and then install to the right
+    location, 
+    this procedure will remove Hercules from the right location.  
+</p>
+<ol>
+    <li class="spaced">
+        Open a command prompt.  
+        If you previously installed Hercules to a system location, 
+        open a command prompt with administrative privileges.  
+    </li>
+    <li class="spaced">
+        Navigate to the build directory.
+    </li>
+    <li class="spaced">
+        Issue the following command:
+        <p>
+            <code>cmake -P cmake_uninstall.cmake</code>
+        </p>
+    </li>
+</ol>
+
+
+<h4 class="skiplogo" id="helpful">Helpful pages</h4>
+
+<ul>
+<li class="spaced">
+    <a href="buildopts.html">Build Options</a>
+    - information on CMake build options
+    that are specific to building Hercules.&nbsp;
+</li>
+<li class="spaced">
+    <a href="cmakeopts.html">CMake Build Options</a>,
+    - information on standard CMake options may be used when building Hercules.&nbsp;
+</li>
+<li class="spaced">
+    <a href="aboutcmake.html">An Overview of CMake</a>
+    - provides, unsurprisingly, an overview of the CMake application 
+    and its approach to building applications.
+</li>
+<li class="spaced">
+    <a href="extpkg.html">External Packages</a> 
+    - how to control how and where CMake builds SoftFloat-3a
+    and other external packages needed by Hercules-390.
+</li>
+<li class="spaced">
+    <a href="faq.html">FAQ</a> 
+    - Frequently Asked Questions.  
+    See the FAQ if you wish to use 1Stop with CMake.
+</li>
+</ul>
+
+
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="whycmake">Why should I use CMake to build Hercules for Windows?</h3>
+
+<ul>
+    <li class="spaced">
+        The CMake scripts will automatically build the following required packages:
+        BZip2, PCRE, SoftFloat-3a, and Zlib.  
+        These packages are built in a subdirectory of
+        the build directory.
+        You do not need to locate installable versions of these packages and set up
+        Windows environment variables to point to their respective Installation directories.  
+        Options are provided to build these packages in another directory,
+        to share one package build directory with
+        multiple CMake Hercules build directories,
+        or to use previously-built packages.
+    </li>
+    <li class="spaced">
+        An installation script is created to install Hercules 
+        in the correct Program Files directory
+        or the directory you specify in <code>-DCMAKE_INSTALL_PREFIX</code>.  
+        This script requires an administrative command prompt if you wish to install 
+        Hercules in a directory protected by Windows.  
+        The default Windows installation directory is 
+        c:\Program Files (x86)\Hercules 
+        when a 32-bit Hercules-390 is built on a 64-bit system, 
+        and c:\Program Files\Hercules otherwise.  
+    </li>
+    <li class="spaced">
+        The build recognizes changes in header files as requiring recompilation of the files
+        that use the altered headers.  
+        This is consistent with the CMake and GNU Autotools build scripts on UNIX-like systems
+        and a significant improvement over the makefile.bat-based Windows build, 
+        which did no header dependency checking.  
+    </li>
+    <li class="spaced">
+        The CMake scripts for Hercules are the same
+        for both UNIX-like and Windows builds and 
+        use the same options 
+        as when building Hercules on UNIX-like systems.  
+        See the 
+        <a href="buildopts.html">Alphabetical List of CMake Hercules Build Command-Line Options</a>
+        for more information about Hercules-specific options 
+        that can control the build when using CMake. 
+        See 
+        <a href="cmakeopts.html">Standard CMake Build Options</a>
+        for more information about general CMake options 
+        that can be useful when building Hercules. 
+
+
+    </li>
+    <li class="spaced">The Hercules source directory is not altered when you build Hercules.  
+        All files created or changed by the build are stored in a separate 
+        build directory, 
+        as is the case when one builds Hercules on a UNIX-like system. 
+    </li>
+    <li class="spaced">
+        You can build in any directory that is not the Hercules source
+        directory.  
+        There is no specific directory structure requirement, 
+        nor any required relationship between the build directory 
+        and the source directory.  
+    </li>
+    <li class="spaced">
+        A corollary of the above is that you can build multiple copies of 
+        Hercules with different build options,
+        say, different versions of external packages,
+        without having to clone Hercules multiple times
+        into separate source directories.  
+        This should simplify local clone management for
+        Windows developers.  
+    </li>
+    <li class="spaced">
+        You can develop and build using the Integrated Development Environment
+        provided by Microsoft Visual Studio 2017 Community Edition or 
+        Microsoft Visual Studio 2015 Community Edition.
+        Older versions are supported by CMake,
+        but the Hercules CMake build has not been tested.  
+        Note that building Hercules with Visual Studio versions 
+        older than 2008 is not supported by Hercules regardless of the
+        build tool in use.   
+    </li>
+    <li class="spaced">
+        A target RUN_TESTS is created to allow running the complete runtest 
+        suite from within the Visual Studio IDE.  
+    </li>
+    <li class="spaced">
+        You can build Hercules from a command line using either MSBuild or NMake.
+        NMake is a component of Visual Studio and is included in all versions that 
+        may be used to build Hercules (2008 or newer).
+        MSBuild, formerly a component of the .NET Framework, 
+        is included with Visual Studio 2013 and newer versions, 
+        including the Build Tools versions.  
+    </li>
+    <li class="spaced">
+        CMake supports JOM, a replacement for NMake that 
+        supports parallel operations when building Hercules.
+        JOM provides a capability similar to /maxcpucount: on a
+        command-line build using MSBuild.exe.  
+    </li>
+    <li class="spaced">
+        The legacy script win32.mak is not required for command-line or IDE-based builds.  
+        The script win32.mak was removed by Microsoft from newer versions of 
+        Visual Studio.
+    </li>
+</ul>
+
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="cmakestatus">Hercules Windows Build Development Status</h3>
+
+<ul>
+
+    <li class="spaced">
+        CMake may be used to build Hercules for all releases of Windows
+        currently supported by Hercules.
+        Windows XP SP3 64-bit is the oldest Windows release that Hercules supports.  
+    </li>
+
+    <li class="spaced">
+        The CMake scripts for Hercules has been tested on
+        Windows 10 Professional Edition, 
+        feature update 1709, using the following build tools:
+        <ul>
+            <li class="spaced">Visual Studio 2017 Community Edition 15.5.2 (IDE, MSBuild, NMake, and JOM)</li>
+            <li class="spaced">Visual Studio 2017 build tools (MSBuild, NMake, and JOM)</li>
+            <li class="spaced">Visual Studio 2015 Community Edition 14.0, update 3 (IDE, MSBuild, NMake, and JOM)</li>
+        </ul>
+    <li class="spaced">
+        All testing has used the MSVC C compiler included with the respective Visual Studio version.
+    </li>
+    <li class="spaced">
+        Testing with JOM used JOM version 1.1.2, the current version at the time of testing
+        in January, 2018.
+    </li>
+    <li class="spaced">
+        Pre-compiled headers are not used when CMake is used to build Hercules for Windows. 
+    </li>
+</ul>
+<br />
+<hr />
+<h3 class="skiplogo" id="versusmakefile">Changes From the makefile.bat Build</h3>
+<p>
+    Before the CMake scripts, 
+    Hercules was built using makefile.bat.
+    The command makefile.bat was used whether one built from a command prompt 
+    or using the Visual Studio IDE.  
+    Internally, makefile.bat used NMake, 
+    an older Microsoft build tool, 
+    and required win32.mak.
+</p>
+<ul>
+    <li class="spaced">
+        The makefile.bat command line options are no longer used.
+        All are replaced by CMake build options.
+        See the table below to match old makefile.bat options to
+        the corresponding CMake options.  
+    </li>
+
+    <li class="spaced">
+        Pre-compiled headers are not created nor used.
+        The CMake build will exploit multiple processor cores, 
+        and this improves performance of the build without the 
+        complexity of pre-compiled headers.  
+    </li>
+
+    <li class="spaced">
+        Visual Studio solutions created by CMake do not support 32-bit and
+        64-bit builds in the same project.  
+        Instead, use two build directories, 
+        one for a 32-bit solution and one for a 64-bit solution.  
+    </li>
+
+    <li class="spaced">
+        Detailed test results from make test are not displayed on the console.
+        Instead, detailed results for each test group are saved in files in the
+        <code>&lt;build-dir&gt;/Testing/Temporary</code> directory.
+    </li>
+</ul>
+
+<h4 class="skiplogo" id="optcomp">Comparison of makefile.bat and CMake Options (table)</h4>
+<p>
+For comparison purposes, 
+here is a synopsis of the makefile.bat command:  
+    <code><pre>
+makefile.bat  {build-type}  {makefile-name}  {num-cpu-engines}  ^
+              [-help]                                           ^
+              [-asm]                                            ^
+              [-title "custom build title"]                     ^
+              [-hqa {directory}]                                ^
+              [-a |clean]                                       ^
+              [{nmake-option}]
+    </pre></code>
+</p>
+<table width="1024px">
+    <tr>
+        <th class="auto-style4">makefile.bat Option</th>
+        <th class="auto-style1">CMake Configure Step Option</th>
+        <th>Comments</th>
+    </tr>
+    <tr>
+        <td class="auto-style4">-help</td>
+        <td class="auto-style1">-DHELP=YES</td>
+        <td>
+            Neither makefile.bat nor CMake take any action to build Hercules after displaying command help.&nbsp; </td>
+    </tr>
+    <tr>
+        <td class="auto-style4">{build-type}</td>
+        <td class="auto-style1">-DCMAKE_BUILD_TYPE=</td>
+        <td>
+            For CMake, only specifies the build type, 
+            not the bitness, 32 or 64, of the built Hercules.&nbsp; 
+            (The bitness of the command prompt used to run 
+            CMake determines bitness,
+            <br />
+            <br />
+            May be &quot;RELEASE&quot; or &quot;DEBUG&quot;</td>
+    </tr>
+    <tr>
+        <td class="auto-style4">{makefile-name}</td>
+        <td class="auto-style1">Not required</td>
+        <td>
+            CMake always uses file CMakeLists.txt in the 
+            source file as the build script. 
+        </td>
+    </tr>
+    <tr>
+        <td class="auto-style4">{num-cpu-engines}</td>
+        <td class="auto-style1">-DMULTI-CPU=&lt;nn&gt</td>
+        <td>
+            If ommitted, support for the Windows maximum of 64 CPUs is generated by CMake.&nbsp;
+            <br />
+            <br />
+            It is not clear what the makefile.bat 
+            default was when doing a command prompt build.&nbsp; 
+            When using makefile.bat within the Visual Studio IDE, 
+            32 and 64 CPUs were supported for 32- and 
+            64-bit systems respectively.&nbsp; </td>
+    </tr>
+    <tr>
+        <td class="auto-style4">-asm</td>
+        <td class="auto-style1">-DASSEMBLY_LISTINGS=YES</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="auto-style4">-title &quot;text&quot;</td>
+        <td class="auto-style1">-DCUSTOM=&quot;text&quot;</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td class="auto-style4">-hqa {directory}</td>
+        <td class="auto-style1">-DHQA_DIR=&quot;&lt;directory&gt;&quot;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="auto-style4">-a | clean</td>
+        <td class="auto-style1">--clean-first</td>
+        <td>
+            <strong>Note: </strong> 
+            This option is used on the CMake build command, 
+            step six in the command prompt build instructions above, 
+            not the CMake configure command.&nbsp;
+            <br />
+            <br />
+            The CMake build for Hercules does not support &quot;rebuild all&quot; without also cleaning the build directory.&nbsp; </td>
+    </tr>
+    <tr>
+        <td class="auto-style4">{nmake-option}</td>
+        <td class="auto-style1">--&nbsp;&nbsp;&nbsp;&nbsp; {nmake-option}</td>
+        <td>
+            <strong>Note: </strong> 
+            This option is used on the CMake build command, 
+            step six in the command prompt build instructions above, 
+            not the CMake configure command.&nbsp; <br />
+            <br />
+            To pass options to the build tool, 
+            code all CMake build options followed by two hyphens, 
+            then code the build tool options.&nbsp; 
+            <br /><br />
+            For example, to enable multiple CPU builds using MSBuild, use:
+            <br /><br />
+            <code>cmake --build . --config release -- /m:4</code>
+            <br /><br />
+            To enable multiple CPU builds using JOM, use:
+            <br /><br />
+            <code>cmake --build . --config release -- -j 8</code>
+        </td>
+    </tr>
+</table>
+
+<h4 class="skiplogo" id="extpkgs">External Package Incompatibilities (BZip2, PCRE, Zlib)</h4>
+
+<p>
+    When building Hercules using CMake on Windows, 
+    the external packages BZip2, PCRE, and Zlib
+    will normally be built 
+    at the same time and in the Hercules build directory
+    from github repositories that are part of the Hercules-390 project.  
+    DLLs for these applications will be installed as 
+    part of Hercules in the Hercules installation
+    directory.
+</p>
+<p>
+    Older pre-built versions of these external packages cannot
+    be used when building Hercules on Windows using CMake.
+    This applies to versions of these packages built from 
+    other sources or libraries installed
+    from Zip archives found in sundry locations on the web
+    (including the binaries included in 
+    <a href="https://github.com/hercules-390/hyperion/releases/tag/4.0.0-rc0">
+        Hercules 4.0 Release Candidate 0
+        </a>).  
+</p>
+<p>
+    The Hercules-390 repositories for the BZip2, PCRE, and Zlib
+    cannot be used to build packages for the makefile.bat build because
+    the directory structures differ from that required for 
+    makefile.bat. 
+</p>
+<p>
+    The sources for these packages in the Hercules-390 project
+    are at the latest release, 
+    incorporate corrections and security updates not found in 
+    binaries available in other locations, 
+    and are otherwise unmodified from the originals.
+    They are used subject to the terms of their original licenses,
+    which are included in the repositories.  
+</p>
+<p>
+    For additional information about the Hercules-specific builds 
+    for these packages, please see the repositories for the packages at:
+</p>
+<ul>
+    <li class="spaced">BZip2 1.0.6: <a href="https://github.com/hercules-390/h390BZip" target="_blank">https://github.com/hercules-390/h390BZip</a></li>
+    <li class="spaced">PCRE 8.41: <a href="https://github.com/hercules-390/h390PCRE" target="_blank">https://github.com/hercules-390/h390PCRE</a></li>
+    <li class="spaced">Zlib 1.2.11: <a href="https://github.com/hercules-390/h390Zlib" target="_blank">https://github.com/hercules-390/h390Zlib</a></li>
+</ul>
+
+
+<h4 class="skiplogo" id="envvars">Environment Variable Incompatibilities</h4>
+
+<p>
+    Three environment variables are used by the makefile.bat build and by 
+    the CMake build for Hercules on Windows that creates a compatibility issue.  
+    The three environment variables are:
+    <ul style="list-style-type:none">
+        <li class="spaced"><code>bzip2_dir</code></li>
+        <li class="spaced"><code>pcre_dir</code></li>
+        <li class="spaced"><code>zlib_dir</code></li>
+    </ul>
+</p>
+<p>
+    Note that Windows environment variables are case-insensitive.  
+</p>
+<p>
+    Both the makefile.bat and CMake builds for Hercules allows these variables
+    to point to directories containing the respective packages.
+    But because CMake requires a different directory layout from that used
+    by makefile.bat, 
+    one cannot use the same directory for both makefile.bat and CMake builds.  
+</p>
+<p>
+    If makefile.bat finds these variables un-set, 
+    it looks for the BZip2, PCRE, and Zlib packages in a 
+    "winbuild" directory tree at the same level as the 
+    Hyperion source directory.  
+    If makefile.bat does not find the packages in that
+    default location, 
+    the capabilities avaiable in the packages are excluded 
+    from Hercules.  
+</p>
+<p>
+    If the CMake build for Hercules finds these variables un-set,
+    it clones each of the three packages from repositories in the
+    Hercules-390 project, builds the packages in a subdirectory
+    of the Hercules build tree, 
+    and uses those the newly-built packages when 
+    building Hercules.  
+</p>
+<p>
+    The recommendation is to un-set the variables, 
+    and you will find this recommendation included in the 
+    <a href="#quickstart">QUICK START</a> 
+    section above.  
+</p>
+<p>
+    If you wish to preserve the ability to build 
+    Hercules using makefiles.bat, 
+    move the directories for the legacy versions 
+    of BZip2, PCRE, and Zlib into a winbuild 
+    directory at the same level as the Hercules-390
+    source directory.  
+    Alternatively, you may install all three 
+    packages in the needed winbuild structure 
+    using the 
+    <a href="https://github.com/hercules-390/hyperion/releases/download/4.0.0-rc0/WinSup4H.exe">
+        Windows Support Files link</a> 
+    (downloads an exe) included with 
+    <a href="https://github.com/hercules-390/hyperion/releases/tag/4.0.0-rc0">
+        Hercules 4.0 Release Candidate 0</a>.
+</p>
+
+<h4 class="skiplogo" id="buildtreedelta">Build Tree Differences</h4>
+
+<p>
+    The build tree created by a Hercules build using CMake is 
+    substantially different from that created by the 
+    makefiles.bat build.  
+</p>
+<p>
+    The makefile.bat build creates a set of five or six subdirectories
+    in the source tree, 
+    with one set created for 32-bit Hercules
+    and a second set for 64-bit Hercules.
+    Each directory holds one type of build result: 
+    generated include files,
+    object files,
+    linkage editor maps,
+    executables and DLLs,
+    and debugging databases (program databases, or PDB files) for executable shared libraries.
+    and optionally assembly listings.  
+    A single consolidated compilation program database (PDB) 
+    is created in the object directory.
+</p>
+<p>
+    Note: the single compilation program database is 
+    only possible because makefile.bat only allows
+    for single-threaded compilations.  
+</p>
+<p>
+    When CMake is used to create the build scripts for Hercules,
+    a subdirectory is created for each executable and DLL that will be built.  
+    All object modules, assembler listings, 
+    and source program databases are created in this subdirectory. 
+    If Visual Studio or MSBuild is used to build Hercules,
+    then these components are stored in a Release or Debug
+    subdirectory.  
+    Executables, DLLs, linkage maps, linkage editor program databases, 
+    DLL import libraries, and export files (.exp) are created in the 
+    build directory
+    (Release or Debug subdirectory if using Visual Studio or MSBuild).  
+</p>
+
+
+
+<h4 class="skiplogo" id="vssoldelta">Visual Studio Solution Differences</h4>
+
+<p>
+    Hercules has had a Visual Studio "solution" for Hercules since 
+    a native Windows build was first developed in the late 2000's.  
+    This solution included a single project and enabled two things:
+</p>
+<ol style="list-style-type:lower-alpha">
+    <li class="spaced">Source file editing using Visual Studio</li>
+    <li class="spaced">Execution of the makefile.bat build script</li>
+</ol>
+<p>
+    All source files were children of the single project. 
+    There is no connection between the source files,
+    the header files they require, 
+    or the executables and DLLs that they end up creating.  
+</p>
+<p>
+When CMake is used to configure and build Hercules,
+it creates a separate Visual Studio solution in the 
+build directory.  
+This solution includes one project per executable, 
+DLL (shared library), or external package.  
+Additional projects are created to run tests (RUN_TESTS)
+and to ensure that if the CMake scripts change, 
+they are re-run before Hercules is built.
+</p>
+<p>
+This solution can be used to build Hercules
+using the Visual Studio application or 
+using a Visual Studio command prompt with MSBuild.
+It can also be used to edit files in the source directory.
+</p>
+
+
+<br />
+
+<hr />
+
+
+<h3 class="skiplogo" id="limitations">Current Limitations of the CMake Build</h3>
+
+<ul>
+<li class="spaced">No support for Cygwin/MinGW. Formerly deprecated, now gone.</li>
+<li class="spaced">No support for creating an installable .MSI file.  Future activity.</li>
+<li class="spaced">
+    No support for pre-compiled headers.  The following capabilities are 
+    enabled or available to improve compilation performance:
+    <p>
+    <ul>
+        <li class="spaced">Parallel c compilations (MSVC /MP option) (enabled by default)</li>
+        <li class="spaced">JOM with parallel compilation support (available)</li>
+        <li class="spaced">Parallel MSBuild threads (MSBuld /maxcpucount option) (supported)</li>
+    </ul>
+    </p>
+</li>
+</ul>
+
+
+<br />
+
+<hr />
+
+
+<h3 class="skiplogo" id="What_To_Do_When_it_Fails">What To Do When it Fails</h3>
+
+<p>Please
+<a href="https://github.com/hercules-390/hyperion/issues/new" target="_blank">
+        create a github issue
+</a>
+in Hercules-390/hyperion.
+The following information will be needed and can be posted
+to the issue in a tarball:
+</p>
+
+<ul>
+    <li>config.h</li>
+    <li>CMakeCache.txt</li>
+    <li>commitinfo.h</li>
+    <li>CMakeFiles/CMakeError.log</li>
+    <li>CMakeFiles/CMakeOutput.log</li>
+    <li>CMake execution console log</li>
+    <li>Console from the build tool execution</li>
+    <li>Contents of the Testing/Temporary/ directory if the failure occurred during make test</li>
+</ul>
+
+<br /><hr />
+<p>
+<small>This web page Copyright &copy; 2018 by Stephen R. Orso.
+<br /><br />
+This work is licensed under the Creative Commons Attribution-
+ShareAlike 4.0 International License.
+<br /><br />
+To view a copy of this license,
+visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/"
+        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a>
+or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+</small>
+</p>
+</div>
+
+</BODY>
+
+</HTML>

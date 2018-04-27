@@ -1,0 +1,593 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+<HTML>
+
+<head>
+<title>Using CMake to Build Hercules Version 4.0</title>
+
+<link rel="stylesheet"   TYPE="text/css" HREF="../hercules2.css">
+<link rel="shortcut icon" href="../images/favicon.ico" />
+<link rel="icon" href="../images/favicon.ico" />
+
+<style>
+    table {
+        border: 2px solid black;
+        border-collapse:collapse;
+    }
+    th {
+        border: 1px solid black;
+        vertical-align:bottom;
+        text-align:left;
+        padding:10px 5px 5px 5px;
+    }
+    td {
+        border: 1px solid black;
+        vertical-align: top;
+        text-align:left;
+        padding:5px 5px 10px 5px;
+    }
+    .auto-style1 {
+        width: 30%;
+    }
+    .auto-style4 {
+        width: 17%;
+    }
+    li.spaced:not(:last-child) {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">Building Hercules for macOS</h2>
+        </td>
+    </tr>
+</table>
+<hr />
+</div>
+
+
+<div id="content">
+
+<blockquote>
+    <p>
+        <a href="#quickstart">QUICK START: Build Hercules for macOS Using CMake</a>
+        <ul>
+            <li><a href="#softreqs">Software Requirements</a>
+            <li><a href="#buildcmdline">Building from a command prompt</a>
+            <li><a href="#buildide">Building using the Xcode IDE</a>
+            <li><a href="#install">Installing and Uninstalling Hercules</a></li>
+            <li><a href="#helpful">Helpful links</a></li>
+        </ul>
+    </p>
+    <p>
+        <a href="#whycmake">Why should I use CMake to build Hercules for macOS?</a>
+    </p>
+    <p>
+        <a href="#cmakestatus">Hercules macOS Build Development Status</a>
+    </p>
+    <p>
+        <a href="#What_To_Do_When_it_Fails">What To Do When it Fails</a>
+    </p>
+</blockquote>
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="quickstart">QUICK START: Build Hercules for macOS Using CMake</h3>
+<h4 class="skiplogo" id="softreqs">Software Requirements</h4>
+<ul>
+    <li class="spaced">
+        Apple development tools.  
+        Either of the following will do.
+        <ul>
+            <li>
+                The Xcode Interactive Development Environment (IDE).  
+                Note that the IDE package includes and installs the Xcode Command Line Tools.  
+                Available in the macOS App Store.  
+                To see if the full Xcode package is installed, 
+                do the following in the terminal app: <code>xcode-select -p</code> 
+                and look for a response of 
+                <code>/Applications/Xcode.app/Contents/Developer</code>
+            </li>
+            <li>
+                The Xcode Command Line Tools.  
+                To see if the Xcode Command Line Tools are installed, 
+                do the following in the terminal app: <code>gcc --version</code>.
+                If the tools are not installed, 
+                a dialog box will appear offering to install them.  
+                You can also install them from the 
+                <a href="https://developer.apple.com/" target="_blank">Apple Developer</a> site. 
+                A paid developer account is not required to obtain the 
+                Xcode command line tools.  
+        </ul>
+    </li>
+    <li class="spaced">
+         <a href="http://cmake.org/download" target="_blank">CMake </a>
+         version 3.4 or better: <code>cmake&nbsp;--version</code>.  
+    </li>
+    <li class="spaced">
+        A <a href="https://git-scm.com/downloads" target="_blank">macOS git command line client</a> 
+        version 1.8.5.1 or better; use <code>git&nbsp;--version</code>.
+        Note: the Xcode command line tools include a git client.  
+        Xcode 9.2, the current version,
+        includes 2.14.3.  
+    </li>
+    <li class="spaced">
+        Optional: The 
+        <a href="https://ninja-build.org/" target="_blank">
+        Ninja build tool</a>, a replacement for GNU make.  
+        Ninja will build Hercules a bit faster than GNU make.  
+        The installation package is a single executable that can be
+        extracted and moved to <code>/usr/local/bin</code>.
+    </li>
+    <li class="spaced">
+        (Optional but desireable): Either of the following REXX interpreters.  
+        A REXX interpreter is needed if you wish to run the Hercules test cases using
+        CTest, runtest.rexx, and/or the RUN_TESTS project from
+        within Xcode.
+        REXX must alse be installed if you wish to use REXX
+        in Hercules scripts. 
+        <ul>
+        <li>
+            <a href="https://regina-rexx.sourceforge.io/" target="_blank">Regina Rexx</a>.
+            A tar.gz archive is available for macOS;
+            this archive must be manually installed.
+        </li>
+        <li>
+            <a href="http://www.oorexx.org/" target="_blank">Open Object Rexx</a>.
+            A binary distribution is not available for Open Object Rexx; 
+            you will need to build from source.  
+        </li>
+        </ul>
+    </li>
+    <li style="list-style-type:circle;">
+        <strong>Note:</strong> neither Homebrew nor GNU Autotools are required 
+        when you use CMake to build Hercules.  
+    </li>
+</ul>
+
+
+
+<h4 class="skiplogo" id="buildcmdline">Build using a command prompt</h4>
+    <ol>
+        <li class="spaced">
+            Open a command line application,
+            either Terminal on the Mac or using SSH from a remote computer.
+        </li>
+
+        <li class="spaced">Clone or update your local clone of Hyperion, as needed.</li>
+
+        <li class="spaced">
+            Create a build directory anywhere you wish, 
+            so long as the directory is writable, 
+            and change to that directory.
+        </li>
+
+        <li class="spaced">
+            Configure: <code>cmake &lt;hyperion-source-dir&gt -G "&lt;generator-name&gt"</code>
+            <p>
+                Choose the values for -G "&lt;generator-name&gt"
+                using the following table.
+                Be sure to include the quotes.  
+            </p>
+            <p>
+            <table>
+                <tr>
+                    <th>Build tool</th>
+                    <th>&lt;generator-name&gt</th>
+                </tr>
+                <tr>
+                    <td>Xcode IDE</td>
+                    <td><code>-G "Xcode"</code></td>
+                </tr>
+                <tr>
+                    <td>GNU make</td>
+                    <td><code>-G "UNIX Makefiles"</code></td>
+                </tr>
+                <tr>
+                    <td>Ninja</td>
+                    <td><code>-G "Ninja"</code></td>
+                </tr>
+            </table>
+            </p>
+            <p>
+                Running <code>cmake --help</code> from the command line will
+                return a complete list of CMake options including the names
+                of every generator available within CMake.  
+            </p>
+        </li>
+
+        <li class="spaced">Build: <code>cmake --build . --config Release</code>
+        <p>
+            The <code>--config Release</code> is required for the Xcode 
+            build tools and optional for Ninja and GNU Make.
+        </p>
+        <p>
+            The option value <code>Release</code> must be written 
+            with an upper-case <code>R</code>;
+            <code>--config release</code> will not work.  
+        </p>
+        </li>
+
+        <li class="spaced">Test: <code>ctest -C Release</code></li>
+        <p>
+            As with the build step above, the option value <code>Release</code> 
+            must be written with an upper-case <code>R</code>.
+        </p>
+
+    </ol>
+
+<p>
+    That's it.  
+    SoftFloat-3a, and Zlib will be cloned 
+    from the Hercules-390 repository and built inside the Hercules
+    build directory. 
+    If BZip2 and/or Zlib are newer than the versions installed
+    on the target system, 
+    they will be cloned from the Hercules-390 repository 
+    and built inside the Hercules build directory.
+    Once that is done, Hercules will be built.
+</p>
+<p>
+    Should you experience difficulties using CMake to 
+    build Hercules
+    please follow the guidance provided in 
+    <a href="#What_To_Do_When_it_Fails">What To Do When it Fails</a>
+    and use the 
+    <a href="../hercinst.html">Installation Using Legacy Tools</a>
+    below to build Hercules.  
+</p>
+
+<h4 class="skiplogo" id="buildide">Build using the Xcode IDE</h4>
+<p>
+    Begin by following steps one through four above.  
+    Be sure you use -G "Xcode" in Step four. 
+</p>
+
+<ol start="6">
+    <li class="spaced">Open the Xcode application</li>
+    <li class="spaced">
+        Open the Xcode project created by the CMake configure step: 
+        navigate to the build directory and open Hercules.Xcodeproj.  
+    </li>
+    <li class="spaced">
+        Xcode by default builds for "Testing," 
+        which corresponds to a CMake Debug configuration.  
+        Change this if desired: Product, Build For, Release.
+    </li>
+    <li class="spaced">
+        Build the solution: Product, Build.  
+    </li>
+    <li class="spaced">
+        When the build has completed, 
+        you may run the Hercules tests by building 
+        the RUN_TESTS scheme: Product, Scheme, RUN_TEST, 
+        followed by Product, Build.
+    </li>
+</ol>
+
+
+<h4 class="skiplogo" id="install">Installing and Uninstalling Hercules</h4>
+<p>
+    Hercules may be installed using a command line or using 
+    the Xcode IDE.  
+</p>
+<p>
+    While it is possible to start the Xcode IDE with 
+    administrative privileges and use it to install,
+    the command prompt is the recommended approach.  
+</p>
+<p>
+    The CMake configure option -DCMAKE_INSTALL_PREFIX can be used
+    to change the default installation directory. 
+</p>
+
+<h5>Installing Hercules</h5>
+<ol>
+    <li class="spaced">
+        Open a command prompt.  
+    </li>
+    <li class="spaced">
+        Navigate to the build directory.
+    </li>
+    <li class="spaced">
+        Issue the following command.  Use <code>sudo</code> if needed.
+        <p>
+            <code>cmake -P cmake_install.cmake</code>
+        </p>
+        <p>
+            If you wish to install Hercules in a directory other
+            than the one that was used in the CMake configure
+            step, 
+            say, for example /home/userid/hercules,
+            you can override that directory with the following 
+            form of the install command:
+        </p>
+        <p>
+            <code>cmake -DCMAKE_INSTALL_PREFIX="/home/userid/hercules" -P cmake_install.cmake</code>
+        </p>
+    </li>
+</ol>
+
+
+<h5>Uninstalling Hercules</h5>
+<p>
+    Uninstallation can be easily performed by deleting the installation directory.  
+</p>
+<p>
+    If you have installed Hercules in a subdirectory that contains other 
+    applications, files, or data, 
+    you can use the following steps to remove <em>just</em> the Hercules files.
+</p>
+<p>
+    This procedure removes Hercules file by file from its last installed 
+    location.  
+    It uses a manifest of full path names that is re-created in the 
+    build directory on each install of Hercules.  
+    So if you install to the wrong location and then install to the right
+    location, 
+    this procedure will remove Hercules from the right location.  
+</p>
+<ol>
+    <li class="spaced">
+        Open a command prompt.  
+    </li>
+    <li class="spaced">
+        Navigate to the build directory.
+    </li>
+    <li class="spaced">
+        Issue the following command.  Use <code>sudo</code> if needed.
+        <p>
+            <code>cmake -P cmake_uninstall.cmake</code>
+        </p>
+    </li>
+</ol>
+
+
+<h4 class="skiplogo" id="helpful">Helpful pages</h4>
+
+<ul>
+<li class="spaced">
+    <a href="buildopts.html">Build Options</a>
+    - information on CMake build options
+    that are specific to building Hercules.&nbsp;
+</li>
+<li class="spaced">
+    <a href="cmakeopts.html">CMake Build Options</a>,
+    - information on standard CMake options may be used when building Hercules.&nbsp;
+</li>
+<li class="spaced">
+    <a href="aboutcmake.html">An Overview of CMake</a>
+    - provides, unsurprisingly, an overview of the CMake application 
+    and its approach to building applications.
+</li>
+<li class="spaced">
+    <a href="extpkg.html">External Packages</a> 
+    - how to control how and where CMake builds SoftFloat-3a
+    and other external packages needed by Hercules-390.
+</li>
+<li class="spaced">
+    <a href="faq.html">FAQ</a> 
+    - Frequently Asked Questions.</li>
+</ul>
+
+
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="whycmake">Why should I use CMake to build Hercules for macOS?</h3>
+
+<ul>
+    <li class="spaced">
+        The CMake scripts will automatically build SoftFloat-3a, 
+        and if the versions of BZip2 and Zlib 
+        are older than the versions in the Hercules-390 project,
+        those packages as well.
+        These packages are built in a subdirectory of
+        the build directory.
+        Options are provided to build these packages in another directory,
+        to share one package build directory with
+        multiple CMake Hercules build directories,
+        or to use previously-built packages.
+    </li>
+    <li>
+        Hercules will be built to use macOS shared libraries (.dylib)
+        and dynamically loaded libraries (.so).
+        When built using the legacy <code>configure.ac</code> script,
+        Hercules is built as a single statically-linked executeable 
+        with no support for cryptographic instructions.
+    </li>
+    <li class="spaced">
+        The CMake scripts for Hercules are the same for 
+        UNIX-like, macOS, and Windows systems.
+        The same options are used when building Hercules 
+        on any of those systems.  
+        See the 
+        <a href="buildopts.html">Alphabetical List of CMake Hercules Build Command-Line Options</a>
+        for more information about Hercules-specific options 
+        that can control the build when using CMake. 
+        See 
+        <a href="cmakeopts.html">Standard CMake Build Options</a>
+        for more information about general CMake options 
+        that can be useful when building Hercules. 
+    </li>
+    <li class="spaced">The Hercules source directory is not altered when you build Hercules.  
+        All files created or changed by the build are stored in a separate 
+        build directory, 
+        as is the case when one builds Hercules on a UNIX-like system. 
+    </li>
+    <li class="spaced">
+        You can build in any directory that is not the Hercules source
+        directory.  
+        There is no specific directory structure requirement, 
+        nor any required relationship between the build directory 
+        and the source directory.  
+    </li>
+    <li class="spaced">
+        A corollary of the above is that you can build multiple copies of 
+        Hercules with different build options,
+        say, different versions of external packages,
+        without having to clone Hercules multiple times
+        into separate source directories.  
+        This should simplify local clone management for
+        Windows developers.  
+    </li>
+    <li class="spaced">
+        You can develop and build using the Integrated Development Environment
+        provided by Microsoft Visual Studio 2017 Community Edition or 
+        Microsoft Visual Studio 2015 Community Edition.
+        Older versions are supported by CMake,
+        but the Hercules CMake build has not been tested.  
+        Note that building Hercules with Visual Studio versions 
+        older than 2008 is not supported by Hercules regardless of the
+        build tool in use.   
+    </li>
+    <li class="spaced">
+        A target RUN_TESTS is created to allow running the complete runtest 
+        suite from within the Xcode IDE.  
+    </li>
+    <li class="spaced">
+        You can build Hercules from a command line using either GNU Make or Ninja.
+        GNU Make is a component of the Xcode Command Line Tools.
+    </li>
+</ul>
+
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="cmakestatus">Hercules Windows Build Development Status</h3>
+
+<ul>
+
+    <li class="spaced">
+        CMake may be used to build Hercules for all releases of macOS
+        currently supported by Hercules.
+    </li>
+
+    <li class="spaced">
+        The CMake scripts for Hercules has been tested on
+        macOS Sierra, 10.12.6, 
+        using the following build tools:
+        <ul>
+            <li class="spaced">Xcode 9.2</li>
+            <li class="spaced">GNU make 3.81</li>
+            <li class="spaced">Ninja 1.8.2</li>
+        </ul>
+    <li class="spaced">
+        All testing has used Apple LLVM C compiler 9.0.0 included with Xcode version 9.2.
+    </li>
+</ul>
+<br />
+<hr />
+
+
+<h4 class="skiplogo" id="extpkgs">External Package Incompatibilities (BZip2, PCRE, Zlib)</h4>
+
+<p>
+    When building Hercules using CMake on Windows, 
+    the external packages BZip2, PCRE, and Zlib
+    will normally be built 
+    at the same time and in the Hercules build directory
+    from github repositories that are part of the Hercules-390 project.  
+    DLLs for these applications will be installed as 
+    part of Hercules in the Hercules installation
+    directory.
+</p>
+<p>
+    Older pre-built versions of these external packages cannot
+    be used when building Hercules on Windows using CMake.
+    This applies to versions of these packages built from 
+    other sources or libraries installed
+    from Zip archives found in sundry locations on the web
+    (including the binaries included in 
+    <a href="https://github.com/hercules-390/hyperion/releases/tag/4.0.0-rc0">
+        Hercules 4.0 Release Candidate 0
+        </a>).  
+</p>
+<p>
+    The Hercules-390 repositories for the BZip2, PCRE, and Zlib
+    cannot be used to build packages for the makefile.bat build because
+    the directory structures differ from that required for 
+    makefile.bat. 
+</p>
+<p>
+    The sources for these packages in the Hercules-390 project
+    are at the latest release, 
+    incorporate corrections and security updates not found in 
+    binaries available in other locations, 
+    and are otherwise unmodified from the originals.
+    They are used subject to the terms of their original licenses,
+    which are included in the repositories.  
+</p>
+<p>
+    For additional information about the Hercules-specific builds 
+    for these packages, please see the repositories for the packages at:
+</p>
+<ul>
+    <li class="spaced">BZip2 1.0.6: <a href="https://github.com/hercules-390/h390BZip" target="_blank">https://github.com/hercules-390/h390BZip</a></li>
+    <li class="spaced">PCRE 8.41: <a href="https://github.com/hercules-390/h390PCRE" target="_blank">https://github.com/hercules-390/h390PCRE</a></li>
+    <li class="spaced">Zlib 1.2.11: <a href="https://github.com/hercules-390/h390Zlib" target="_blank">https://github.com/hercules-390/h390Zlib</a></li>
+</ul>
+
+<hr />
+
+
+<h3 class="skiplogo" id="What_To_Do_When_it_Fails">What To Do When it Fails</h3>
+
+<p>Please
+<a href="https://github.com/hercules-390/hyperion/issues/new" target="_blank">
+        create a github issue
+</a>
+in Hercules-390/hyperion.
+The following information will be needed and can be posted
+to the issue in a tarball:
+</p>
+
+<ul>
+    <li>config.h</li>
+    <li>CMakeCache.txt</li>
+    <li>commitinfo.h</li>
+    <li>CMakeFiles/CMakeError.log</li>
+    <li>CMakeFiles/CMakeOutput.log</li>
+    <li>CMake execution console log</li>
+    <li>Console from the build tool execution</li>
+    <li>Contents of the Testing/Temporary/ directory if the failure occurred during make test</li>
+</ul>
+
+<br /><hr />
+<p>
+<small>This web page Copyright &copy; 2018 by Stephen R. Orso.
+<br /><br />
+This work is licensed under the Creative Commons Attribution-
+ShareAlike 4.0 International License.
+<br /><br />
+To view a copy of this license,
+visit
+<a href="http://creativecommons.org/licenses/by-sa/4.0/"
+        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a>
+or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+</small>
+</p>
+</div>
+
+</BODY>
+
+</HTML>
