@@ -1,42 +1,70 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
-<HEAD><TITLE>
-Hercules Version 4: Installation and Operation</TITLE>
-<LINK REL=STYLESHEET TYPE="text/css" HREF="hercules.css">
+<head>
+<title>Hercules Version 4: Installation and Operation</title>
+
+<link rel="stylesheet" type="text/css" href="hercules2.css">
 <link rel="shortcut icon" href="images/favicon.ico" />
 <link rel="icon" href="images/favicon.ico" />
-</HEAD>
-<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
-      VLINK="#008040" ALINK="#000000">
 
-<h1>Hercules Version 4: Installation and Operation</h1>
+<style>
+   table {
+        border: 2px solid black;
+        border-collapse:collapse;
+    }
+    th {
+        border: 1px solid black;
+        vertical-align:bottom;
+        text-align:left;
+        padding:10px 5px 5px 5px;
+    }
+    td {
+        border: 1px solid black;
+        vertical-align: top;
+        text-align:left;
+        padding:5px 5px 10px 5px;
+    }
+    li.spaced:not(:last-child) {
+        margin-bottom: 5px;
+    }
+</style>
 
-<p><hr></p>
+</head>
+<body>
 
-<h2>Contents</h2>
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="index.html"><img src="images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Hercules Version 4: Installation and Operation</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">Installation Using Legacy Tools</h2>
+        </td>
+    </tr>
+</table>
+<hr />
+</div>
+
+
+<div id="content">
+
+<h3>Contents</h3>
 <blockquote>
     <p>
-        <a href="#install">Installation Procedure</a>
+        <a href="#install">Installation Procedure Using Legacy Tools</a>
         <ul>
-            <li><a href="#instcmake">Building with CMake (open source)</a></li>
-            <li><a href="#instsource">Building from source</a>
-            <li><a href="#instbinary">Pre-built binaries</a>
-        </ul>
-    </p>
-    <p>
-        <a href="#config">Configuration Procedure</a>
-    </p>
-    <p>
-        <a href="#dasd">Creating DASD volumes</a>
-    </p>
-    <p>
-        <a href="#operating">Operating Procedure</a>
-        <ul>
-            <li><a href="#arguments">Command line arguments</a>
-            <li><a href="#keyboard">Using the keyboard</a>
-            <li><a href="#commands">Panel commands</a>
-            <li><a href="#RCFILE">The .RC &nbsp;("run commands")&nbsp; file</a>
-            <li><a href="#HAO">HAO &nbsp;("Hercules Automatic Operator")</a>
+            <li><a href="#buildunix">Building for UNIX-like Systems</a></li>
+            <li><a href="#buildwin">Building for Windows Systems</a>
+            <ul>
+                <li><a href="#instbinaries">Installing Windows Pre-Built Binaries</a>
+            </ul>
+            <li><a href="#buildmacos">Building for macOS Systems</a>
         </ul>
     </p>
 
@@ -44,128 +72,127 @@ Hercules Version 4: Installation and Operation</TITLE>
         <a href="#support">Technical Support</a>
     </p>
 </blockquote>
+<hr />
 
-<p><hr><a name="install"></a></p>
-<h2>Installation Procedure</h2>
-
-<h3 id="instcmake">Building using CMake (open source)</h3>
-<p>You may build Hercules on open source systems using CMake, 
-or using the older 
-<a href="#bldautotools">GNU autotools-build</a>
-procedure described below.
+<h3 class="skiplogo" id="install">Installation Procedure Using Legacy Tools</h3>
+<p>
+    These procedures using legacy tools (GNU Autotools or makefile.bat/NMake)
+    are provided in the event you experience difficulties when 
+    building with CMake.  
+    If you have not tried building Hercules using CMake, 
+    please do so.
+    If you experienced difficulties using CMake to build Hercules,
+    <em>please</em> <a href="https://github.com/hercules-390/hyperion/issues" target="_blank">
+    create a github issue</a>.
 </p>
-<p>The procedure and options for the CMake build are described in
-<a href="CMake/index.html">Using CMake to Build Hercules Version 4.0</a>.
-</p>
-<p>The CMake build is a new addition to Hercules and has been tested 
-on Debian, Ubuntu, FreeBSD, Solaris, 
-and the Windows Subsystem for Linux (Windows 10).
-</p>
-<p>Should you experience difficulties using CMake to 
-build Hercules v4, 
-please follow the guidance provided in 
-<a href="CMake/index.html#What_To_Do_When_it_Fails">What To Do When it Fails</a>
-and use the 
-<a href="#bldautotools">GNU autotools build</a>
-below to build Hercules.  
+<p>
+    Rasbperry Pi and other ARM system users should use CMake to build and install Hercules 
+    and follow the instructions for UNIX-like.
+    Hercules does not support the use of 
+    GNU Autotools to build for the Raspberry Pi
+    and similar ARM-based systems on a board.  
 </p>
 
 
-<h3>Building from source - Windows</h3>
+<br /><hr />
+
+
+<h4 class="skiplogo" id="buildunix">Building for UNIX-like Systems</h4>
+<p>
+    Hercules is normally built for UNIX-like systems using
+    "<a href="CMake/index.html">Building Hercules for UNIX-like Systems</a>".
+    If you have not used CMake to build Hercules, 
+    please do before using this legacy process.
+</p>
+<p>
+    Additional information about building using legacy tools can be found 
+    in the Hercules sources at
+    <a href="https://github.com/hercules-390/hyperion/blob/master/BUILDING.txt" target="_blank">    
+            BUILDING.txt</a>, 
+    and
+    <a href="https://github.com/hercules-390/hyperion/blob/master/README.BuildUNIX.txt" target="_blank">
+            README.BuildUNIX.txt</a>.
+</p>
 <ol>
-<li>Download the
-<a href="https://github.com/hercules-390/hyperion/archive/master.zip">source code .ZIP file</a>
-from Github.
-<br><em>Note:</em> By downloading this file you agree to the terms
-    of the <a href="herclic.html">Q Public Licence</a>.
-<br />
-<br />
-<li>
-Hercules for Windows is built using the Microsoft Visual C (MSVC) compiler.<br />
-Refer to file <a href="https://github.com/hercules-390/hyperion/blob/master/README.WIN64">README.WIN64</a> for details.
-Note: Fish also has instructions<br />
-on his <a href="http://www.softdevlabs.com/hercules-msvc-build.html">MSVC Hercules Build Instructions</a> web page.<br /><br />
+    <li class="spaced">
+        Download the
+        <a href="https://github.com/hercules-390/hyperion/archive/master.zip">source code .ZIP file</a>
+        from Github.
+        <p>
+            <em>Note:</em> By downloading this file you agree to the terms
+            of the <a href="herclic.html">Q Public Licence</a>.
+        </p>
+    <li class="spaced">
+        Use these commands to unzip the distribution file:
+        <ol style="list-style-type:none">
+            <li><code>unzip hyperion-master.zip</code></li>
+            <li><code>cd hyperion-master</code></li>
+        </ol>
+    </li>
+    <li class="spaced">
+        Verify you have all of the correct versions of all of the
+        required packages installed:
 
-</ol>
-</p>
+        <ol style="list-style-type:none">
+            <li><code>./util/bldlvlck</code></li>
+        </ol>
+    </li>
+    <li class="spaced">
+        Build the ./configure script (required):
+        <ol style="list-style-type:none">
+            <li><code>sh ./autogen.sh</code></li>
+        </ol>
+        <p>
+            Most projects that are built from source do so from the official
+            distribution tarball which comes with its own pre-built ./configure
+            scipt. 
+            When you are building Hercules directly from the repository source
+            code however, you will need to create (or recreate) it yourself.
+        </p>
+        <p>
+            Also note you will need to re-run <code>autogen.sh</code>
+            each time the "configure.ac" or "makefile.am" files change. This
+            means if you do a "git pull" to update your source with changes
+            that were recently made to the repository, you <i>may</i> need
+            to recreate your configure script again if either configure.ac
+            <i>or</i> makefile.am was updated.
+        </p>
+        <p>
+            Thus the safest course of action is to <i>always</i> run autogen.sh
+            immediately before running ./configure. (see next step below)
+        </p>
+    </li>
+    <li class="spaced">    
+        Configure Hercules for your system
+        <ol style="list-style-type:none">
+            <li><code>./configure</code></li>
+        </ol>
+        <p>
+            By default, the configure script will attempt to guess appropriate
+            compiler optimization flags for your system.  If its guesses
+            turn out to be wrong, you can disable all optimization by
+            passing the <code><nobr>--disable-optimization</nobr></code> option to
+            configure, or specify your own optimization flags with
+            <code><nobr>--enable-optimization=FLAGS</nobr></code>. For additional configuration
+            options, run: <code>./configure <nobr>--help=short</nobr></code>.
 
-
-<h3>Building from source - Mac OS X</h3>
-<ol>
-<li>Install <b>Xcode</b> from the
-<a href="http://itunes.apple.com/app/xcode/id497799835">
-App Store</a>.
-<br />
-<br />
-<li>Install <b>Homebrew</b> using the procedure described
-at <a href="http://brew.sh/">http://brew.sh/</a>
-<br />
-<br />
-<li>Use these commands to install pre-requisite software:<br />
-<br><code>brew install autoconf</code>
-<br><code>brew install automake</code>
-<br><code>brew install gnu-sed</code>
-<br><code>automake --add-missing</code>
-<br />
-<br />
-<li>Proceed with <i>Building from source - Linux and Mac OS X</i> below.<br /><br />
-</ol>
-
-<h3 id="bldautotools">Building from source - open source, UNIX-like, and Mac OS X systems</h3>
-<p>Hercules is normally built on these platforms using GNU autotools.</p>
-<ol>
-<li>Download the
-<a href="https://github.com/hercules-390/hyperion/archive/master.zip">source code .ZIP file</a>
-from Github.
-<br><em>Note:</em> By downloading this file you agree to the terms
-    of the <a href="herclic.html">Q Public Licence</a>.
-<br />
-<br />
-<li>Use these commands to unzip the distribution file:
-<pre>unzip hyperion-master.zip
-cd hyperion-master</pre>
-<li>Verify you have all of the correct versions of all of the
-required packages installed:
-
-    <p><code>./util/bldlvlck</code>
-
-<p><li>Build the ./configure script (recommended):
-
-    <p><code>sh ./autogen.sh</code>
-
-    <p>
-    Most projects that are built from source do so from the official
-    distribution tarball which comes with its own pre-built ./configure
-    scipt. When you are building directly from the repository source
-    code however, you will need to create (or recreate) it yourself.
-    <p>
-    Also note you will need to re-run <code>autogen.sh</code> again
-    each time the "configure.ac" or "makefile.am" files change. This
-    means if you do a "git pull" to update your source with changes
-    that were recently made to the repository, you <i>may</i> need
-    to recreate your configure script again if either configure.ac
-    <i>or</i> makefile.am was updated.
-    <p>
-    Thus the safest course of action is to <i>always</i> run autogen.sh
-    immediately before running ./configure. (see next step below)
-
-<p><li>Configure Hercules for your system:
-
-    <p><code>./configure</code>
-
-    <p>
-    By default, the configure script will attempt to guess appropriate
-    compiler optimization flags for your system.  If its guesses
-    turn out to be wrong, you can disable all optimization by
-    passing the <code><nobr>--disable-optimization</nobr></code> option to
-    configure, or specify your own optimization flags with
-    <code><nobr>--enable-optimization=FLAGS</nobr></code>. For additional configuration
-    options, run: <code>./configure <nobr>--help=short</nobr></code>.
-
-<br />
-<li>Build the executables: <p><code>make</code>
-
-<p><li>(Optional) Install the programs: as root: <p><code>make install</code><br />
+        </p>
+    </li>
+    <li class="spaced">
+        Build the executables: 
+        <ol style="list-style-type:none">
+            <li><code>make</code></li>
+        </ol>
+        <p>
+            <code>make</code>
+        </p>
+    </li>
+    <li class="spaced">(
+        Optional) Install the programs: as root: 
+        <p>
+            <code>make install</code>
+        </p>
+    </li>
 </ol>
 
 <em>Important:</em>
@@ -174,890 +201,248 @@ Refer to the <a href="hercfaq.html#3.04">
 Hercules Frequently-Asked Questions</a> page for required
 compiler and other software levels.<br /><br />
 
-<a name="instbinary"></a>
-<h3>Installing pre-built binaries for Windows:</h3>
+<br /><hr />
+
+
+<h4 class="skiplogo" id="buildwin">Building for Windows Systems</h4>
+<p>
+    Hercules is normally built for Windows systems using
+    "<a href="CMake/indexwin.html">Building Hercules for Windows Systems</a>".
+    If you have not used CMake to build Hercules, 
+    please do before using this legacy process.
+</p>
+<p>
+    Additional information about building for Windows using legacy tools can be found 
+    in the Hercules sources at
+    <a href="https://github.com/hercules-390/hyperion/blob/master/BUILDING.txt" target="_blank">
+            BUILDING.txt</a>, 
+    <a href="https://github.com/hercules-390/hyperion/blob/master/README.BuildWIN.txt" target="_blank">
+            README.BuildWIN.txt</a>, 
+    and
+    <a href="https://github.com/hercules-390/hyperion/blob/master/README.BuildWINSupp.txt" target="_blank">
+            README.BuildWINSupp.txt</a>.
+</p>
 <ol>
-<li>Download one of the
-<a href="http://www.softdevlabs.com/hyperion.html#prebuilt">pre-built binaries</a>
-from <a href="http://www.softdevlabs.com">SoftDevLabs</a>.
-<br />
-<br />
-<li>(Optional) You might also want to install Fish's
-<a href="http://www.softdevlabs.com/hercgui">Hercules GUI for Windows</a>.<br /><br />
+    <li class="spaced">
+        Open a Visual Studio &lt;arch&gt; Native Tools Command Prompt.  
+        Replace &lt;arch&gt; with x86 for 32-bit systems
+        and x64 for 64-bit systems.
+    </li>
+    <li class="spaced">
+        Navigate to the directory that will become the parent of the 
+        Hercules source and build directory.
+        In the remaining instructions, 
+        that parent directory is referred to as &lt;top_dir&gt;.
+    </li>
+    <li class="spaced">
+        Download the
+        <a href="https://github.com/hercules-390/hyperion/archive/master.zip">source code .ZIP file</a>
+        from Github.
+        <p>
+            <em>Note:</em> By downloading this file you agree to the terms
+            of the <a href="herclic.html">Q Public Licence</a>.
+        </p>
+    </li>
+    <li class="spaced">
+        Use these commands to unzip the distribution file:
+        <ul style="list-style-type:none">
+            <li><code>unzip hyperion-master.zip</code></li>
+            <li><code>cd hyperion-master</code></li>
+        </ul>
+    </li>
+    <li class="spaced">
+        Download and install the Windows Support files for Hercules.
+        Theses files include BZip2 and Zlib, 
+        which are compression utilities,
+        and PCRE, a regular expression library needed for Windows.
+        Use <code>&lt;top_dir&gt;\winbuild</code> as the 
+        installation directory.
+        <ul style="list-style-type: none;">
+            <li>
+                <code>
+                <a href="https://github.com/hercules-390/hyperion/releases/download/4.0.0-rc0/WinSup4H.exe">
+                        https://github.com/hercules-390/hyperion/releases/download/4.0.0-rc0/WinSup4H.exe</a>
+                </code>
+            </li>
+        </ul>
+    </li>
+    <li class="spaced">
+        Use the following command to build SoftFloat-3a For Hercules, 
+        a package required by Hercules,
+        and Hercules.  
+        If you opened an x86 Visual Studio command prompt, 
+        you will get a 32-bit Hercules.  
+        Likewise, a 64-bit Hercules will be built 
+        when an x64 command prompt is used.  
+        <ul style="list-style-type:none;">
+            <li><code>cd &lt;top_dir&gt;\hyperion-master</code></li>
+            <li><code>1Stop [Hercules configure options, if any]</code></li>
+        </ul>
+    </li>
+    <li class="spaced">
+        Hercules will be built in either of the following directories:
+        <ul style="list-style-type:none;">
+            <li>32-bit build: <code>&lt;top_dir&gt;\hyperion-master\dllmod.bin</code></li>
+            <li>64-bit build: <code>&lt;top_dir&gt;\hyperion-master\amd64.bin</code></li>
+        </ul>
+    </li>
+    <li class="spaced">
+        You must manually copy the contents of the build directory to your desired 
+        installation directory.  
+    </li>
 </ol>
 
-<p><hr><a name="config"></a>
-<h2>Configuration Procedure</h2>
+
+<h4 class="skiplogo" id="instbinaries">Installing Windows Pre-Built Binaries</h4>
 <p>
-You will need to amend the configuration file
-<em><b>hercules.cnf</b></em> to reflect your device layout and intended
-mode of operation (S/370, ESA/390, or z/Architecture).
-See the <a href="hercconf.html">Hercules Configuration File</a> page for
-a complete description.
-
-<p><hr><a name="dasd"></a>
-<h2>Creating DASD volumes</h2>
-<p>
-The <a href="hercload.html">Creating Hercules DASD</a> page
-describes various methods of creating and loading virtual DASD
-volumes. The compressed CKD DASD support is described in <a
-href="cckddasd.html">this page</a>.
-
-<p><hr><a name="operating"></a>
-<a name="arguments">
-<h2>Operating Procedure</h2>
-<p class="warning">
-<em>Note: If you intend to run any licensed software on your PC
-using Hercules, it is your responsibility to ensure that you do not
-violate the software vendor's licensing terms.</em>
-
-<h4>Command line arguments</h4>
-<p>
-To start Hercules enter this command at the host's command prompt:
-<blockquote><code><pre>
-    hercules  [ -f <em>filename</em> ]           |  [ --config=<em>filename</em> ]
-              [ -r <em>rcfile</em> ]             |  [ --rcfile=<em>rcfile</em> ]
-              [ -b <em>logofile</em> ]           |  [ --herclogo=<em>logofile</em> ]
-              [ -d ]                    |  [ --daemon ]
-              [ -e ]                    |  [ --externalgui ]
-              [ -p <em>dyndir</em> ]             |  [ --modpath=<em>dyndir</em> ]
-              [ -l <em>modname</em> ] ...        |  [ --ldmod=<em>modname</em> ] ...
-              [ -s <em>symbol=value</em> ] ...   |  [ --defsym=<em>symbol=value</em> ] ...
-              [ -v ]                    |  [ --verbose ]
-              [ -h ]                    |  [ --help ]
-              [ -t[factor]]             |  [ --test[=factor]]
-              [ &gt; <em>logfile</em> ]
-</pre></code>
-</blockquote>
-<p>
-where:
-<blockquote>
-<dl>
-        <dt><code><em>filename</em></code><p><dd>
-
-            is the name of the configuration file.
-            The default, if none is specified, is <b><em>hercules.cnf</em></b>.
-            The default may be overridden via the <code>HERCULES_CNF</code>
-            environment variable.
-        <p>
-        <dt><code><em>rcfile</em></code><p><dd>
-
-            is the name of the Hercules <a href="#RCFILE">.RC run commands file</a>.
-            The run commands file automatically executes panel commands upon startup.
-        <p>
-        <dt><code><em>logofile</em></code><p><dd>
-
-            is the name of the Hercules logo file. The logo file is the
-            initial welcome screen presented when a TN 3270 terminal connects 
-            to a hercules 3270 device.
-        <p>
-        <dt><code><em>-d</em></em></code><p><dd>
-
-            specifies that Hercules is to be run in 'daemon' mode,
-            wherein it runs invisibly with no attached console.
-        <p>
-        <dt><code><em>-e</em></em></code><p><dd>
-
-            indicates Hercules is to be controlled by an External GUI.
-        <p>
-        <dt><code><em>dyndir</em></code><p><dd>
-
-            is the directory from which dynamic modules are to be loaded.
-            The default depends on the host platform on which Hercules
-            is being run. This option overrides the default.
-        <p>
-        <dt><code><em>modname</em></code><p><dd>
-
-            is the name of an additional dynamic module to be loaded
-            at startup. More than one additional module may be specified,
-            although each must be preceded with the <code>-l</code>
-            option specifier.
-        <p>
-        <dt><code><em>symbol=value</em></code><p><dd>
-
-            the name of a symbol and its associated value to be used in configuration
-            file processing or panel commands. See the command 'defsym'
-            for more information on using symbols. The '-s' option may be repeated. 
-            Note: 'value' may be quoted to contain imbedded blanks. 
-        <p>        
-        <dt><code><em>-v</em></code><p><dd>
-
-            sets the message-level to verbose. This is the same as
-            entering the command <code>msglvl +verbose</code>.
-        <p>
-        <dt><code><em>-h</em></code><p><dd>
-
-            displays help information regarding the syntax of command-line arguments.
-        <p>
-        <dt><code><em>-t[factor]</em></code><p><dd>
-
-            starts Hercules in test mode, activating special .rc file script
-            commands used only by QA test scripts. Normal Hercules use should
-            never specify this switch.
-            <p>
-            <code>factor</code> is an optional test timeout factor within the
-            range 1.0 to 14.3. The test timeout factor is used to adjust each
-            test script's specified timeout value to compensate for the speed
-            of the system on which they are running.
-            <p>
-            Use a factor greater than 1.0 on slower systems to slightly increase
-            timeout values giving each test more time to complete.
-            <p>
-            Please note that due to manner in which command line arguments are
-            parsed this option must be specified as one argument. Thus "-t2.0"
-            is correct whereas "-t &nbsp;2.0" is not. Oftentimes it is easier
-            to use the long <code>--test=<i>factor</i></code> syntax instead.
-            <p>
-            Test timeout values (specified as optional arguments on the special
-            runtest script command) are a safety feature designed to prevent
-            runaway tests from never ending. Normally tests end automatically
-            the very moment they are done.
-        <p>
-        <dt><code><em>logfile</em></code><p><dd>
-
-            is an optional log file which will receive a copy of
-            all messages displayed on the control panel
-        <p>
-</dl>
-</blockquote>
-
-<p>
-Next connect a tn3270 client to the console port (normally port 3270).
-The client will be connected to the first 3270 device address specified
-in the configuration file (this should be the master console address).
-If your master console is a 1052 or 3215, connect a telnet client
-instead of a tn3270 client.
-
-<p>
-Now you can enter an ipl command from the control panel.
-
-<p><br>
-<hr width="50%">
-
-<a name="keyboard">
-<h4>Using the keyboard</h4>
-<p>
-
-The main Hercules screen contains a scrollable list of messages with a command
-input area and system status line at the bottom of the screen.
-<p>
-To scroll through the messages, use either the Page Up or Page Down keys,
-the Ctrl + Up Arrow or Ctrl + Down Arrow keys, or the Home or End and/or
-the Ctrl + Home or Ctrl + End keys.
-<p>
-Use the Insert key to switch between insert and overlay mode when typing in
-the command input area. Use the Home and End keys to move to the first or
-last character of the command you are typing, or the use the left/right arrow keys
-to move to a specific character. Use the Escape key to erase the input area.
-<p>
-Pressing Escape when the command input area is already empty causes the screen
-to switch to the semi-graphical "New Panel" display mode, which shows the overall
-status of the system and devices.
-<p>
-When in the semi-graphical "New Panel" display mode there is no command input
-area. Instead, single character "hot keys" are used to issue some of the more
-common functions such as starting or stopping the CPU. The hot-keys are those
-which are highlighted. Pressing the '?' key displays brief help information
-on how to use the semi-graphical panel.
-<br /><br />
-
-    <TABLE border=1 cellpadding=5 align="center" width="70%">
-
-      <THEAD>
-
-        <TR>
-          <TH colspan=2><big>Normal cursor handling</big>
-          </TH>
-        </TR>
-
-        <TR>
-          <TH width="25%">Key</TH>
-          <TH>Action</TH>
-        </TR>
-
-      </THEAD>
-
-      <TBODY>
-
-
-        <TR>
-          <TD>
-                    Esc
-          </TD>
-          <TD>
-                    Erases the contents of the command input area.
-                    If the command input area is already empty,
-                    switches to semi-graphical New Panel.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Del
-          </TD>
-          <TD>
-                    Deletes the character at the cursor position.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Backspace
-          </TD>
-          <TD>
-                    Erases the previous character.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Insert
-          </TD>
-          <TD>
-                    Toggles between insert mode and overlay mode.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Tab
-          </TD>
-          <TD>
-                    Attempts to complete the partial file name at the
-                    cursor position in the command input area. If more
-                    than one possible file exists, a list of matching
-                    file names is displayed.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Home
-          </TD>
-          <TD>
-                    Moves the cursor to the start of the input in the
-                    command input area. If the command input area is
-                    empty, scrolls the message area to the top.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    End
-          </TD>
-          <TD>
-                    Moves the cursor to the end of the input in the
-                    command input area.  If the command input area is
-                    empty, scrolls the message area to the bottom.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Page Up
-          </TD>
-          <TD>
-                    Scrolls the message area up one screen.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Page Down
-          </TD>
-          <TD>
-                    Scrolls the message area down one screen.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Up arrow
-          </TD>
-          <TD>
-                    Recalls previous command into the input area.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Down arrow
-          </TD>
-          <TD>
-                    Recalls next command into the input area.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Right arrow
-          </TD>
-          <TD>
-                    Moves cursor to next character of input area.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Left arrow
-          </TD>
-          <TD>
-                    Moves cursor to previous character of input area.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Ctrl + Up arrow
-          </TD>
-          <TD>
-                    Scrolls the message area up one line.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Ctrl + Down arrow
-          </TD>
-          <TD>
-                    Scrolls the message area down one line.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Ctrl + Home
-          </TD>
-          <TD>
-                    Scrolls the message area to the top.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Ctrl + End
-          </TD>
-          <TD>
-                    Scrolls the message area to the bottom.
-          </TD>
-        </TR>
-
-
-      </TBODY>
-    </TABLE>
-
-<br /><br />
-The following additional keyboard functions are effective when the
-Hercules Extended Cursor Handling feature (OPTION_EXTCURS) is activated
-at compile time.
-At present, this feature is activated on the Windows platform only:
-<br /><br />
-    <TABLE border=1 cellpadding=5 align="center">
-    <TABLE border=1 cellpadding=5 align="center" width="70%">
-
-      <THEAD>
-
-        <TR>
-          <TH colspan=2><big>Extended cursor handling</big>
-          </TH>
-        </TR>
-
-        <TR>
-          <TH width="25%">Key</TH>
-          <TH>Action</TH>
-        </TR>
-
-      </THEAD>
-
-      <TBODY>
-
-
-        <TR>
-          <TD>
-                    Alt + Up arrow
-          </TD>
-          <TD>
-                    Moves cursor up one row.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Alt + Down arrow
-          </TD>
-          <TD>
-                    Moves cursor down one row.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Alt + Right arrow
-          </TD>
-          <TD>
-                    Moves cursor right one column.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Alt + Left arrow
-          </TD>
-          <TD>
-                    Moves cursor left one column.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Tab
-          </TD>
-          <TD>
-                    If cursor is outside the command input area,
-                    moves cursor to the start of the input in the
-                    command input area.
-                    Otherwise behaves as described in previous table.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    Home
-          </TD>
-          <TD>
-                    If cursor is outside the command input area,
-                    moves cursor to the start of the input in the
-                    command input area.
-                    Otherwise behaves as described in previous table.
-          </TD>
-        </TR>
-
-
-        <TR>
-          <TD>
-                    End
-          </TD>
-          <TD>
-                    If cursor is outside the command input area,
-                    moves cursor to the end of the input in the
-                    command input area.
-                    Otherwise behaves as described in previous table.
-          </TD>
-        </TR>
-
-
-      </TBODY>
-    </TABLE>
-
-<p>
-
-
-<a name="commands">
-<h4>Panel commands</h4>
-<p>
-The following is what is displayed on the Hercules harware console (HMC)
-in response to the '?' command being entered. Please note that it may not
-be completely accurate or up-to-date. Enter the '?' command for
-yourself for a more complete, accurate and up-to-date list of supported
-panel commands:
-<p>
-<pre>
-
-    Command      Description
-    -------      -----------------------------------------------
-    !message    *SCP priority message
-    #            Silent comment
-    $locate      Display sysblk, regs or hostinfo
-    $test       *Your custom command (*DANGEROUS!*)
-    $zapcmd     *Enable/disable command (*CAREFUL!*)
-    *            Loud comment
-    .reply      *SCP command
-    ?            alias for help
-    aea          Display AEA tables
-    aia          Display AIA fields
-    alrf         Command deprecated: Use "archlvl enable|disable|query asn_lx_reuse" instead
-    ar           Display access registers
-    archlvl     *Set Architecture Level
-    archmode     Alias for archlvl
-    asn_and_l    Command deprecated: Use "archlvl enable|disable|query asn_lx_reuse" instead
-    attach      *Configure device
-    auto_scsi   *Command deprecated - Use "SCSIMOUNT"
-    autoinit    *Display/Set automatic create empty tape file switch
-    automount   *Display/Update allowable tape automount directories
-    b           *Set breakpoint
-    b+           Set breakpoint
-    b-          *Delete breakpoint
-    cache       *Execute cache related commands
-    cachestat    Cache stats command
-    capping     *Set/display capping value
-    cckd        *cckd command
-    cf          *Configure current CPU online or offline
-    cfall        Configure all CPU's online or offline
-    clocks       Display tod clkc and cpu timer
-    cmdlevel    *Display/Set current command group
-    cmdlvl       (alias for cmdlevel)
-    cmdsep      *Display/Set command line separator
-    cmpscpad    *Set/display the CMPSC zero padding value.
-    cnslport     Set console port
-    codepage    *Set/display code page conversion table
-    conkpalv    *Display/alter console TCP keep-alive settings
-    cp_updt     *Create/Modify user character conversion table
-    cpu         *Define target cpu for panel display and commands
-    cpuidfmt     Set format BASIC/0/1 STIDP generation
-    cpumodel     Set CPU model number
-    cpuprio      Set/Display cpuprio parameter
-    cpuserial    Set CPU serial number
-    cpuverid     Set CPU verion number
-    cr          *Display or alter control registers
-    cscript     *Cancels a running script thread
-    ctc         *Enable/Disable CTC debugging
-    define      *Rename device
-    defstore    *Define/Display main and expanded storage values
-    defsym      *Define symbol
-    delsym      *Delete a symbol
-    detach       Remove device
-    devinit     *Reinitialize device
-    devlist     *List device, device class, or all devices
-    devprio      Set/Display devprio parameter
-    devtmax     *Display or set max device threads
-    diag8cmd     Set diag8 command option
-    ds           Display subchannel
-    dumpdev     *Specify bootstrap loader DUMP parameters
-    ecps:vm     *Command deprecated - Use "ECPSVM"
-    ecpsvm      *ECPS:VM Commands
-    engines      Set engines parameter
-    evm         *Command deprecated - Use "ECPSVM"
-    exec        *Execute a Rexx script
-    exit         (Synonym for 'quit')
-    ext          Generate external interrupt
-    fcb         *Display the current FCB (if only the printer is given)
-    fpc         *Display or alter floating point control register
-    fpr         *Display or alter floating point registers
-    f{+/-}adr    Mark frames unusable/usable
-    g            Turn off instruction stepping and start all CPUs
-    gpr         *Display or alter general purpose registers
-    hao         *Hercules Automatic Operator
-    help        *list all commands / command specific help
-    herclogo    *Read a new hercules logo file
-    hercprio     Set/Display hercprio parameter
-    hst         *History of commands
-    http        *Start/Stop/Modify/Display HTTP Server
-    httpport    *Command deprecated - Use "HTTP PORT ..."
-    httproot    *Command deprecated - Use "HTTP ROOT fn"
-    hwldr       *Specify boot loader filename
-    i            Generate I/O attention interrupt for device
-    iodelay     *Display or set I/O delay value
-    ipending     Display pending interrupts
-    ipl         *IPL from device or file
-    iplc        *Command deprecated - use IPL with clear option
-    k            Display cckd internal trace
-    ldmod       *Load a module
-    legacysen    Set legacysenseid setting
-    loadcore    *Load a core image file
-    loaddev     *Specify bootstrap loader IPL parameters
-    loadparm    *Set IPL parameter
-    loadtext    *Load a text deck file
-    locks       *Display internal locks list
-    log         *Direct logger output
-    logopt      *Set/Display logging options
-    lparname    *Set LPAR name
-    lparnum     *Set LPAR identification number
-    lsdep        List module dependencies
-    lsmod        List dynamic modules
-    mainsize    *Define/Display mainsize parameter
-    manufactu    Set STSI manufacturer code
-    maxcpu       Set maxcpu parameter
-    maxrates    *Display highest MIPS/SIOS rate or set interval
-    message     *Display message on console a la VM
-    model       *Set/Query STSI model code
-    modpath      Set module load path
-    mounted_t   *Control tape initialization
-    msg          Alias for message
-    msglevel    *Display/Set current Message Display output
-    msglvl       Alias for msglevel
-    msgnoh       Similar to "message" but no header
-    mt          *Control magnetic tape operation
-    numcpu       Set numcpu parameter
-    numvec       Set numvec parameter
-    ostailor    *Tailor trace information for specific OS
-    panrate     *Display or set rate at which console refreshes
-    pantitle    *Display or set console title
-    pgmprdos    *Set LPP license setting
-    pgmtrace    *Trace program interrupts
-    plant        Set STSI plant code
-    pr           Display prefix register
-    psw         *Display or alter program status word
-    ptp         *Enable/Disable PTP debugging
-    ptt         *Set or display internal trace
-    qcpuid      *Display cpuid
-    qd           Query dasd
-    qpfkeys      Display the current PF Key settings
-    qpid         Display Process ID of Hercules
-    qports       Display TCP/IP ports in use
-    qproc        Display processors type and utilization
-    qstor        Display main and expanded storage values
-    quiet       *Toggle automatic refresh of panel display data
-    quit        *Terminate the emulator
-    r           *Display or alter real storage
-    restart      Generate restart interrupt
-    resume       Resume hercules
-    rexx        *display Rexx interpreter settings
-    rmmod        Delete a module
-    s           *Instruction stepping
-    s+          *Instruction stepping on
-    s-           Turn off instruction stepping
-    s?          *Instruction stepping query
-    savecore    *Save a core image to file
-    sclproot    *Set SCLP base directory
-    scpecho     *Set/Display option to echo to console and history of scp replys
-    scpimply    *Set/Display option to pass non-hercules commands to the scp
-    script      *Run a sequence of panel commands contained in a file
-    scsimount   *Automatic SCSI tape mounts
-    sf+dev       Add shadow file
-    sf-dev       Delete shadow file
-    sfc          Compress shadow files
-    sfd          Display shadow file stats
-    sfk         *Check shadow files
-    sh          *Shell command
-    shcmdopt     Set diag8 sh option
-    shrd         shrd command
-    shrdport     Set shrdport value
-    sizeof       Display size of structures
-    srvprio      Set/Display srvprio parameter
-    ssd         *Signal shutdown
-    start       *Start CPU (or printer/punch device if argument given)
-    startall     Start all CPU's
-    stop        *Stop CPU (or printer/punch device if argument given)
-    stopall      Stop all CPU's
-    store        Store CPU status at absolute zero
-    suspend      Suspend hercules
-    symptom      Alias for traceopt
-    syncio       Display syncio devices statistics
-    sysclear    *System Clear Reset manual operation
-    sysepoch     Set sysepoch parameter
-    sysreset    *System Reset manual operation
-    s{+/-}dev    Turn CCW stepping on/off
-    t           *Instruction trace
-    t+          *Instruction trace on
-    t-           Turn off instruction tracing
-    t?          *Instruction trace query
-    timerint    *Display or set timers update interval
-    tlb          Display TLB tables
-    toddrag      Display or set TOD clock drag factor
-    todprio      Set/Display todprio parameter
-    traceopt    *Instruction trace display options
-    tt32        *Control/query CTCI-WIN functionality
-    tzoffset     Set tzoffset parameter
-    t{+/-}CKD    Turn CKD_KEY tracing on/off
-    t{+/-}dev    Turn CCW tracing on/off
-    u           *Disassemble storage
-    uptime       Display how long Hercules has been running
-    v           *Display or alter virtual storage
-    version      Display version information
-    xpndsize    *Define/Display xpndsize parameter
-    yroffset     Set yroffset parameter
-
-     (*)  Enter "<a href="#morehelp">help &lt;command&gt;</a>" for more info.
-
-</pre>
-<p>
-The <em>ipl</em> command may also be used to perform a load from cdrom or
-server.  For example if a standard SuSE S/390 Linux distribution CD is loaded
-and mounted on /cdrom for example, this cdrom may then be ipl-ed by:
-<em>ipl /cdrom/suse.ins</em>
-<p>
-The <em>attach</em> and <em>detach</em> commands are used to dynamically
-add or remove devices from the configuration,
-and the <em>define</em> command can be used to alter the device number
-of an existing device.
-<p>
-The <em>devinit</em> command can be used to reopen an existing device.
-The <em>args</em> (if specified) override the arguments
-specified in the configuration file for this device.
-The device type cannot be changed and must not be specified.
-This command can be used to rewind a tape, to mount a new tape or
-disk image file on an existing device, to load a new card deck
-into a reader, or to close and reopen a printer or punch device.
-<p>
-In single-step mode, pressing the enter key will advance to the
-next instruction.
-<p>
-There is also an alternate semi-graphical control panel.  Press Esc to
-switch between the command line format and the semi-graphical format.
-Press ? to obtain help in either control panel.
-<p>
-When a command is prefixed with '-', the the command will not be redisplayed at
-the console. This can be used in scripts and is also used internally when commands
-are to be invoked without being redisplayed at the panel.
-
-<br /><br />
-<a name="morehelp"></a>
-<b>Additional Command Help</b><br /><br />
-Some commands also offer additional help information regarding their syntax,
-etc. Enter&nbsp; "<tt>help <i>&lt;command name&gt;</i></tt>" &nbsp; to display
-this additional help information. (Note: not every command supports additional help)
-
-<br /><br />
-<hr width="50%">
-
-<a name="RCFILE">
-<h4>The &nbsp;hercules.rc &nbsp;(run-commands)&nbsp; file</h4>
-</a>
-<p>
-Hercules also supports the ability to automatically execute panel commands
-upon startup via the 'run-commands' file. If the run-commands file
-is found to exist when Hercules starts, each line contained within it is
-read and interpreted as a panel command exactly as if the command were
-entered from the HMC system console.
-<p>
-The default filename for the run-commands file is "hercules.rc", but may be
-overridden by setting the "<tt><b>HERCULES_RC</b></tt>" environment variable to the
-desired filename.
-<p>
-Except for the 'pause' command (see paragraph further below), each command
-read from the run-commands file is logged to the console preceded by a '> '
-(greater-than sign) character so you can easily distinguish between panel
-commands entered from the keyboard from those entered via the .rc file.
-<p>
-Lines starting with '<tt>#</tt>' are treated as "silent comments" and are
-thus not logged to the console. Line starting with '<tt>*</tt>' however are
-treated as "loud comments" and <i>will</i> be logged.
-<p>
-In addition to being able to execute any valid panel command (including the
-'sh' shell command) via the run-commands file, an additional
-'<tt><b>pause <i>nnn</i></b></tt>' command is supported in order to introduce
-a brief delay before reading and processing the next line in the file. The
-value <tt><i>nnn</i></tt> can be any number from 0.001 to 999.0 and specifies
-the number of seconds to delay before reading the next line. Creative use of
-the run-commands file can completely automate Hercules startup.
-
-<br /><br />
-<hr width="50%">
-
-<a name="HAO">
-<h4>The "Hercules Automatic Operator" (HAO) Facility</h4>
-</a>
-<p>
-The Hercules Automatic Operator (HAO) feature is a facility which can
-automatically issue panel commands in response to specific messages
-appearing on the Hercules console.
-<p>
-To use the Hercules Automatic Operator facility, you first define a "rule"
-consisting of a "target" and an associated "command". The "target" is
-a regular expression pattern used to match against the text of the various
-messages that Hercules issues as it runs. Whenever a match is found, the
-rule "fires" and its associated command is automatically issued.
-<p>
-The Hercules Automatic Operator facility only operates on messages issued
-to the Hercules console. These messages may originate from Hercules itself,
-or from the guest operating system via the SCP SYSCONS interface or via the
-integrated console printer-keyboard (3215-C or 1052-C). HAO cannot intercept
-messages issued by the guest operating system to its own terminals.
-
-<h5>Defining a Rule</h5>
-<p>
-To define a HAO rule, enter the command:
-<pre>
-   hao tgt <i>target</i>
-</pre>
-<p>
-to define the rule's "target" match pattern
-followed by the command:
-<pre>
-   hao cmd <i>command</i>
-</pre>
-<p>
-to define the rule's associated panel-command.
-<p>
-The <i>target</i> is a regular expression as defined by your host platform.
-When running on Linux, Hercules uses POSIX Extended Regular Expression syntax.
-On a Windows platform, regular expression support is provided by
-Perl Compatible Regular Expression (PCRE).
-The HAO facility can only be used if regular expression support was included
-in Hercules at build time.
-<p>
-The associated <i>command</i> is whatever valid Hercules panel command you
-wish to issue in response to a message being issued that matches the given
-<i>target</i> pattern.
-
-<h5>Substituting substrings in the command</h5>
-<p>
-The <i>command</i> may contain special variables $1, $2, etc, which will be
-replaced by the values of "capturing groups" in the match pattern.
-A capturing group is a part of the regular expression enclosed in parentheses
-which is matched with text in the target message. In this way, commands may be
-constructed which contain substrings extracted from the message which
-triggered the command.
-<p>
-The following special variables are recognized:
+    Hercules Version 4.0 (Hyperion) is in development; 
+    installation from source is the best method to 
+    ensure you have an up-to-date copy.  
+</p>
 <ul>
-<li><code>$1</code> to <code>$9</code> -
-    the text which matched the 1st to 9th capturing
-    group in the target regular expression
-<li><code>$`</code> - the text preceding the regular expression match
-<li><code>$'</code> - the text following the regular expression match
-<li><code>$$</code> - replaced by a single dollar sign
+    <li class="spaced">
+        <a href="https://github.com/hercules-390/hyperion/releases/latest" target="_blank">Hyperion 4.0.0-rc0</a>.
+        is the current release candidate.  It includes zip'd Windows binaries 
+        and sources to build and install on open-source operating systems.
+    </li>
+    <li class="spaced">
+        Windows Binaries installation instructions: 
+        <ol>
+            <li>
+                Install the binaries from the zip archive to the directory of your choice
+            </li>
+            <li>
+                Change the Windows Path statement to include that directory.  
+            </li>
+            <li>
+                If you need a Microsoft Visual C++ Runtime library, see
+                <a href="http://support.microsoft.com/kb/2019667" target="_blank">
+                        "The latest supported Visual C++ downloads"</a>.
+            </li>
+        </ol>
+    </li>
+    <li>
+        Installable binaries are not yet available for UNIX-like systems.  
+        We hope to make them available for selected systems in the future.  
+    </li>
+
 </ul>
-<p>
-Note that substitution of a $<i>n</i> variable does not occur if there are
-fewer than <i>n</i> capturing groups in the regular expression.
-<p>
-As an example, the rule below issues the command 'i 001F' in response to
-the message HHCTE014I 3270 device 001F client 127.0.0.1 connection reset:
-<pre>
-   hao tgt HHCTE014I 3270 device ([0-9A-F]{3,4})
-   hao cmd i $1
-</pre>
-<p>
-Another example, shown below, illustrates how the dot matrix display of a
-3480 tape unit might be used to implement an automatic tape library:
-<pre>
-   hao tgt HHCTA010I ([0-9A-F]{4}): Now Displays: (?:".{8}" / )?"M([A-Z0-9]{1,6})\s*S"
-   hao cmd devinit $1 /u/tapes/$2.awstape
-</pre>
 
-<h5>Other commands and limitations</h5>
-<p>
-To delete a fully or partially defined HAO rule, first use the 'hao list'
-command to list all of the defined (or partially defined) rules, and then use
-the 'hao del <i>nnn</i>' command to delete the specific rule identified by
-<i>nnn</i> (all rules are assigned numbers as they are defined and are thus
-identified by their numeric value). Optionally, you can delete all defined or
-partially defined rules by issuing the command 'hao clear'.
-<p>
-The current implementation limits the total number of defined rules to 64.
-This limit may be raised by  increasing the value of the HAO_MAXRULE
-constant in hao.c and rebuilding Hercules.
-<p>
-All defined rules are checked for a match each time Hercules issues a message.
-There is no way to specify "stop processing subsequent rules". If a message is
-issued that matches two or more rules, each associated command is then issued
-in sequence.
+<br /><hr />
 
-<br /><br />
-<hr><a name="support"></a>
-<h2>Technical Support</h2>
+
+<h4 class="skiplogo" id="buildmacos">Building for macOS Systems</h4>
+<ol>
+    <li class="spaced">
+        Install <b>Xcode</b> from the
+        <a href="http://itunes.apple.com/app/xcode/id497799835">
+        Mac App Store</a>.
+    </li>
+    <li class="spaced">
+        Install <b>Homebrew</b> using the procedure described
+        at <a href="http://brew.sh/">http://brew.sh/</a>
+    </li>
+    <li class="spaced">
+        Use these commands to install pre-requisite software:
+        <ol style="list-style-type:lower-alpha">
+            <li><code>brew install autoconf</code></li>
+            <li><code>brew install automake</code></li>
+            <li><code>brew install gnu-sed</code></li>
+            <li><code>automake --add-missing</code></li>
+        </ol>
+    </li>
+    <li class="spaced">
+        Download the
+        <a href="https://github.com/hercules-390/hyperion/archive/master.zip">source code .ZIP file</a>
+        from Github.
+        <p>
+            <em>Note:</em> By downloading this file you agree to the terms
+            of the <a href="herclic.html">Q Public Licence</a>.
+        </p>
+    <li class="spaced">
+        Use these commands to unzip the distribution file:
+        <ol style="list-style-type:none">
+            <li><code>unzip hyperion-master.zip</code></li>
+            <li><code>cd hyperion-master</code></li>
+        </ol>
+    </li>
+    <li class="spaced">
+        Verify you have all of the correct versions of all of the
+        required packages installed:
+
+        <ol style="list-style-type:none">
+            <li><code>./util/bldlvlck</code></li>
+        </ol>
+    </li>
+    <li class="spaced">
+        Build the ./configure script (required):
+        <ol style="list-style-type:none">
+            <li><code>sh ./autogen.sh</code></li>
+        </ol>
+        <p>
+            Most projects that are built from source do so from the official
+            distribution tarball which comes with its own pre-built ./configure
+            scipt. 
+            When you are building Hercules directly from the repository source
+            code however, you will need to create (or recreate) it yourself.
+        </p>
+        <p>
+            Also note you will need to re-run <code>autogen.sh</code>
+            each time the "configure.ac" or "makefile.am" files change. This
+            means if you do a "git pull" to update your source with changes
+            that were recently made to the repository, you <i>may</i> need
+            to recreate your configure script again if either configure.ac
+            <i>or</i> makefile.am was updated.
+        </p>
+        <p>
+            Thus the safest course of action is to <i>always</i> run autogen.sh
+            immediately before running ./configure. (see next step below)
+        </p>
+    </li>
+    <li class="spaced">    
+        Configure Hercules for your system
+        <ol style="list-style-type:none">
+            <li><code>./configure</code></li>
+        </ol>
+        <p>
+            By default, the configure script will attempt to guess appropriate
+            compiler optimization flags for your system.  If its guesses
+            turn out to be wrong, you can disable all optimization by
+            passing the <code><nobr>--disable-optimization</nobr></code> option to
+            configure, or specify your own optimization flags with
+            <code><nobr>--enable-optimization=FLAGS</nobr></code>. For additional configuration
+            options, run: <code>./configure <nobr>--help=short</nobr></code>.
+
+        </p>
+    </li>
+    <li class="spaced">
+        Build the executables: 
+        <ol style="list-style-type:none">
+            <li><code>make</code></li>
+        </ol>
+        <p>
+            <code>make</code>
+        </p>
+    </li>
+    <li class="spaced">(
+        Optional) Install the programs: as root: 
+        <p>
+            <code>make install</code>
+        </p>
+    </li>
+</ol>
+
+<em>Important:</em>
+You must use at least version 3.00 of the gcc compiler and the glibc2 library.
+Refer to the <a href="hercfaq.html#3.04">
+Hercules Frequently-Asked Questions</a> page for required
+compiler and other software levels.<br /><br />
+
+    <p>
+<br /><hr />
+
+
+<h3 class="skiplogo" id="support">Technical Support</h3>
 
 <P>
 For technical support, please see our <a href="hercsupp.html">Technical Support</a> web page.
@@ -1070,5 +455,8 @@ For technical support, please see our <a href="hercsupp.html">Technical Support<
 </center>
 <br />
 </center>
-</BODY>
+
+</div>
+
+</body>
 </HTML>

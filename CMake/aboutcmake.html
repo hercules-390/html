@@ -1,39 +1,46 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
-<HEAD><TITLE>
-An Overview of CMake</TITLE>
-<LINK REL=STYLESHEET TYPE="text/css" HREF="../hercules.css">
+
+<head>
+<title>An Overview of CMake</title>
+
+<link rel="stylesheet" type="text/css" href="../hercules2.css">
 <link rel="shortcut icon" href="../images/favicon.ico" />
 <link rel="icon" href="../images/favicon.ico" />
-</HEAD>
 
 <style>
-
-li:not(:last-child) {
-    margin-bottom: 5px;
-}
-table {
-    border: 2px solid black;
-    border-collapse:collapse;
-}
-th {
-    border: 1px solid black;
-    vertical-align:bottom;
-    text-align:left;
-    padding:10px 5px 5px 5px;
-}
-td {
-    border: 1px solid black;
-    vertical-align: top;
-    text-align:left;
-    padding:5px 5px 10px 5px;
-}
+    li:not(:last-child) {
+        margin-bottom: 5px;
+    }
 </style>
 
-<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
-      VLINK="#008040" ALINK="#000000">
-<h1>An Overview of CMake</h1>
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">An Overview of CMake</h2>
+        </td>
+    </tr>
+</table>
 <hr />
+
+</div>
+
+<div id="content">
+
 
 <blockquote>
     <p>
@@ -42,9 +49,9 @@ td {
     <p>
         <a href="#3steps">CMake Processing Steps</a>
         <ul>
-            <li><a href="#configure">Configure</a>
-            <li><a href="#build">Build</a>
-            <li><a href="#install">Install</a>
+            <li><a href="#3steps">Configure</a>
+            <li><a href="#3steps">Build</a>
+            <li><a href="#3steps">Install</a>
         </ul>
     </p>
     <p>
@@ -55,140 +62,149 @@ td {
     </p>
 </blockquote>
 
-<h3 id="capabilities">CMake Capabilities and Functions</h3>
+<h3 class="skiplogo" id="capabilities">CMake Capabilities and Functions</h3>
 <p>
 CMake scripts:
-<ul>
-<li>
-    Probe a target system's characteristics by 
-    checking for predefined types, header files, libraries, functions; 
-    by probing the type, version, and behavior of the c/c++ compiler in use; 
-    and running test compiles, links, and executions of sample code.  
-</li>
-<li>
-    Interpret options offered by the person building the 
-    application when the CMake script is invoked. 
-</li>
-<li>
-    Create compiler header files such as config.h that expose the 
-    characteristics of the target system into compilation units.
-</li>
-<li>
-    Create build system scripts for various build tools such as 
-    GNU Makefiles, Ninja and NMake; 
-    and for Integrated Development Environments (IDEs) such as 
-    Microsoft Visual Studio or Apple Xcode. 
-</li>
-<li>Create test case scripts</li>
-</ul>
 </p>
-
+<ul>
+    <li>
+        Probe a target system's characteristics by 
+        checking for predefined types, header files, libraries, functions; 
+        by probing the type, version, and behavior of the c/c++ compiler in use; 
+        and running test compiles, links, and executions of sample code.  
+    </li>
+    <li>
+        Interpret options offered by the person building the 
+        application when the CMake script is invoked. 
+    </li>
+    <li>
+        Create compiler header files such as config.h that expose the 
+        characteristics of the target system into compilation units.
+    </li>
+    <li>
+        Create build system scripts for various build tools such as 
+        GNU Makefiles, Ninja and NMake; 
+        and for Integrated Development Environments (IDEs) such as 
+        Microsoft Visual Studio or Apple Xcode. 
+    </li>
+    <li>Create test case scripts</li>
+</ul>
 <p>
     In this regard, CMake does much of what the GNU Autotools suite does, 
-    although Autotools will only create build scripts for Make.   
+    although GNU Autotools will only create build scripts for Make.   
 </p>
 
 
 <br /><hr />
 
-<h3 id="3steps">CMake Processing Steps</h3>
+<h3 class="skiplogo" id="3steps">CMake Processing Steps</h3>
 <p>
     When using CMake, 
     there are three major steps in the process of creating a useable application:
 </p>
 <ol>
-<li id="configure">
-    <em>Configure, </em>
-    where the CMake script uses the target system's characteristics 
-    and the user's option specifications to generate scripts 
-    for the chosen build tool.  
-    The part of CMake that creates scripts for a given build system 
-    is known as a "Generator."  
-    CMake includes many generators, 
-    including Apple Xcode, Makefiles, Ninja, Nmake, and Microsoft Visual Studio.  
-    The user can specify the generator to be used when invoking a CMake script.  
-    At the end of the Configure step, 
-    a complete set of scripts exists to compile, 
-    link, and otherwise prepare the application for use using the specified build tool.   
-    CMake also creates an install target in the build system scripts.   
-    If tests were defined in the CMake script, CMake create a CMake script to run those tests. 
-</li>
-<li id="build">
-    <em>Build,</em> 
-    where the build tool uses the generated build scripts and headers to 
-    compile, link, and otherwise transform application source files 
-    into a set of executable binaries.  
-    At the end of the Build step, 
-    a complete and (normally) executable application 
-    exists in the build directory tree, also known as the build tree. 
-</li>
-<li id="install">
-    <em>Install,</em> 
-    where the components required to run the application are copied to appropriate directories for general use.  
-    Required components typically include executables, 
-    shared libraries, and documentation, 
-    although any file may be deemed required for installation.  
-    The appropriate directory is often but need not be a system directory; 
-    -DCMAKE_INSTALL_PREFIX=<> can be used to specify an installation directory.    
-</li>
+    <li id="configure">
+        <em>Configure, </em>
+        where the CMake script uses the target system's characteristics 
+        and the user's option specifications to generate scripts 
+        for the chosen build tool.  
+        The part of CMake that creates scripts for a given build system 
+        is known as a "Generator."  
+        CMake includes many generators, 
+        including Apple Xcode, Makefiles, Ninja, NMake, and Microsoft Visual Studio.  
+        The user can specify the generator to be used when invoking a CMake script.  
+        At the end of the Configure step, 
+        a complete set of scripts exists to compile, 
+        link, and otherwise prepare the application for use using the specified build tool.   
+        CMake also creates an install target in the build system scripts.   
+        If tests were defined in the CMake script, CMake creates a CMake script to run those tests. 
+    </li>
+    <li id="build">
+        <em>Build,</em> 
+        where the build tool uses the generated build scripts and headers to 
+        compile, link, and otherwise transform application source files 
+        into a set of executable binaries.  
+        At the end of the Build step, 
+        a complete and (normally) executable application 
+        exists in the build directory tree, also known as the build tree. 
+    </li>
+    <li id="install">
+        <em>Install,</em> 
+        where the components required to run the application are copied to appropriate directories for general use.  
+        Required components typically include executables, 
+        shared libraries, and documentation, 
+        although any file may be deemed required for installation.  
+        The appropriate directory is often but need not be a system directory; 
+        -DCMAKE_INSTALL_PREFIX=<> can be used to specify an installation directory.    
+    </li>
 </ol>
 <p>
-    This three-step process corresponds to the typical Autotools process: 
+    This three-step process corresponds to the typical GNU Autotools process: 
     <code>configure && make && make install</code>. 
 </p>
 
 <br /><hr />
 
-<h3 id="cmakeview">How CMake Views an Application</h3>
+<h3 class="skiplogo" id="cmakeview">How CMake Views an Application</h3>
 
 <p>
-A CMake script creates and uses what it calls targets.  
-A target might be a shared library, 
-a static library, 
-or an executable and is defined during Configure.  
-Targets have attributes.  
-For a library, for example, 
-attributes include the name and location of the library, 
-the location of the public headers needed to use the library, 
-and whether there are different versions for Release and Debug configurations.  
-Targets are defined and described in the CMake script, 
-and CMake uses those target definitions to create script(s) for the build tool, 
-such as Makefile when using GNU Makefiles. 
+    A CMake script creates and uses what it calls targets.  
+    A target might be a shared library, 
+    a static library, 
+    or an executable and is defined during Configure.  
+    Targets have attributes.  
+    For a library, for example, 
+    attributes include the name and location of the library, 
+    the location of the public headers needed to use the library, 
+    and whether there are different versions for Release and Debug configurations.  
+    Targets are defined and described in the CMake script, 
+    and CMake uses those target definitions to create script(s) for the build tool, 
+    such as Makefile when using GNU Makefiles. 
 </p>
 
 <p>
-When a target, 
-for example an executable target, 
-references a library target, 
-CMake uses the library target's attributes to ensure the 
-compile steps for the executable include all needed header directories 
-and the link steps reference the correct library name and location.  
-CMake also ensures that the build tool builds the library 
-<em>before</em> linking the executable.  
-CMake knows from the library target attributes whether it is a static or shared library 
-and uses build tool commands appropriate for the type of library.  
-The CMake script writer need not worry about that. 
+    When a target, 
+    for example an executable target, 
+    references a library target, 
+    CMake uses the library target's attributes to ensure the 
+    compile steps for the executable include all needed header directories 
+    and the link steps reference the correct library name and location.  
+    CMake also ensures that the build tool builds the library 
+    <em>before</em> linking the executable.  
+    CMake knows from the library target attributes whether it is a static or shared library 
+    and uses build tool commands appropriate for the type of library.  
+    The CMake script writer need not worry about that. 
 </p>
-
 <p>
-If this leads you to conclude that switching from a static 
-library to a shared library should be easy in CMake, 
-you would be correct.  
-If you are wondering if a CMake script written for 
-shared libraries will deal with the differences between 
-UNIX-like .so files and Windows .DLL files 
-and the corresponding Windows DLL export library, 
-the answer is, "Yes."  
-No additional CMake scripting is needed to deal with
-the specifics of shared versus static libraries, 
-or the differences in shared library implementation
-between Windows and UNIX-like target systems. 
+    CMake also addresses Windows-specific application elements
+    such as resource compiler files and DLL export lists.
+    These can be included as source files for the targets that
+    require them when building for a Windows target system.
+    CMake will ignore them without comment when the 
+    target system is UNIX-like.
+    See the source file 
+    <a href="https://github.com/hercules-390/hyperion/blob/master/CMake/Herc61_SlibSource.cmake" target="_blank">
+            Herc61_SlibSource.cmake</a>
+    in the Hercules-390 repository for examples.  
 </p>
-
+<p>
+    If this leads you to conclude that switching from a static 
+    library to a shared library should be easy when using CMake, 
+    you would be correct.  
+    If you are wondering if a CMake script written for 
+    shared libraries will deal with the differences between 
+    UNIX-like .so files and Windows .DLL files 
+    and the corresponding Windows DLL export library, 
+    the answer is, "Yes."  
+    No additional CMake scripting is needed to deal with
+    the specifics of shared versus static libraries, 
+    or the differences in shared library implementation
+    between Windows and UNIX-like target systems. 
+</p>
 
 <br /><hr />
 
-<h3 id="benefits">Benefits of Using CMake to Build Hercules-390</h3>
+<h3 class="skiplogo" id="benefits">Benefits of Using CMake to Build Hercules-390</h3>
 
 <p>
 CMake uses the same CMake script 
@@ -245,8 +261,6 @@ to find an old SDK and copy win32.mak into a current SDK directory.
 </p>
 
 
-<br /><hr />
-
 
 <br /><hr />
 <p>
@@ -264,6 +278,9 @@ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 </small>
 </p>
 
-</BODY>
+
+</div>
+
+</body>
 
 </HTML>

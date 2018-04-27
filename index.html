@@ -1,31 +1,43 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
-<HEAD><TITLE>
-The Hercules System/370, ESA/390, and z/Architecture Emulator</TITLE>
+<HEAD>
+<TITLE>The Hercules System/370, ESA/390, and z/Architecture Emulator</TITLE>
+
 <LINK REL=STYLESHEET TYPE="text/css" HREF="hercules.css">
 <link rel="shortcut icon" href="images/favicon.ico" />
 <link rel="icon" href="images/favicon.ico" />
+
+<style>
+    th.noborder, td.noborder {
+        border-style: none;
+    }
+    li.spaced:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+</style>
+
 </HEAD>
+
+
 <BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
       VLINK="#008040" ALINK="#000000">
 
 <table><tr><td>
 
-<table width="300" align="right">
+<table width="200" align="right">
   <tr>
-   <td></td>
-   <td width="256" align="right">
-     <img vspace="10" src="images/hercpic-rblk-256.gif" alt="Hercules logo" width="256" height="256">
+  <td rowspan="2"></td>
+   <td width="200" align="center">
+     <img vspace="5" src="images/hercpic-rblk-256.gif" alt="Hercules logo" width="160" height="160">
    </td>
   </tr>
   <tr>
-   <td></td>
-   <td width="256" align="right">
-     <center>
+   <td width="200" align="center">
      <a href="http://www.opensource.org/">
-       <img vspace="10" src="images/osi-certified-60x50.jpg" alt="Hercules is OSI Certified Open Source Software" border="1" width="60" height="50">
+       <img vspace="10" src="images/osi-certified-60x50.jpg" 
+            alt="Hercules is OSI Certified Open Source Software" border="1" width="60" height="50">
      </a>
-     </center>
    </td>
   </tr>
 </table>
@@ -33,121 +45,470 @@ The Hercules System/370, ESA/390, and z/Architecture Emulator</TITLE>
 <h1>The Hercules System/370, ESA/390, and z/Architecture Emulator</h1>
 
 <hr noshade>
-<center><h2>Hercules 4.0 (Hyperion)</h2></center>
+<h2>Hercules 4.0 (Hyperion)</h2>
 <hr noshade>
 
 <p>
-
-This is official web page for the <b>Hercules 4.0</b> version
-of the Hercules mainframe emulator, working titled <b>"Hyperion"</b>.
-
-<br /><br />
-
-The <b>Hyperion</b> version of Hercules is the official development version of
-the Hercules emulator and contains the latest corrections and enhancements made by volunteer Hercules
-developers.
-
-<br /><br />
-
-<b>Hercules</b> is an open source software implementation of the mainframe
-System/370 and ESA/390 architectures, in addition to the latest 64-bit
-z/Architecture. Hercules runs under Linux, Windows,
-Solaris, FreeBSD,
-and Mac OS X.
-
+    This is official web page for <b>Hercules</b> version 4.0, 
+    working titled <b>"Hyperion"</b>, 
+    the development version of Hercules.
+    Hyperion is developed and supported by a small group of volunteers.
+</p>
 <p>
+    <strong>Hercules</strong> is an open source software implementation of the mainframe
+    System/370 and ESA/390 architectures, in addition to the latest 64-bit
+    z/Architecture. 
+    Hercules runs under Linux, Windows, Solaris, FreeBSD, and macOS.
+    Hercules is licensed under the terms of the 
+    <a href="herclic.html" target="_blank">Q Public Licence</a>.
+    The Q Public License is 
+    <a href="https://opensource.org/licenses/QPL-1.0" target="_blank">certified</a> 
+    as an open source license by the
+    <a href="http://www.opensource.org/">Open Software Initiative</a>.
+</p>
+<hr />
 
-Hercules is <a href="http://www.opensource.org/">OSI Certified Open Source Software</a>
-licensed under the terms of the <a href="herclic.html">Q Public Licence</a>.
+<h3>Using Hercules to Emulate a Mainframe</h3>
+<p>
+To emulate a mainframe using Hercules, 
+you will need a few things:
+</p>
+<ol>
+    <li>A suitable host computer.</li>
+    <li>Hercules Installation and Setup Instructions</li>
+    <li>Mainframe software, most often an operating system.</li>
+    <li>Documentation for the software you plan to use.</li>
+</ol>
+<p>
+    Prior experience programming or supporting a 
+    mainframe operating operating system is not
+    required but is very helpful.  
+</p>
 
-<h3>Minimum supported host platforms:</h3>
+
+<h4>Host Computer Capability</h4>
+<p>
+    Hercules will run just fine on most modern desktop
+    or laptop computers.  
+    Performance will depend on what you do with Hercules.
+    Emulating a mainframe running DOS/360,
+    one of IBM's oldest mainframe operating systems
+    and one that would run in 16KiB of mainframe core
+    memory, 
+    will require far fewer host system resources 
+    than, say, 
+    a more modern MVS 3.8j configured with 16MiB of
+    emulated core and running a number of batch jobs.  
+    One of the mainframe ports of Linux will require
+    still more resources.  
+</p>
+<p>
+    On x86-based systems,
+    Hercules will work on 32-bit and 64-bit systems. 
+    Hercules does not require hardware-based virtualization
+    capabilities and runs fine on operating systems
+    that are themselves running in a virtual environment
+    such as Oracle Virtualbox. 
+</p>
+<p>
+    Muliple cores on the host system are helpful when 
+    emulating a mainframe configured with multiple 
+    CPUs, 
+    but multiple cores are not a requirement.  
+</p>
+
+
+<h4>Suitable Host platforms</h4>
 <ul>
-
-    <li><b>Windows</b>
-        <p>
-        The current minimum supported Windows platform is Windows XP
-        x64 or Windows Server 2003 or greater. That will likely change
-        in the near future however since neither
-        are supported any longer by Microsoft (extended support for
-        both ended on April 2014 and July 2015 respectively).
-        </p>
-    <li><b>Open Source systems (Linux, BSD, etc)</b>
-        <p>
-        (varies)
-        </p>
+    <li class="spaced">
+        <strong>Windows:</strong> Windows XP x64 or Windows Server 2003 R2 or greater.
+        Windows Vista or newer 32-bit or 64-bit will work.  
+    </li>
+    <li class="spaced">
+        <strong>UNIX-like systems:</strong> Linux-based systems and FreeBSD.  
+        Solaris is supported when you build Hercules from source using CMake.
+    </li>
+    <li class="spaced">
+        <strong>macOS:</strong> Limited testing; feedback encouraged.
+    </li>
 </ul>
-<h3>Installation Materials:</h3>
+<p>
+    The above list is limited by the systems available to developers;
+    we cannot afford to have one of everything.
+    That said, we welcome feedback and issues from people who try
+    to install on other platforms.  
+    One Hercules developer has installed on an emulated Raspberry Pi using QEMU.
+</p>
+
+<h4>Hercules Installation and Setup Instructions</h4>
+<p>
+    Select the installation procedure appropriate for your system.
+</p>
 <ul>
-    <li><a href="https://github.com/hercules-390/hyperion/releases/latest" target="_blank">Hyperion 4.0.0-rc0</a>.
-        is the current release candidate.  It includes zip'd Windows binaries 
-            and sources to build and install on open-source operating systems.&nbsp; <br />
-        <br />
+    <li class="spaced">
+        <a href="CMake/indexwin.html">Building Hercules for Windows Systems</a>
+        (Recommended).  
+        Uses CMake to build from source.
     </li>
-    <li>Windows installation instructions: 
-        The Windows binaries can be installed in the directory of your choice; change the Windows
-        Path statement to include that directory.  
-        Windows users will need a Microsoft Visual C++ Runtime.&nbsp; 
-        If not already installed on your computer, you can get it from Microsoft at this link:&nbsp; 
-        <a href="http://support.microsoft.com/kb/2019667" target="_blank">
-                Microsoft Visual C++ 2008 Runtime components</a>.<br />
-        <br />
+    <li class="spaced">
+        <a href="CMake/index.html">Building Hercules for UNIX-like Systems</a>
+        (Recommended).  
+        Uses CMake to build from source.
     </li>
-    <li>Open Source system installation instructions: see 
-        <a href="https://github.com/hercules-390/hyperion/blob/master/BUILDING.txt">BUILDING.txt</a>, 
-        <a href="https://github.com/hercules-390/hyperion/blob/master/README.BuildUNIX.txt">README.BuildUNIX.txt</a>,
-        and 
-        <a href="CMake/index.html">Using CMake to Build Hercules Version 4.0</a>
+    <li class="spaced">
+        <a href="CMake/indexmac.html">Hercules Installation for macOS Systems</a>
+        (Recommended).  
+        Uses Homebrew and GNU Autotools to build from source.
     </li>
-
+    <li class="spaced">
+        <a href="hercinst.html">Installation Using Legacy Tools</a>.
+        Uses makefile.bat/NMake (Windows) or GNU Autotools (UNIX-like systems and macOS)
+        to build from source.  
+        Includes Windows binaries installation instructions.
+        Useful if you encounter problems using CMake to build from source.  
+    </li>
+</ul>
+<p>
+    Most of the mainframe system web sites below include 
+    configuration instructions, 
+    sample configuration files,
+    and in some cases, 
+    pre-built emulated DASD files.  
+    Some do not.
+    The following links can be used to complete 
+    the setup of a Hercules emulated mainframe system.  
+</p>
+<ul>
+    <li class="spaced">
+        <a href="hercconf.html">Configuration File</a>.
+        Create a configuration file that defines 
+        the system configuration including I/O devices.
+    </li>
+    <li class="spaced">
+        <a href="hercload.html">Creating DASD</a>.
+        Create emulated DASD volumes for attachment to
+        an emulated mainframe.
+    </li>
+    <li class="spaced">
+        <a href="cckddasd.html">Compressed DASD Emulation</a>.
+        Create emulated DASD volumes using compression to
+        reduce host computer disk space needs.
+    </li>
+    <li class="spaced">
+        <a href="telnet.html">Telnet/tn3270 Console How-To</a>.
+        Connect to an emulated mainframe 3270 device,
+        3270 operator console, 
+        and/or 1052 or 3215 printer-keyboard.
+    </li>
+    <li class="spaced">
+        <a href="hercoper.html">Operating Procedures</a>.
+        Hercules command line parameters, 
+        panel commands,
+        keyboard use,
+        and the Hercules Automatic Operator (HAO).
+    </li>
 </ul>
 
-<h3>Documentation:</h3>
+
+<h4>Mainframe Software</h4>
+<p>
+    You have a number of choices, 
+    and you are not limited to the packages listed here.
+    IBM DOS/VS and IBM DOS/360 pre-date and bear absolutely no resemblance to 
+    <span style="white-space: nowrap;"></span>PC-DOS or 
+    <span style="white-space: nowrap;"></span>MS-DOS.
+</p>
+<p>
+    Note that if you run mainframe software within 
+    Hercules, 
+    you must respect the terms and conditions of 
+    the software license for that software.  
+</p>
+<ul>
+    <li class="spaced">
+        <strong><a href="https://en.wikipedia.org/wiki/MVS" target="_blank">IBM MVS</a></strong>.  
+        Jay Moseley has a very complete tutorial for 
+        <a href="http://www.jaymoseley.com/hercules/" target="_blank">installing and running MVS 3.8j</a>,
+        IBM's last release of MVS.
+    </li>
+    <li class="spaced">
+        <strong>Turnkey MVS systems</strong>.
+        There are at least two.  
+        Each includes its own copy of Hercules.  
+        If a Turnkey system suits you, 
+        with its pre-installed mainframe operating system,
+        there is no need to install Hercules from this site.  
+        <ul>
+            <li>Volker Bandke's <a href="http://www.bsp-gmbh.com/turnkey/" target="_blank">MVS Tur(n)key System</a></li>
+            <li>J&uuml;rgen Winkelmann's <a href="http://wotho.ethz.ch/tk4-/" target="_blank">TK4-</a></li>
+        </ul>
+    </li>
+    <li class="spaced">
+        <a href="https://en.wikipedia.org/wiki/OS/360_and_successors#MVT" target="_blank">
+                <strong>IBM OS/360 MVT</strong></a>,
+        a non-virtual storage operating system.
+        Jay Maynard has a good installation procedure at 
+        <a href="http://www.conmicro.com/hercos360/" target="_blank">
+                Introduction to Generating and Running OS/360 on Hercules</a>
+    </li>
+    <li class="spaced">
+        <a href="https://en.wikipedia.org/wiki/DOS/360_and_successors#DOS/VS" target="_blank">
+                <strong>IBM DOS/VS</strong></a>.
+        See Yahoo user ceo1944's 
+        <a href="https://xa.yimg.com/df/H390-DOSVS/2314dos.zip?token=O_EaUFZNM1ysRqSNnu0yltXgRxz64FxKEy-bF5bQOdYtbtb0qeIc62CVfCZITl7XIyIm3Ep8w05e7R-rMrOJbkTKMYI8d6jY128&type=download">
+                2314DOS.zip</a>.
+        This link downloads a zip archive of JCL and instructions from the Yahoo group 
+        <a href="https://groups.yahoo.com/neo/groups/H390-DOSVS/info" target="_blank">
+                <span style="white-space: nowrap;">H390-DOS/VS</span></a>;
+        free registration required. 
+    </li>
+    <li class="spaced">
+        <a href="https://en.wikipedia.org/wiki/DOS/360_and_successors" target="_blank">
+                <strong>IBM DOS/360</strong></a>.
+        There are at least four installation procedures available.
+        The first three are in the 
+        <a href="https://groups.yahoo.com/neo/groups/H390-DOSVS/info" target="_blank">
+                <span style="white-space: nowrap;">H390-DOS/VS</span></a>
+        Yahoo group 
+        (free registration required) 
+        and the fourth is a stand-alone web site. 
+        <ul>
+            <li>
+                Bill Carlborg's 
+                <a href="https://xa.yimg.com/df/H390-DOSVS/dos360-2314.zip?token=MPFimNo7jHqpod_6lzBBJDb_biQSsmBmoIXTix2dgmXH-21ONQN801pRMrZlDDc8TSBuQaNTOhC8DGFX2PbWfuHxSSBs4cUVIFb_lWz6&type=download" target="_blank">
+                        <span style="white-space: nowrap;">DOS360-2314.zip</span></a> 
+                (downloads a .zip archive).
+            </li>
+            <li>
+                Ben Huntsman's 
+                <a href="https://xa.yimg.com/df/H390-DOSVS/DIY-DOS360.zip?token=gFJ6LzhRIUXfW1povoYYIdQjNlP_P2y8lQnolBKbiDqikX2dwhrodt-eOzDQUqvku1YB6HMBEVMbmF96NlwgKx0W1qg5wFoa4Z2IiKk&type=download" target="_blank">
+                        <span style="white-space: nowrap;">DYI-DOS360.zip</span></a> 
+                (downloads a .zip archive).
+            </li>
+            <li>
+                Kevin Leonard's 
+                <a href="https://groups.yahoo.com/neo/groups/H390-DOSVS/files/DOS-360%2026.2/" target="_blank">
+                        <span style="white-space: nowrap;">DOS-360 26.2</span></a>
+            </li>
+            <li>
+                <a href="https://sites.google.com/site/dos360install/" target="_blank">
+                        https://sites.google.com/site/dos360install/</a>.
+                This site is loosely modeled on Jay Moseley's MVS 3.8j site noted above.  
+            </li>
+        </ul>
+    </li>
+    <li class="spaced">
+        <strong><a href="https://en.wikipedia.org/wiki/VM_(operating_system)" target="_blank">IBM VM/370</a></strong>.  
+        See the 
+        <a href="http://www.cbttape.org/vm6.htm" target="_blank">VM/370 R6</a>,
+        page on the 
+        <a href="http://www.cbttape.org/" target="_blank">cbttape.org</a>
+        site.
+        Turnkey versions of VM/370 are available on David Wade's
+        <a href="http://www.smrcc.org.uk/members/g4ugm/VM370.htm" target="_blank">
+                G4UGM's Vintage and Classic Computer pages</a>
+    </li>
+    <li class="spaced">
+        <a href="https://en.wikipedia.org/wiki/Comparison_of_Linux_distributions" target="_blank">
+                <strong>Linux</strong></a>.
+        Mainframe versions exist for the following.
+        Some of these are not open source, 
+        and installation generally requires 
+        <a href="herctcp.html">configuration of a mainframe Channel-to-Channel adapter</a> 
+        to enable network connectivity for installation and/or post-install security updates.  
+        <ul>
+            <li>
+                <a href="https://debian.org" target="_blank">Debian</a>
+                Download a s390x CD or DVD.  
+            </li>
+            <li>
+                <a href="https://alt.fedoraproject.org/alt/" target="_blank">Fedora.</a>
+                Scroll down the page until you reach "s390x Architecture"
+                at the bottom of the page.
+            </li>
+            <li>
+                <a href="https://www.gentoo.org/downloads/" target="_blank">Gentoo</a>.
+                The s390x is included under "(experimental)" for "Experimental architectures".
+                You know what that means.  
+            </li>
+            <li>
+                <a href="https://www.redhat.com/" target="_blank">Red Hat</a>.
+                Paid license or 30-day trial only.  
+                Red Hat supports Fedora as its open source alternative.
+            </li>
+            <li>
+                <a href="https://www.suse.com/products/server/download/" target="_blank">SUSE Enterprise Server</a>.
+                Paid license or 60-day trial only.  
+            </li>
+        </ul>
+    </li>
+    <li class="spaced">
+        <a href="https://en.wikipedia.org/wiki/Michigan_Terminal_System" target="_blank">
+                <strong>Michigan Terminal System (MTS)</strong></a>.
+        The Michigan Terminal System Archive includes a <a href="https://sites.google.com/site/michiganterminalsystem/mts-d60A" target="_blank">turnkey distribution</a> that has been tailored for 
+        use with Hercules.
+        Additional helpful information may be found at 
+        <a href="https://try-mts.com/why-try-mts/" target="_blank">https://try-mts.com/why-try-mts/</a>
+    </li>
+    <li class="spaced">
+        <a href="https://github.com/s390guy/SATK" target="_blank"><strong>SATK</strong></a>.
+        Harold Grovesteen's Stand Alone Tool Kit offers a collection of tools for creating 
+        mainframe assembly language programs on your computer for later execution within
+        Hercules.
+        The binary floating point test programs and scripts were created using SATK and serve as 
+        examples for the assembler's capabilities and use.
+    </li>
+    <li class="spaced">
+        <a href="http://tommysprinkle.com/txxos/" target="_blank"><strong>TXXOS</strong></a>.
+        Tommy Sprinkle's "Bare Metal Programming for the IBM 370 Mainframe" web site
+        walks you step-by-step from IPL'ing a simple listing program through 
+        building a disk-resident operating system. 
+    </li>
+</ul>
+<p>
+    See <a href="hercfaq.html">Frequently Asked Questions</a>,
+    starting with question <a href="hercfaq.html#2.01">2.01 Can it run z/OS, z/VM, z/VSE?</a> 
+    for more details on available operating systems 
+    and licensing matters.  
+</p>
+<h4>Mainframe Software Documentation</h4>
+<p>
+    Documentation for the Linux distributions, the Michigan Terminal System, SATK, and TXXOS may be found on their respective web sites.  
+</p>
+<p>
+    Documentation for the IBM operating systems is a different matter; 
+    much of it was published before the Internet existed.
+    The 
+    <a href="http://www.bitsavers.org/" target="_blank">Bitsavers</a>
+    site and its mirrors contain a repository of 
+    scanned, and in some cases, OCR'd, 
+    IBM hardware and software reference manuals.  
+    The DOS360Install site has a couple of essential DOS/360 
+    manuals that are not on Bitsavers.  
+</p>
+<p>
+    Bitsavers is organized first by manufacturer, 
+    then by machine.
+    Within machine one can find operating system documentation.
+    Use the following shortcuts to the Bitsavers site.  
+    And explore...one can find very useful information in unexpected places 
+    on Bitsavers.  
+</p>
+<ul>
+    <li class="spaced">
+        <a href="http://www.bitsavers.org/pdf/ibm/" target="_blank">
+                All Bitsavers IBM documentation</a>
+    </li>
+    <li class="spaced">
+        <a href="http://www.bitsavers.org/pdf/ibm/360/" target="_blank">
+                System/360 hardware & software manuals</a>
+        <ul>
+            <li>
+                <a href="http://www.bitsavers.org/pdf/ibm/360/dos" target="_blank">
+                        DOS/360 software manuals</a>
+            </li>
+            <li>
+                <a href="https://sites.google.com/site/dos360install/start/doclinks" target="_blank">
+                        DOS/360 Bibliography from the DOS360Install site</a>
+            </li>
+            <li>
+                <a href="http://www.bitsavers.org/pdf/ibm/360/os" target="_blank">
+                        OS/360 software manuals</a>
+            </li>
+        </ul>
+    </li>
+    <li class="spaced">
+        <a href="http://www.bitsavers.org/pdf/ibm/370" target="_blank">
+                System/370 hardware & software manuals</a>
+        <ul>
+            <li>
+                <a href="http://www.bitsavers.org/pdf/ibm/370/DOS_VS" target="_blank">
+                        DOS/VS software manuals</a>
+            </li>
+            <li>
+                <a href="http://www.bitsavers.org/pdf/ibm/370/MVS" target="_blank">
+                        MVS software manuals</a>.
+                Also see
+                <a href="http://bitsavers.trailing-edge.com/pdf/ibm/370/OS_VS2/" target="_blank">
+                        OS/VS2 software manuals</a>.
+                OS/VS2 was IBM's original name for MVS.
+            </li>
+            <li>
+                <a href="http://www.bitsavers.org/pdf/ibm/370/VM_370" target="_blank">
+                        VM/370 software manuals</a>
+            </li>
+        </ul>
+    </li>
+    <li class="spaced">
+        <a href="http://www-01.ibm.com/support/docview.wss?uid=pub1sa22720108" target="_blank">
+                ESA/390 Principles of Operation, helpful for Linux, SATK, and TXXOS</a>
+    </li>
+    <li class="spaced">
+        <a href="http://linuxmain.blogspot.com/2012/09/zarchitecture-principles-of-operation.html" target="_blank">
+                z/Architecture Principles of Operation, helpful for Linux, SATK, and TXXOS</a>
+    </li>
+</ul>
+
+
+<br /><hr />
+
+
+<h3>Hercules Documentation and Useful Links</h3>
     <p>The Web/HTML documentation is in a "how-to" style with examples.  
         The downloadable PDFs are comprehensive reference documentation.  </p>
-    <table style="border-style:none">
-    <tr style="border-style:none;text-align:center">
-        <th style="border-style:none">Web/HTML</th>
-        <th style="border-style:none">    </th>
-        <th style="border-style:none">Downloadable PDFs</th>
+    <table class="noborder">
+    <tr class="noborder" style="text-align:center">
+        <th class="noborder">Web/HTML</th>
+        <th class="noborder">    </th>
+        <th class="noborder">Downloadable PDFs</th>
     </tr>
-    <tr style="border-style:none">
-        <td style="border-style:none">
+    <tr class="noborder">
+        <td class="noborder" style="vertical-align: top">
         <ul>
-            <li><a href="hercinst.html">Hercules Installation and Operation</a></li>
+            <li><a href="hercoper.html">Hercules Operation</a></li>
             <li><a href="hercconf.html">Hercules Configuration File</a></li>
-            <li><a href="hercmsg.html">Hercules System Messages</a></li>
-            <li><a href="hercfaq.html">Hercules Frequently-Asked Questions</a></li>
+            <li><a href="hercload.html">Creating Emulated DASD</a></li>
+            <li><a href="cckddasd.html">Compressed DASD Files</a></li>
+            <li><a href="hercmsg.html">System Messages</a></li>
+            <li><a href="hercfaq.html">Frequently-Asked Questions</a></li>
+            <li><a href="telnet.html">Telnet/tn3270 Console How-To</a></li>
+            <li><a href="herctcp.html">TCP/IP networking with Hercules</a></li>
             <li><a href="rexxinteg.html">Hercules-REXX Integration</a></li>
+            <li><a href="shared.html">Shared Device Server</a></li>
             <li><a href="hercsupp.html">Technical Support</a></li>
-            <li><a href="herclic.html">The Q Public Licence</a></li>
         </ul>
         </td>
-        <td style="border-style:none">    </td>
-        <td style="border-style:none">
+        <td class="noborder">    </td>
+        <td class="noborder"  style="vertical-align: top">
         <ul>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesGeneralInfo.pdf">Hercules General Information</a>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesInstallation.pdf">Hercules Installation Guide</a>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesUserReference.pdf">Hercules User Reference Guide</a>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesOperationsandUtilities.pdf">Hercules Operations and Utilities Guide</a>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesMessagesandCodes.pdf">Hercules Messages and Codes</a>
-            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesReferenceSummary.pdf">Hercules Reference Summary</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesGeneralInfo.pdf" target="_blank">Hercules General Information</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesInstallation.pdf" target="_blank">Hercules Installation Guide</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesUserReference.pdf" target="_blank">Hercules User Reference Guide</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesOperationsandUtilities.pdf" target="_blank">Hercules Operations and Utilities Guide</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesMessagesandCodes.pdf" target="_blank">Hercules Messages and Codes</a>
+            <li><a href="http://hercdoc.glanzmann.org/V400/HerculesReferenceSummary.pdf" target="_blank">Hercules Reference Summary</a>
         </ul>
         </td>
     </tr>
 </table>
+
+<br /><hr />
 
 
 <h3>Additional helpful links</h3>
 <ul>
     <li><a href="hercnew.html">What's new in this release</a>
     <li><a href="hercrnot.html">Release notes</a>
-    <li><a href="https://github.com/hercules-390/hyperion/issues">Issue Tracker</a>
-    <li><a href="http://groups.yahoo.com/group/hercules-390">Support Forum</a>
-    <li><a href="https://github.com/hercules-390/hyperion/wiki">Developer Wiki</a>
-    <li><a href="https://github.com/hercules-390/hyperion" target="_blank">Source Code Repository</a></li>
+    <li><a href="https://github.com/hercules-390/hyperion/issues" target="_blank">Issue Tracker</a>
+    <li><a href="http://groups.yahoo.com/group/hercules-390" target="_blank">Support Forum</a>
+    <li><a href="https://github.com/hercules-390/hyperion/wiki" target="_blank">Developer Wiki</a>
+    <li><a href="https://github.com/hercules-390" target="_blank">Hercules-390 4.0 Source Code</a></li>
+    <li><a href="herclic.html">The Q Public Licence</a></li>
 </ul>
 
+<br /><hr />
 
+<h3>About Hercules</h3>
 <center><hr width=15% noshade></center>
 
 
@@ -162,7 +523,7 @@ programmers is constantly at work implementing new features and fixing bugs.
 
 <center><hr width=15% noshade></center>
 
-<h3>What people are saying about Hercules</h3>
+<h4>What people are saying about Hercules</h4>
 
 <p>
 

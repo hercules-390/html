@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
+<HTML>
+
+<head>
+<title>Using CMake to Build Hercules Version 4.0</title>
+
+<link rel="stylesheet"   TYPE="text/css" HREF="../hercules2.css">
+<link rel="shortcut icon" href="../images/favicon.ico" />
+<link rel="icon" href="../images/favicon.ico" />
+
+<style>
+    li:not(:last-child) {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">What's new in CMake for Hercules</h2>
+        </td>
+    </tr>
+</table>
+<hr />
+</div>
+
+
+<div id="content">
+
+<h3>Winter 2018 Update</h3>
+
+<p><strong>Windows Builds are Supported</strong></p>
+
+<p>
+    CMake can be used to build Hercules on Windows systems. 
+    One may use the Microsoft Visual Studio Integrated Development 
+    Environment to build, 
+    or you can use MSBuild, NMake, or JOM from the command line.  
+    The required external packages BZip2, PCRE, and Zlib are 
+    built when Hercules is built, 
+    just as the current <code>1Stop.cmd</code> builds SoftFloat-3a. 
+    See 
+    <a href="indexwin.html">Building Hercules for Windows</a>
+    for complete details. 
+</p>
+<p>
+    <strong>Note:</strong>
+    Windows build support changes how three environment variables are used
+    when building Hercules.  These are <code>bzlib_dir</code>,
+    <code>pcre_dir</code>, and <code>zlib_dir</code>.
+    See 
+    <a href="#extpkgs">External Package Incompatibilities (BZip2, PCRE, Zlib)</a>
+    and
+    <a href="#envvars">Environment Variable Incompatibilities</a>
+    on the 
+    <a href="indexwin.html">Building Hercules for Windows</a>
+    page for details and actions to take.  
+</p>
+<br />
+
+<p><strong>CMake Can Build BZip2, Zlib, and for Windows, PCRE if needed</strong></p>
+
+<p>
+    If BZip2 and/or Zlib are not installed on your UNIX-like system, 
+    or the installed versions are older releases than the versions
+    of those packages available in the Hercules-390 github project,
+    the CMake build will clone and build missing or downlevel
+    packages from the Hercules-390 github project.
+</p>
+<p>
+    For builds on Windows systems, 
+    Bzip2, PCRE, and Zlib are built from the Hercules-390 project.
+</p>
+<p>
+    CMake command line options are available to force the use of
+    the system-installed packages (UNIX-like systems only), 
+    to use previously built versions,
+    or to exclude the packages and their capabilities from 
+    the Hercules build.  
+    See the descriptions of the 
+    <code>BZIP2</code> and <code>BZIP2_DIR</code> options
+    and the corresponding options for PCRE and ZLIB in 
+    <a href="cmakeopts.html">Standard CMake Build Options</a>
+</p>
+
+<br />
+
+<hr />
+<p>
+<small>This web page Copyright &copy; 2017 by Stephen R. Orso.
+<br /><br />
+This work is licensed under the Creative Commons Attribution-
+ShareAlike 4.0 International License. 
+<br /><br />
+To view a copy of this license,
+visit 
+<a href="http://creativecommons.org/licenses/by-sa/4.0/" 
+        target="_blank">http://creativecommons.org/licenses/by-sa/4.0/</a> 
+or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+</small>
+</p>
+</div>
+
+</BODY>
+
+</HTML>

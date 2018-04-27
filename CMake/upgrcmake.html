@@ -1,39 +1,63 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
-<HEAD><TITLE>
-Upgrade CMake to at least 3.4</TITLE>
-<LINK REL=STYLESHEET TYPE="text/css" HREF="../hercules.css">
+
+<head>
+<title>Using CMake to Build Hercules Version 4.0</title>
+
+<link rel="stylesheet"   TYPE="text/css" HREF="../hercules2.css">
 <link rel="shortcut icon" href="../images/favicon.ico" />
 <link rel="icon" href="../images/favicon.ico" />
-</HEAD>
 
 <style>
+    table {
+        border: 2px solid black;
+        border-collapse:collapse;
+    }
+    th {
+        border: 1px solid black;
+        vertical-align:bottom;
+        text-align:left;
+        padding:10px 5px 5px 5px;
+    }
+    td {
+        border: 1px solid black;
+        vertical-align: top;
+        text-align:left;
+        padding:5px 5px 10px 5px;
+    }
 
-li:not(:last-child) {
-    margin-bottom: 5px;
-}
-table {
-    border: 2px solid black;
-    border-collapse:collapse;
-}
-th {
-    border: 1px solid black;
-    vertical-align:bottom;
-    text-align:left;
-    padding:10px 5px 5px 5px;
-}
-td {
-    border: 1px solid black;
-    vertical-align: top;
-    text-align:left;
-    padding:5px 5px 10px 5px;
-}
+    li:not(:last-child) {
+        margin-bottom: 5px;
+    }
 </style>
 
-<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
-      VLINK="#008040" ALINK="#000000">
-<h1>Upgrade CMake to at least 3.4</h1>
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">Upgrade CMake to at least 3.4</h2>
+        </td>
+    </tr>
+</table>
 <hr />
+</div>
+
+
+<div id="content">
+
 <p>
 There are four ways to get the current version, or at least a new-enough version, of CMake installed on your system.  
 Which of these can be used depends on your target system.
@@ -70,7 +94,7 @@ Which of these can be used depends on your target system.
 <hr />
 <br />
 
-<h3 id="linux">Linux</h3>
+<h3 class="skiplogo" id="linux">Linux</h3>
 <p>
 There are four ways to get CMake installed on your system.  
 </p>
@@ -142,7 +166,7 @@ There are four ways to get CMake installed on your system.
 <br />
 
 
-<h3 id="windows">Windows</h3>
+<h3 class="skiplogo" id="windows">Windows</h3>
 <p>
     Here are your choices:
 </p>
@@ -192,7 +216,7 @@ Just do not install one older than 3.4.0.
 <hr />
 <br />
 
-<h3 id="macos">Mac OS X / macOS</h3>
+<h3 class="skiplogo" id="macos">Mac OS X / macOS</h3>
 <p>
 See if CMake is included in the macOS app store, and if so, how.   
 But it is not likely to be there; 
@@ -233,7 +257,7 @@ Build from source, also at
 <br />
 
 
-<h3 id="otheruls">Other UNIX-like Systems</h3>
+<h3 class="skiplogo" id="otheruls">Other UNIX-like Systems</h3>
 <p>
 There are three ways to get CMake installed on your system.  
 </p>
@@ -278,7 +302,7 @@ Procedures for using options one or two are dependent on your target system's di
 <br />
 
 
-<h3 id="bootstrap">Build From Source</h3>
+<h3 class="skiplogo" id="bootstrap">Build From Source</h3>
 <p>
     Complete "build from source" instructions may be found on the CMake web site at 
     <a href="https://cmake.org/install/" target="_blank">https://cmake.org/install/</a>.
@@ -442,7 +466,7 @@ Procedures for using options one or two are dependent on your target system's di
 
 <br /><hr />
 <p>
-<small>This web page Copyright &copy; 2017 by Stephen R. Orso.
+<small>This web page Copyright &copy; 2018 by Stephen R. Orso.
 <br /><br />
 This work is licensed under the Creative Commons Attribution-
 ShareAlike 4.0 International License.

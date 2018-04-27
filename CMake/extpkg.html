@@ -1,131 +1,561 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN" "html.dtd">
 <HTML>
-<HEAD><TITLE>
-Using CMake to Build Hercules Version 4.0</TITLE>
-<LINK REL=STYLESHEET TYPE="text/css" HREF="../hercules.css">
+
+<head>
+<title>Using CMake to Build Hercules Version 4.0</title>
+
+<link rel="stylesheet" type="text/css" href="../hercules2.css">
 <link rel="shortcut icon" href="../images/favicon.ico" />
 <link rel="icon" href="../images/favicon.ico" />
-</HEAD>
 
 <style>
-li:not(:last-child) {
-    margin-bottom: 5px;
-}
-    </style>
+    table {
+        border: 2px solid black;
+        border-collapse:collapse;
+    }
+    th {
+        border: 1px solid black;
+        vertical-align:bottom;
+        text-align:left;
+        padding:10px 5px 5px 5px;
+    }
 
-<BODY BGCOLOR="#ffffcc" TEXT="#000000" LINK="#0000A0"
-      VLINK="#008040" ALINK="#000000">
+    table.extpkgdir {
+        border: none;
+        margin-left: 40px
+    }
 
-<h1>Using CMake to Build Hercules Version 4.0</h1>
+    td.extpkgdirc1 {
+        border: none;
+        font-family: Courier;
+        padding:0px 5px 0px 5px;
+    }
+    td.extpkgdirc2 {
+        border: none;
+        padding:0px 5px 0px 5px;
+    }
+
+    th.extpkgc1, td.extpkgc1 {
+        width: 100px;
+    }
+    th.extpkgc2, td.extpkgc2 {
+        width: 574px;
+    }
+    th.extpkgc3, td.extpkgc3 {
+        width: 350px;
+    }
+
+    td.pkgoptc1 {
+        padding:10px 10px 10px 10px;
+        width: 220px;
+    }
+
+    td.pkgoptc2 {
+        padding:10px 10px 10px 10px;
+        width: 500px;
+    }
+
+    td {
+        border: 1px solid black;
+        vertical-align: top;
+        text-align:left;
+        padding:5px 5px 10px 5px;
+    }
+
+    li:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+</style>
+
+</head>
+
+
+<body>
+
+<div id="header">
+<table class="hdr">
+    <tr>
+        <td rowspan="2" class="hdrlogo">
+            <a href="../index.html"><img src="../images/hercpic-rblk-256.gif" alt="logo" class="hdrlogo" /></a>
+        </td>
+        <td class="hdr">
+            <h1 class="hdr">Using CMake to Build Hercules Version 4.0</h1>
+        </td>
+    </tr>
+    <tr>
+        <td class="hdr">
+            <h2 class="hdr">Controlling the Automatic Build of External Packages</h2>
+        </td>
+    </tr>
+</table>
 <hr />
+</div>
 
-<h2>Controlling the Automatic Build of External Packages</h2>
-<p>The CMake build for Hercules will clone and build all required external
+
+<div id="content">
+
+<blockquote>
+    <p>
+        <a href="#overview">What is a Hercules External Package?</a>
+    </p>
+    <p>
+        <a href="#pkgtable">List of Hercules External Packages</a>
+    </p>
+    <p>
+        <a href="#howwhen">How and When External Packages are Built</a>
+    </p>
+    <p>
+        <a href="#wherebuilt">Controlling Where External Packages are Built</a>
+        <ul>
+            <li><a href="#letcmake">Letting the CMake Script Build External Packages</a></li>
+            <li><a href="#reqherc">Require the CMake Script to Build an External Packages</a></li>
+            <li><a href="#reqsys">Require the Use of a System-Installed External Package</a></li>
+            <li><a href="#dyiextpkg">Build External Package(s) Yourself</a></li>
+        </ul>
+    </p>
+</blockquote>
+
+<br /><hr />
+
+<h3 class="skiplogo" id="overview">What is a Hercules External Package?</h3>
+<p>
+    A Hercules External Package meets at least one of the 
+    following criteria:
+</p>
+<ul>
+    <li>
+        The package provides functionality not available on 
+        one of the platforms that Hercules supports.  
+        BZip2, PCRE, and Zlip fit this criterion because
+        they are not included in the Windows distribution. 
+    </li>
+    <li>
+        Modifications were required to a generally available 
+        package to adapt it to the specific requirements of 
+        mainframe emulation.
+        SoftFloat-3a fits this criterion.  
+    </li>
+</ul>
+<p>
+   Packages that require no special action when building Hercules, 
+   such as the Microsoft Visual C Runtime or pthreads on UNIX-like
+   systems, 
+   are not considered "Hercules External Packages." 
+   While logically external to Hercules, 
+   packages like the C runtime and pthreads are readily available,
+   are normally part of their respective host systems,
+   and do not require alteration, customization,
+   or specific build parameters.  
+   Likewise, neither Open Object Rexx nor Regina Rexx
+   are considered Hercules External Packages 
+   from the standpoint of building Hercules.  
+</p>
+<p>
+    If you do not code any of the options available 
+    to control building of external packages for Hercules,
+    the CMake build will build all required external packages
+    within a subdirectory of the build directory.  
+    On subsequent rebuilds of Hercules,
+    each external package clone is checked for 
+    updates and rebuilt only if needed. 
+    Updates include changes to the Hercules-390
+    repository for the package and any 
+    changes made on the local system.
+</p>
+<p>
+    Shared libraries created for external packages are given
+    Hercules-specific names and will be installed with Hercules.
+    On UNIX-like systems, 
+    this could mean that external packages will be installed
+    in system standard directories such as <code>/usr/local/lib</code>.
+    The Hercules-specific names prevents conflicts with 
+    standard versions of those packages.</p>
+<p>
+    This approach allows you build Hercules without
+    having to be aware of external packages at all.  
+    Should you wish to delete the Hercules build directory, 
+    the deletion also deletes the clone and build directories
+    for every external package.
+</p>
+<p>
+    If this is acceptable&mdash;and, often, it is&mdash;you
+    need not read this page any further unless you are curious.  
+    Or are a Hercules Developer or wish to become one.
+</p>
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="pkgtable">List of Hercules External Packages</h3>
+<p>
+The following external packages are used by Hercules:
+</p>
+<table>
+    <tr>
+        <th class="extpkgc1">Package</th>
+        <th class="extpkgc2">Hercules Usage</th>
+        <th class="extpkgc3">Hercules-390 Repository<br />&nbsp;&nbsp;&nbsp;&nbsp;& Upstream URL</th>
+    </tr>
+    <tr>
+        <td class="extpkgc1">BZip2</td>
+        <td class="extpkgc2">
+            <p>
+                A data compression library.
+            </p>
+            <p>
+                Required only to provide support for BZip2-compressed
+                emulated tape and disk volumes.
+            </p>
+            <p>
+                Only the compression and decompression functions are used.
+                The command-line utilities are not used.  
+            </p>
+        </td>
+        <td class="extpkgc3">
+            <a href="https://github.com/hercules-390/h390BZip" target="_blank">https://github.com/hercules-390/h390BZip</a>
+            <br /><br />
+            <a href="http://www.bzip.org/" target="_blank">http://www.bzip.org/</a>
+        </td>
+    </tr>
+    <tr>
+        <td class="extpkgc1">PCRE</td>
+        <td class="extpkgc2">
+            <p>
+                Perl-Compatible Regular Expressions
+            </p>
+            <p>
+                Required to support regular expressions in 
+                Hercules Automatic Operator expressions, 
+                and only on the Windows platform. 
+                Hercules uses the built-in userland support 
+                for regular expressions available in UNIX-like systems.  
+            </p>
+            <p>
+                Only the 8-bit character set version 
+                without Unicode nor UTF-8 is needed.
+                The executable test programs  are not needed.  
+            </p>
+        </td>
+        <td class="extpkgc3">
+            <a href="https://github.com/hercules-390/h390PCRE" target="_blank">
+                    https://github.com/hercules-390/h390PCRE</a>
+            <br /><br />
+            <a href="http://www.pcre.org/" target="_blank">http://www.pcre.org/</a>
+        </td>
+    </tr>
+    <tr>
+        <td class="extpkgc1">SoftFloat-3a For Hercules</td>
+        <td class="extpkgc2">
+            <p>
+                Binary floating point library.
+            </p>
+            <p>
+                Required.
+            </p>
+            <p>
+                This is a modified version of Dr. John Hauser's 
+                SoftFloat binary floating point package.  
+                The modifications adapt SoftFloat version 3a to the
+                specifics of IBM binary floating point, as defined in the 
+                z/Architecture Principles of Operation, 
+                SA22-7832-11.
+            </p>
+        </td>
+        <td class="extpkgc3">
+            <a href="https://github.com/hercules-390/SoftFloat-3a" target="_blank">
+                    https://github.com/hercules-390/SoftFloat-3a</a>
+            <br /><br />
+            <a href="http://www.jhauser.us/arithmetic/SoftFloat.html" target="_blank">
+                    http://www.jhauser.us/arithmetic/SoftFloat.html</a>
+        </td>
+    </tr>
+    <tr>
+        <td class="extpkgc1">Zlib</td>
+        <td class="extpkgc2">
+            <p>
+                A data compression library.
+            </p>
+            <p>
+                Required only to provide support for Zlib-compressed
+                emulated tape and disk volumes.
+            </p>
+            <p>
+                The command-line examples are not needed.  
+            </p>
+        </td>
+        <td class="extpkgc3">
+            <a href="https://github.com/hercules-390/h390Zlib" target="_blank">https://github.com/hercules-390/h390Zlib</a>
+            <br /><br />
+            <a href="http://www.zlib.net/" target="_blank">http://www.zlib.net/</a>
+        </td>
+    </tr>
+</table>
+
+<br /><hr />
+
+
+<h3 class="skiplogo" id="howwhen">When and How External Packages are Built</h3>
+<p>
+The CMake script for Hercules will build 
+an external package when all of the following are true:
+</p>
+<ul style="list-style-type:square">
+    <li>
+        The package was not specifically excluded.
+        For example, <code>-DBZIP2=NO</code>
+        is not included on the CMake command line.
+    </li>
+    <li>
+        A build or install directory location has not been specified using a CMake option. 
+        For example <code>-DBZIP2_DIR=&lt;build-tree&gt;</code> 
+        is not included on the CMake command line.
+    </li>
+    <li>
+        (UNIX-like systems only) 
+        A version of the package is not installed in the system's standard libraries,
+        or the version that is installed is older than the 
+        version maintained in the Hercules-390 project.  
+    </li>
+</ul>
+<p>
+    When the CMake script for Hercules builds an external package,
+    it uses the same build tool, 
+    architecture (32-bit or 64-bit),
+    and build configuration (release or debug)
+    as is being used for Hercules. 
+    Defaults are taken for all other 
+    external package build options,
+    and because any Hercules-built external package 
+    is cloned from the Hercules-390 project,
+    the defaults are appropriate.  
+</p>
+<p>
+    When Hercules is rebuilt, 
+    perhaps due to development activity,
+    all external packages built by the CMake script 
+    are checked for updates.  
+    Updates include changes committed to the 
+    external package repository in the Hercules-390 project
+    or changes to the external package source as a result of
+    development activity on the external package. 
+</p>
+<p>
+    Normally, 
+    external packages are not rebuilt 
+    when Hercules is rebuilt.  
+</p>
+
+
+<br /><hr />
+<!-- **********************************************************************  -->
+
+<h3 class="skiplogo" id="wherebuilt">Controlling Where and When External Packages are Built</h3>
+
+<h4 class="skiplogo" id="letcmake">Let the CMake Script Build External Packages</h4>
+<p>
+The CMake script for Hercules will clone and build all required external
 packages into the location specified or defaulted to in 
-<code>-DEXTPKG_DIR</code>.
-An external package is one which resides in its own repository and is
-built separately from Hercules.
+<a href="buildopts.html/#extpkg_dir"><code>-DEXTPKG_DIR</code></a>.
+This option specifies the path that the CMake script will use as the root of all
+package directories for those external packages that will be built by the script.
 </p>
-<p>Hercules presently uses one external package, 
-SoftFloat-3a For Hercules.
-Other packages might also become external packages in the future,
-for example in Windows Perl Compatible Regular Expressions, BZIP2, and ZLIB.  
-The decNumber package and the html directory may also be split 
-into external packages just as SoftFloat-3a For Hercules was split.
-</p>
-
-<p>The autotools build for Hercules expects external packages to have been
-previously built either by the person doing the build or by the <code>1Stop</code>
-script.  
-The package(s) were expected to be installed at specific
-location(s) relative to the Hercules build directory.  
-An autotools <code>--enable</code> option allowed the builder 
-to specify a location other than the default.
-</p>
-<p>The CMake build uses its own capabilities and the capabilities of git
-and the  generator (e.g., Unix Makefiles, Ninja, or Xcode) to build
-the external package or components of the package only when required
-by updates to the package.  
-Package updates include commits to the remote repository and 
-alterations to source files, 
-such as might be performed by an external package developer.
-</p>
-<p>Command line options are provided to enable control of this automation.
-</p>
-
-<h4><code>-DS3FH_DIR=&lt;path&gt;</code></h4>
-<p><code>&lt;path&gt;</code> may be absolute or relative to the Hercules build directory.
-</p>
-<p>The <code>-DS3FH_DIR</code> option is most useful to external package developers who
-are modifying an external package and wish to test changes pre-commit.
-</p>
-<p>This existing option names the path to a previously built and installed
-external package.  It is the builder's responsibility to do the build;
-CMake will not automatically build an external package when an
-installation directory has been specified.
-</p>
-
-<h4><code>-DEXTPKG_DIR=&lt;path&gt;</code></h4>
-
-<p><code>&lt;path&gt;</code> may be absolute or relative to the Hercules build directory.
-</p>
-
-<p>The <code>-DEXTPKG_DIR=&lt;path&gt;</code> option is most useful to Hercules developers who may have multiple
+<p>The <code>-DEXTPKG_DIR=&lt;extpkg_dir&gt;</code>
+option probably is most useful to Hercules developers who may have multiple
 Hercules build directories, 
 or who wish to erase and recreate the build
 directory without rebuilding all external packages.
+If multiple Hercules build directories are created using the 
+same <code>-DEXTPKG_DIR=</code> directory,
+all of those build directories must use the same build tool,
+architecture (32-bit or 64-bit), 
+and configuration type (release or debug).
 </p>
 
-<p>This option specifies the path that the CMake build will use as the root of all
-package directories for those external packages that CMake will build.
-The external package directory structure looks like this:
+<p>
+    The external package directory structure looks like this:
 </p>
 
-<table style="margin-left: 40px">
+<table class="extpkgdir">
     <tr>
-        <td><code>extpkg/</code></td>
-        <td>All external packages are placed in <code>extpkg/</code>,
+        <td class="extpkgdirc1"><code>&lt;extpkg_dir&gt/</code></td>
+        <td class="extpkgdirc2">
+            All external packages are placed in <code>&lt;extpkg_dir&gt</code>,
             with a separate subdirectory per package
         </td>
     </tr>
     <tr>
-        <td><code>extpkg/&lt;pkgname&gt;/</code></td>
-        <td>directory for one external package, named "pkgname"</td>
+        <td class="extpkgdirc1"><code>&lt;extpkg_dir&gt/&lt;pkgname&gt;/</code></td>
+        <td class="extpkgdirc2">directory for one external package, named "pkgname"</td>
     </tr>
     <tr>
-        <td><code>extpkg/&lt;pkgname&gt;/pkgsrc</code></td>
-        <td>source directory, generally from a git repository.</td>
+        <td class="extpkgdirc1"><code>&lt;extpkg_dir&gt/&lt;pkgname&gt;/pkgsrc</code></td>
+        <td class="extpkgdirc2">source directory, generally from a git repository.</td>
     </tr>    
     <tr>
-        <td><code>extpkg/&lt;pkgname&gt;/build</code></td>
-        <td>build directory for an external package.</td>
-    </tr>    
-    <tr>
-        <td><code>extpkg/&lt;pkgname&gt;/install</code></td>
-        <td>install directory for the built package</td>
-    </tr>    
+        <td class="extpkgdirc1"><code>&lt;extpkg_dir&gt/&lt;pkgname&gt;/build</code></td>
+        <td class="extpkgdirc2">build directory for an external package.</td>
+    </tr>
 </table>
 
 <p>The default value for this directory is <code>&lt;build-dir&gt;/extpkg</code>, 
 which causes CMake to build all external packages in the Hercules build directory
 tree.  
-This default enables a casual builder to build Hercules without
-having to be aware of external packages at all.  
-And should the casual builder tire of Hercules, 
-deleting the build directory also deletes the
-external package repositories, builds, and installation directories.
 </p>
-<p>Note:
-<code>-DS3FH_DIR</code> and <code>-DEXTPKG_DIR</code> 
-may both be specified for a given build.
-If they are, then CMake will use the pre-built SoftFloat-3a For Hercules
-and will build all other external packages (currently none) in the
-directory specified by <code>-DEXTPKG_DIR</code>.  
-The directory specified by <code>-DEXTPKG_DIR</code> will be created.
+<p>
+    The CMake script for Hercules will clone and configure 
+    each external package, 
+    and it will generate instructions in the Hercules
+    build script to update the clone, 
+    configure if needed, and build the external package. 
+    An install of the external package is not done.
+    The CMake script for Hercules uses the build 
+    directory of the external package.  
+    Instructions are added to the Hercules build 
+    script to include any external package shared libraries
+    in the Hercules install.  
 </p>
-<br />
 
-<hr />
+<h4 class="skiplogo" id="reqherc">Require the CMake Script to Build an External Package</h4>
+<p>
+    On UNIX-like systems, the CMake script to build Hercules 
+    will use the system-installed version of an external package
+    if the system-installed version is newer than the one in the
+    Hercules-390 project.  
+</p>
+<p>
+    To force the CMake script to build an external package
+    even when the UNIX-like target system has a newer version, 
+    use one of the following build options.  
+    These options facilitate validation of each 
+    Hercules-390 external package repository.  
+</p>
+<table style="margin-left: 40px">
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#bzip2">DBZIP2=HERCULES</a></code></td>
+        <td class="pkgoptc2">
+            Build the BZip2 compression library from the Hercules-390 project
+        </td>
+    </tr>
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#zlib">DZLIB=HERCULES</a></code></td>
+        <td class="pkgoptc2">
+            Build the Zlib compression library from the Hercules-390 project
+        </td>
+    </tr>
+</table>
+<p>
+    Notes: PCRE is never built by the CMake script for Hercules on UNIX-like systems.
+    SoftFloat-3a is always built by the CMake script for Hercules.
+    Options may be used to force the CMake script to build one or both of 
+    the above external packages.  
+</p>
+
+
+<h4 class="skiplogo" id="reqsys">Require the Use of a System-Installed External Package</h4>
+<p>
+    On UNIX-like systems, the CMake script to build Hercules 
+    will use the system-installed version of an external package
+    if the system-installed version is newer than the one in the
+    Hercules-390 project.  
+</p>
+<p>
+    To force the CMake script to use system-installed external package
+    even when the UNIX-like target system has an older version, 
+    use one of the following build options.  
+    These options facilitate validation of Hercules
+    using external packages provided by the UNIX-like distribution.  
+</p>
+<table style="margin-left: 40px">
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#bzip2">DBZIP2=SYSTEM</a></code></td>
+        <td class="pkgoptc2">
+            Use the BZip2 compression library from the target system
+        </td>
+    </tr>
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#zlib">DZLIB=SYSTEM</a></code></td>
+        <td class="pkgoptc2">
+            Use the Zlib compression library from the target system
+        </td>
+    </tr>
+</table>
+<p>
+    Notes: PCRE is never built by the CMake script for Hercules on UNIX-like systems.
+    SoftFloat-3a is always built by the CMake script for Hercules.
+    Options may be used to force the CMake script to use system-installed
+    versions of one or both of the above external packages.  
+</p>
+
+
+<h4 class="skiplogo" id="dyiextpkg">Build External Package(s) Yourself</h4>
+<p>
+    While the CMake script to build Hercules will 
+    build each external package, 
+    each external package has a separate CMake build script 
+    and may be built independently of Hercules.  
+</p>
+<p>
+    If you are doing development work on an external package,
+    say SoftFloat-3a,
+    or implementing a new release of an upstream package,
+    say, Zlib,
+    you should create your own source directory 
+    for the package, 
+    build it yourself using instructions in the 
+    Hercules-390 package repository, 
+    and then tell the CMake script for Hercules
+    where to find that package using any or all of 
+    the following options.  
+</p>
+<table style="margin-left: 40px">
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#bzip2_dir">DBZIP2_DIR=&lt;dirname&gt</a></code></td>
+        <td class="pkgoptc2">
+            Replace <code>&lt;dirname&gt</code>with the build or install directory
+            of the BZip2 compression library that you built.
+        </td>
+    </tr>
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#pcre_dir">DPCRE_DIR=&lt;dirname&gt</a></code></td>
+        <td class="pkgoptc2">
+            Replace <code>&lt;dirname&gt</code>with the build or install directory
+            of the PCRE regular expression library that you built.
+        </td>
+    </tr>
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#s3fh_dir">DS3FH_DIR=&lt;dirname&gt</a></code></td>
+        <td class="pkgoptc2">
+            Replace <code>&lt;dirname&gt</code>with the build or install directory
+            of the SoftFloat-3a For Hercules binary floating point library that you built.
+        </td>
+    </tr>
+    <tr>
+        <td class="pkgoptc1"><code>-<a href="buildopts.html/#zlib_dir">DZLIB_DIR=&lt;dirname&gt</a></code></td>
+        <td class="pkgoptc2">
+            Replace <code>&lt;dirname&gt</code>with the build or install directory
+            of the Zlib compression library that you built.
+        </td>
+    </tr>
+</table>
+<p>
+    There is no requirement to install the external package into a 
+    separate install directory.  
+    The CMake script for Hercules can incorporate an external package 
+    from a build directory tree or an install directory tree.  
+</p>
+<p>
+    There is no requirement to build all external packages.
+    You can build one external package yourself and let the CMake
+    script for Hercules build any remaining packages 
+    in the external package directory.  
+</p>
+
+
+
+<br /><hr />
+
+
 <p>
 <small>This web page Copyright &copy; 2017 by Stephen R. Orso.
 <br /><br />
@@ -140,7 +570,8 @@ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 </small>
 </p>
+</div>
 
-</BODY>
+</body>
 
 </HTML>
