@@ -12,6 +12,15 @@
     li:not(:last-child) {
         margin-bottom: 5px;
     }
+
+/* Ensure #heading id navigation positions the heading below the 100px fixed logo  */
+dt.skiplogo::before         {
+    display: block;
+    content: " ";
+    margin-top: -100px;
+    height: 100px;
+    visibility: hidden;
+}
 </style>
 
 </head>
@@ -79,177 +88,192 @@
 
 <h3>Summary of Hercules CMake Script Options</h3>
 <table style="border-collapse:collapse; margin-left: 40px;">
-    <tr>
-        <td>ADD-CFLAGS</td>
+    <tr >
+        <td><a href="#add-cflags">ADD-CFLAGS</a></td>
         <td>
             Add compiler options
         </td>
     </tr>
     <tr>
-        <td>AUTOMATIC-OPERATOR</td>
+        <td><a href="#automatic-operator">AUTOMATIC-OPERATOR</a></td>
         <td>
             Enable the Automatic Operator function
         </td>
     </tr>
     <tr style="border-bottom: 1pt solid black;">
-        <td>BZIP2</td>
+        <td><a href="#bzip2">BZIP2</a></td>
         <td>
             Include BZip2 compression capabilities
         </td>
     </tr>
     <tr>
-        <td>BZIP2_DIR</td>
+        <td><a href="#bzip2_dir">BZIP2_DIR</a></td>
         <td>
             Directory containing a previously-built BZip2 library
         </td>
     </tr>
     <tr>
-        <td>CAPABILITIES</td>
+        <td><a href="#capabilities">CAPABILITIES</a></td>
         <td>
             Enable fine-grained security for <code>hercifc</code> (UNIX-like only)
         </td>
     </tr>
     <tr style="border-bottom: 1pt solid black;">
-        <td>CCKD-BZIP2</td>
+        <td><a href="#cckd-bzip2">CCKD-BZIP2</a></td>
         <td>
             Enable BZip2 compression for emulated disk volumes
         </td>
     </tr>
     <tr>
-        <td>CUSTOM</td>
+        <td><a href="#custom">CUSTOM</a></td>
         <td>
             Custom descriptive string describing the build
         </td>
     </tr>
     <tr>
-        <td>DEBUG</td>
+        <td><a href="#debug">DEBUG</a></td>
         <td>
             Compile Hercules for debugging
         </td>
     </tr>
     <tr style="border-bottom: 1pt solid black;">
-        <td>EXTERNAL-GUI</td>
+        <td><a href="#external-gui">EXTERNAL-GUI</a></td>
         <td>
             Enable interface to an external graphical user interface 
         </td>
     </tr>
     <tr>
-        <td>EXTPKG_DIR</td>
+        <td><a href="#extpkg_dir">EXTPKG_DIR</a></td>
         <td>
             Directory to contain required external packages
         </td>
     </tr>
 <!--
     <tr>
-        <td>FTHREADS</td>
+        <td><a href="#fthreads">FTHREADS</a></td>
         <td>
 
         </td>
     </tr>               -->
     <tr>
-        <td>GETOPTWRAPPER</td>
+        <td><a href="#getoptwrapper">GETOPTWRAPPER</a></td>
         <td>
             Use a wrapper for the getopt() function (UNIX-like systems only)
         </td>
     </tr>
     <tr style="border-bottom: 1pt solid black;">
-        <td>HELP</td>
+        <td><a href="#git_clone">GIT_CLONE</a></td>
+        <td>
+            Specify the protocol to be used when cloning repositories.  
+        </td>
+    </tr>
+
+    <tr>
+        <td><a href="#help">HELP</a></td>
         <td>
             Display help and exit
         </td>
     </tr>
     <tr>
-        <td>HET-BZIP2</td>
+        <td><a href="#het-bzip2">HET-BZIP2</a></td>
         <td>
             Enable BZip2 compression for emulated tape volumes
         </td>
     </tr>
-    <tr>
-        <td>HQA_DIR</td>
+    <tr style="border-bottom: 1pt solid black;">
+        <td><a href="#hqa_dir">HQA_DIR</a></td>
         <td>
             Hercules QA build header directory
         </td>
     </tr>
-    <tr style="border-bottom: 1pt solid black;">
-        <td>INTERLOCKED-ACCESS-&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;FACILITY-2</td>
+    <tr>
+        <td><a href="#interlocked-access-facility-2">
+                INTERLOCKED-ACCESS-&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;FACILITY-2</a></td>
         <td style="vertical-align: top;">
             Enable the Interlocked Access Facility 2
         </td>
     </tr>
     <tr>
-        <td>IPV6</td>
+        <td><a href="#ipv6">IPV6</a></td>
         <td>
             Include support for IP Version 6
         </td>
     </tr>
-    <tr>
-        <td>LARGEFILE</td>
+    <tr style="border-bottom: 1pt solid black;">
+        <td><a href="#largefile">LARGEFILE</a></td>
         <td>
             Enable/disable support for large files (>4GiB) if not natively supported
         </td>
     </tr>
-    <tr style="border-bottom: 1pt solid black;">
-        <td>MULTI-CPU</td>
+    <tr>
+        <td><a href="#multi-cpu">MULTI-CPU</a></td>
         <td>
             Enable support for multiple emulated CPUs
         </td>
     </tr>
     <tr>
-        <td>OBJECT-REXX</td>
+        <td><a href="#object-rexx">OBJECT-REXX</a></td>
         <td>
             Include support for Open Object Rexx in HAO and command scripts
         </td>
     </tr>
-    <tr>
-        <td>OPTIMIZATION</td>
+    <tr style="border-bottom: 1pt solid black;">
+        <td><a href="#optimization">OPTIMIZATION</a></td>
         <td>
             Specify compiler optimization flags
         </td>
     </tr>
-    <tr style="border-bottom: 1pt solid black;">
-        <td>PCRE</td>
+    <tr>
+        <td><a href="#pcre">PCRE</a></td>
         <td>
             Include support for the Perl-Compatible Regular Expression Library (Windows only)
         </td>
     </tr>
     <tr>
-        <td>PCRE_DIR</td>
+        <td><a href="#pcre_dir">PCRE_DIR</a></td>
         <td>
             Directory containing a previously-built PCRE library (Windows only)
         </td>
     </tr>
-    <tr>
-        <td>REGINA-REXX</td>
+    <tr style="border-bottom: 1pt solid black;">
+        <td><a href="#regina-rexx">REGINA-REXX</a></td>
         <td>
             Include support for Regina Rexx in HAO and command scripts
         </td>
     </tr>
-    <tr style="border-bottom: 1pt solid black;">
-        <td>S3FH_DIR</td>
+    <tr>
+        <td><a href="#s3fh_dir">S3FH_DIR</a></td>
         <td>
             Directory containing a previously-built SoftFloat-3a For Hercules library
         </td>
     </tr>
     <tr>
-        <td>SETUID-HERCIFC</td>
+        <td><a href="#setuid-hercifc">SETUID-HERCIFC</a></td>
         <td>
             Install <code>hercifc</code> with setuid permissions (not supported for the nonce)
         </td>
     </tr>
-    <tr>
-        <td>SYNCIO</td>
+    <tr style="border-bottom: 1pt solid black;">
+        <td><a href="#syncio">SYNCIO</a></td>
         <td>
             Dispatch I/O operations on a CPU thread (soon to be deprecated)
         </td>
     </tr>
-    <tr style="border-bottom: 1pt solid black;">
-        <td>ZLIB</td>
+    <tr>
+        <td><a href="#wintarget">WINTARGET</a></td>
+        <td>
+            (Windows Only)  
+            Specify the version of Windows to be targeted by the build.  
+        </td>
+    </tr>    
+    <tr>
+        <td><a href="#zlib">ZLIB</a></td>
         <td>
             Include ZLib compression capabilities
         </td>
     </tr>
     <tr>
-        <td>ZLIB_DIR</td>
+        <td><a href="#zlib_dir">ZLIB_DIR</a></td>
         <td>
             Directory containing a previously-built ZLib library.
         </td>
@@ -279,7 +303,7 @@
 <!--  ADD-CFLAGS                                                    -->
 <!--------------------------------------------------------------------> 
 
-<dt id="add-cflags"><code>ADD-CFLAGS=&nbsp; "&lt;c-flags&gt;"</code></dt>
+<dt class="skiplogo" id="add-cflags"><code>ADD-CFLAGS=&nbsp; "&lt;c-flags&gt;"</code></dt>
 <dd>
     <p>
         Provide additional c compiler command line options.  
@@ -303,7 +327,7 @@
 <!--  AUTOMATIC-OPERATOR                                            -->
 <!--------------------------------------------------------------------> 
 
-<dt id="automatic-operator"><code>AUTOMATIC-OPERATOR=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="automatic-operator"><code>AUTOMATIC-OPERATOR=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable the Hercules Automatic Operator feature.
@@ -327,7 +351,7 @@
 <!--  BZIP2                                                         -->
 <!--------------------------------------------------------------------> 
 
-<dt id="bzip2"><code>BZIP2=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES&nbsp; |&nbsp; SYSTEM</code></dt>
+<dt class="skiplogo" id="bzip2"><code>BZIP2=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES&nbsp; |&nbsp; SYSTEM</code></dt>
 <dd>
     <p>
         Define whether Hercules should include BZip2 compression support, 
@@ -434,7 +458,7 @@
 <!--  BZIP2_DIR                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="bzip2_dir"><code>BZIP2_DIR=&nbsp; &lt;dirname&gt;</code></dt>
+<dt class="skiplogo" id="bzip2_dir"><code>BZIP2_DIR=&nbsp; &lt;dirname&gt;</code></dt>
 <dd>
     <p>
         Define the build or the installation directory for the BZip2 library, 
@@ -483,7 +507,7 @@
 <!--  CAPABILITIES                                                  -->
 <!--------------------------------------------------------------------> 
 
-<dt id="capabilities"><code>CAPABILITIES=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
+<dt class="skiplogo" id="capabilities"><code>CAPABILITIES=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
 <dd>
     <p>
         Enable support for fine grained privileges for the HERCIFC utility.
@@ -508,7 +532,7 @@
 <!--  CCKD-BZIP2                                                    -->
 <!--------------------------------------------------------------------> 
 
-<dt id="cckd-bzip2"><code>CCKD-BZIP2=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="cckd-bzip2"><code>CCKD-BZIP2=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable support for <code>bzip2</code> compression for emulated DASD volumes.
@@ -538,7 +562,7 @@
 <!--  CUSTOM                                                        -->
 <!--------------------------------------------------------------------> 
 
-<dt id="custom"><code>CUSTOM=&nbsp; "&lt;descr&gt;"</code></dt>
+<dt class="skiplogo" id="custom"><code>CUSTOM=&nbsp; "&lt;descr&gt;"</code></dt>
 <dd>
     <p>
         Provide a custom description for this build.  
@@ -561,7 +585,7 @@
 <!--  DEBUG                                                         -->
 <!--------------------------------------------------------------------> 
 
-<dt id="debug"><code>DEBUG=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
+<dt class="skiplogo" id="debug"><code>DEBUG=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
 <dd>
     <p>
         Enable the Hercules debugging macros 
@@ -584,7 +608,7 @@
 <!--  EXTERNAL-GUI                                                  -->
 <!--------------------------------------------------------------------> 
 
-<dt id="external-gui"><code>EXTERNAL-GUI=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="external-gui"><code>EXTERNAL-GUI=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable the interface to an external graphical user interface.  
@@ -606,7 +630,7 @@
 <!--  EXTPKG_DIR                                                    -->
 <!--------------------------------------------------------------------> 
 
-<dt id="extpkg_dir"><code>EXTPKG_DIR= &nbsp; <strong>&lt;herc_build_dir&gt;/extpkg</strong>&nbsp; |&nbsp;&lt;pkg_dir&gt;</code></dt>
+<dt class="skiplogo" id="extpkg_dir"><code>EXTPKG_DIR= &nbsp; <strong>&lt;herc_build_dir&gt;/extpkg</strong>&nbsp; |&nbsp;&lt;pkg_dir&gt;</code></dt>
 <dd>
     <p>
         <code>&lt;pkg_dir&gt;</code> may be absolute or relative to the Hercules build directory.
@@ -702,7 +726,7 @@
 ---- So there is no need to expose or document this option.  Any setting
 ---- other than the default is an error.  Maybe someday this will change.  
 
-<dt id="fthreads"><code>FTHREADS=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="fthreads"><code>FTHREADS=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         (Windows Only) Use fish threads instead of posix threads
@@ -717,7 +741,7 @@
 <!--  GETOPTWRAPPER                                                 -->
 <!--------------------------------------------------------------------> 
 
-<dt id="getoptwrapper"><code>GETOPTWRAPPER=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="getoptwrapper"><code>GETOPTWRAPPER=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Certain (older?) UNIX-like systems generate linker errors
@@ -743,10 +767,61 @@
 
 
 <!--------------------------------------------------------------------> 
+<!--  GIT_CLONE                                                     -->
+<!--------------------------------------------------------------------> 
+
+<dt class="skiplogo" id="git_clone"><code>GIT_CLONE=&nbsp; <strong>https:</strong>&nbsp; |&nbsp; git:</code></dt>
+<dd>
+    <p>
+        Specify the protocol to be used when cloning repositories.  
+        This option is needed only when the default protocol, 
+        https:, 
+        does not work.  
+    </p>
+    <p>
+        The CMake scripts will clone repositories containing external packages 
+        required to build Hercules, 
+        and the generated build scripts will update the local clones
+        of those external package repositories.  
+        See the 
+        <a href="https://git-scm.com/book/en/v2/Git-on-the-Server-The-Protocols" target="_blank">
+            git protocol documentation
+        </a> 
+        for descriptions of the
+        differences between the two protocols.
+    </p>
+    <dl>
+        <dt><code>https:</code></dt>
+        <dd>
+            <p>
+                Use the https: protocol to clone repositories.  
+                This is the default.
+            </p>
+        </dd>
+        <dt><code>git:</code></dt>
+        <dd>
+            <p>
+                Use the git: protocol to clone repositories.  
+                The git: protocol can be used on systems that
+                do not support https: or do not have current 
+                certificate stores.
+                The git: protocol requires outbound access using 
+                TCP/IP port 9418, 
+                and higher-numbered ports are often blocked on 
+                corporate networks.  
+            </p>
+        </dd>
+    </dl>
+</dd>
+<hr />
+<br />
+
+
+<!--------------------------------------------------------------------> 
 <!--  HELP                                                          -->
 <!--------------------------------------------------------------------> 
 
-<dt id="help"><code>HELP=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
+<dt class="skiplogo" id="help"><code>HELP=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
 <dd>
     <p>
         Display summary help for the CMake script that builds Hercules and exit.  
@@ -761,7 +836,7 @@
 <!--  HET-BZIP2                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="het-bzip2"><code>HET-BZIP2=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="het-bzip2"><code>HET-BZIP2=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable support for bzip2 compression for emulated tape volumes.  
@@ -791,7 +866,7 @@
 <!--  HQA_DIR                                                       -->
 <!--------------------------------------------------------------------> 
 
-<dt id="hqa_dir"><code>HQA_DIR=&nbsp; &lt;dirname&gt;</code></dt>
+<dt class="skiplogo" id="hqa_dir"><code>HQA_DIR=&nbsp; &lt;dirname&gt;</code></dt>
 <dd>
     <p>
         Define the directory containing the optional header <code>hqa.h</code>.
@@ -805,7 +880,7 @@
 <!--  INTERLOCKED-ACCESS-FACILITY-2                                 -->
 <!--------------------------------------------------------------------> 
 
-<dt id="interlocked-access-facility-2"><code>INTERLOCKED-ACCESS-FACILITY-2=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="interlocked-access-facility-2"><code>INTERLOCKED-ACCESS-FACILITY-2=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable the Interlocked-Access Facility 2, as defined in the z/Architecture
@@ -845,7 +920,7 @@
 <!--  IPV6                                                          -->
 <!--------------------------------------------------------------------> 
 
-<dt id="ipv6"><code>IPV6=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="ipv6"><code>IPV6=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Include IPV6 support in Hercules.
@@ -863,7 +938,7 @@
 <!--  LARGEFILE                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="largefile"><code>LARGEFILE=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="largefile"><code>LARGEFILE=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable support for large files (greater than 4GB) on 
@@ -914,7 +989,7 @@
 <!--  MULTI-CPU                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="multi-cpu"><code>MULTI-CPU=&nbsp; YES&nbsp; |&nbsp; NO&nbsp; |&nbsp; &lt;number&gt</code></dt>
+<dt class="skiplogo" id="multi-cpu"><code>MULTI-CPU=&nbsp; YES&nbsp; |&nbsp; NO&nbsp; |&nbsp; &lt;number&gt</code></dt>
 <dd>
     <p>
         Specify the maximum number of CPUs that can be specified on the 
@@ -963,7 +1038,7 @@
 <!--  OBJECT-REXX                                                   -->
 <!--------------------------------------------------------------------> 
 
-<dt id="object-rexx"><code>OBJECT-REXX=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="object-rexx"><code>OBJECT-REXX=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable support for Open Object Rexx support.  
@@ -994,7 +1069,7 @@
 <!--  OPTIMIZATION                                                  -->
 <!--------------------------------------------------------------------> 
 
-<dt id="optimization"><code>OPTIMIZATION=&nbsp; YES&nbsp; |&nbsp; NO&nbsp; |&nbsp; "&lt;flags&gt;"</code>
+<dt class="skiplogo" id="optimization"><code>OPTIMIZATION=&nbsp; YES&nbsp; |&nbsp; NO&nbsp; |&nbsp; "&lt;flags&gt;"</code>
 <dd>
     <p>
         Enable automatic optimization, 
@@ -1021,7 +1096,7 @@
 <!--  PCRE                                                          -->
 <!--------------------------------------------------------------------> 
 
-<dt id="pcre"><code>PCRE=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES</code></dt>
+<dt class="skiplogo" id="pcre"><code>PCRE=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES</code></dt>
 <dd>
     <p>
         (Windows target systems only.) Define whether Hercules should include PCRE regular expression support, 
@@ -1109,7 +1184,7 @@
 <!--  PCRE_DIR                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="pcre_dir"><code>PCRE_DIR=&nbsp; &lt;dirname&gt;</code></dt>
+<dt class="skiplogo" id="pcre_dir"><code>PCRE_DIR=&nbsp; &lt;dirname&gt;</code></dt>
 <dd>
     <p>
         Define the build or the installation directory for the PCRE library, 
@@ -1160,7 +1235,7 @@
 <!--  REGINA-REXX                                                   -->
 <!--------------------------------------------------------------------> 
 
-<dt id="regina-rexx"><code>REGINA-REXX=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="regina-rexx"><code>REGINA-REXX=&nbsp; YES&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         Enable support for Regina Rexx support.  
@@ -1191,7 +1266,7 @@
 <!--  S3FH_DIR                                                      -->
 <!--------------------------------------------------------------------> 
 
-<dt id="s3fh_dir"><code>S3FH_DIR=&nbsp; &lt;dirname&gt;</code></dt>
+<dt class="skiplogo" id="s3fh_dir"><code>S3FH_DIR=&nbsp; &lt;dirname&gt;</code></dt>
 <dd>
     <p>
         Define the build or the installation directory for the 
@@ -1237,7 +1312,7 @@
 <!--  SETUID-HERCIFC                                                -->
 <!--------------------------------------------------------------------> 
 
-<dt id="setuid-hercifc"><code>SETUID-HERCIFC=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
+<dt class="skiplogo" id="setuid-hercifc"><code>SETUID-HERCIFC=&nbsp; YES&nbsp; |&nbsp; <strong>NO</strong></code></dt>
 <dd>
     <p>
         Install <code>hercifc</code> as setuid root.
@@ -1255,7 +1330,7 @@
 <!--  SYNCIO                                                        -->
 <!--------------------------------------------------------------------> 
 
-<dt id="syncio"><code>SYNCIO=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
+<dt class="skiplogo" id="syncio"><code>SYNCIO=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO</code></dt>
 <dd>
     <p>
         The <code>SYNCIO</code> command line option enables or disables Syncio.&nbsp; 
@@ -1279,10 +1354,93 @@
 
 
 <!--------------------------------------------------------------------> 
+<!--  WINTARGET                                                     -->
+<!--------------------------------------------------------------------> 
+
+<dt class="skiplogo" id="wintarget"><code>WINTARGET=&nbsp;<strong>HOST</strong>&nbsp; |&nbsp; &lt;winows-version&gt</code></dt>
+<dd>
+    <p>
+        Windows target systems only.
+        On UNIX-like systems this option is ignored.
+    </p>
+    <p>
+        Specify the version of Windows to be targeted by the build.  
+        As a general rule, targeting for a given version of Windows 
+        will include support for future versions of Windows, 
+        although Microsoft has been known to break this from time to time.
+    </p>
+    <dl>
+        <dt><code>TARGET</code></dt>
+        <dd>
+            <p>
+                Target Hercules for the Windows version running on the system
+                on which Hercules is being built.  
+                This is the default.
+            </p>
+            <p>
+                Note:  If you specify this option or accept it as a default, 
+                the header 
+                <code>sdkddkver.h</code>
+                must be available in the Windows 
+                Software Development Kit (SDK) used when building Hercules.  
+            </p>
+        </dd>
+        <dt><code>DIST</code></dt>
+        <dd>
+            <p>
+                Target Hercules for oldest version of Windows 
+                that Hercules supports, Windows XP Professional 64-bit Service Pack 3 (WINXP364).  
+           </p>
+            <p>
+                Builds targeting WINXP364 can be run on newer 32-bit and 64-bit
+                versions of Windows through at least Windows 10.  
+           </p>
+        </dd>
+        <dt><code>WINXP364</code></dt>
+        <dd>
+            <p>
+                Target Hercules for Windows XP Professional 
+                64-bit Service Pack 3 (WINXP364).
+                Builds that target WINXP364 can be run on newer 32-bit and 64-bit
+                versions of Windows through at least Windows 10.  
+            </p>
+        </dd>
+        <dt><code>WINVISTA</code></dt>
+        <dd>
+            <p>
+                Target Hercules for Windows Vista.
+            </p>
+        </dd>
+        <dt><code>WIN7</code></dt>
+        <dd>
+            <p>
+                Target Hercules for Windows 7.
+            </p>
+        </dd>
+        <dt><code>WIN8</code></dt>
+        <dd>
+            <p>
+                Target Hercules for Windows 8 (and 8.1).
+            </p>
+        </dd>
+        <dt><code>WIN10</code></dt>
+        <dd>
+            <p>
+                Target Hercules for Windows 10.
+            </p>
+        </dd>
+    </dl>
+
+</dd>
+<hr />
+<br />
+
+
+<!--------------------------------------------------------------------> 
 <!--  ZLIB                                                          -->
 <!--------------------------------------------------------------------> 
 
-<dt id="zlib"><code>ZLIB=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES&nbsp; |&nbsp; SYSTEM</code></dt>
+<dt class="skiplogo" id="zlib"><code>ZLIB=&nbsp; <strong>YES</strong>&nbsp; |&nbsp; NO&nbsp; |&nbsp; HERCULES&nbsp; |&nbsp; SYSTEM</code></dt>
 <dd>
     <p>
         Define whether Hercules should include Zlib compression support, 
@@ -1385,7 +1543,7 @@
 <!--  ZLIB_DIR                                                     -->
 <!--------------------------------------------------------------------> 
 
-<dt id="zlib_dir"><code>ZLIB_DIR=&nbsp; &lt;dirname&gt;</code></dt>
+<dt class="skiplogo" id="zlib_dir"><code>ZLIB_DIR=&nbsp; &lt;dirname&gt;</code></dt>
 <dd>
     <p>
         Define the build or the installation directory for the Zlib library, 
@@ -1436,7 +1594,7 @@
 
 
 <p>
-<small>This web page Copyright &copy; 2017 by Stephen R. Orso.
+<small>This web page Copyright &copy; 2017-2019 by Stephen R. Orso.
 <br /><br />
 This work is licensed under the Creative Commons Attribution-
 ShareAlike 4.0 International License. 
